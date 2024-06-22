@@ -4,7 +4,7 @@
 #include <vector>
 
 // Revision History:
-// Rev. 2 - 90/02/11 Modified by Joe Smith
+// Rev. 1 - 21/06/2024 Modified by Joe Smith
 // - to add third parameter to function sort.
 // (Note: It is also good to document WHY each
 // particular change was made).
