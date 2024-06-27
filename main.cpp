@@ -87,8 +87,9 @@ class Group22
 
 
     /***********************************************/
-    int divideIntegers(int a,   // int a - dividend. i.e. the number to be divided (in)
-                       int b    // int b - divisor. i.e. the number by which the dividend is to be divided (in)
+    int divideIntegers(
+        int a,   // int a - dividend. i.e. the number to be divided (in)
+        int b    // int b - divisor. i.e. the number by which the dividend is to be divided (in)
     );
     // Returns: int - The quotient of the division of a by b.
     /* Write a detailed description of what the function does.
