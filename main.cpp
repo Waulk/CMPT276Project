@@ -1,7 +1,7 @@
 /***********************************************
  * Module: main.h
  * 
- * Code Version History:
+ * Code Version History: (The latest top and the oldest bottom)
  * Ver. 2: - 2024-07-10 Modified by John Smith
  *         - Explanation of modification(s). If there is more than one modification, put each on a separate line.
  *         - Ex1: Added function X
@@ -10,6 +10,14 @@
  *         - Initial version 
  ***********************************************/
 
+/***********************************************
+ * Write the purpose of the class/module.
+ * Example: This class provides examples of different types of reference parameters: input (in), output (out), and input/output (in/out).
+ * The purpose is to establish a coding convention for the team, ensuring consistency in the implementation and documentation of functions.
+ * 
+ * Below is an instruction/tip from Assignment 3 instruction paper:
+ * It is important to state the nature of the cohesion of the module or the nature of (not implementation of) the data or control abstraction retained by/hidden in the module. You may also mention any general rules as to how the module should be used. e.g. "You must call CreateStack() before you can use a stack"
+***********************************************/
 
 /***********************************************
  * Header Guards/Include Statements/Using Directive go here
@@ -20,7 +28,6 @@
  * #include "example.h"
  * using std::string;
  ***********************************************/
-
 
 class Group22 
 {
@@ -39,8 +46,44 @@ class Group22
     * 
     * in/out   - Parameter is passed by reference without the 'const' keyword. 
     *          - The function reads the value of the parameter, utilizes the value in some way, and modifies the parameter.
-     ***********************************************/
+    ***********************************************/
 
+
+    /***********************************************
+    * Rules for name, capitalization, indentation
+    * ---------------------------------------------
+    * Function Names: Use CamelCase. The first character in the function name must be in lower case.
+    * Example: countVowels
+    * ---------------------------------------------
+    * Class Names: Use CamelCase. The first character in the class name must be in upper case.
+    * Example: ExampleClassName
+    * ---------------------------------------------
+    * Constant Variables: Use uppercase letters for all characters in constant variable names.
+    * Example: const COLOR;
+    * ---------------------------------------------
+    * Indentation and Spacing
+    * Indentation: Use a tab size of 4.
+    * Spacing: Surround '=' with spaces. 
+    * Place a space after ','
+    * Do NOT place a space after ';'.
+    * Good Examples: int num = 1;
+    *                int addNums(int a, int b);
+    * Bad Examples:  int num=1 ;
+    *                int addNums(int a,int b) ;
+    * ---------------------------------------------
+    * Position of Opening/Closing Braces 
+    * Opening and closing braces must be on their own lines.
+    * Good Example:
+    *  int divideIntegers(int a, int b) 
+    {
+        // implementation
+    }
+
+    * Bad Example:
+    int divideIntegers(int a, int b) {
+        // implementation
+    }
+    ***********************************************/
 
     // The below is an example of an IN parameter (pass-by-value)
     /***********************************************
@@ -55,12 +98,8 @@ class Group22
     * ---------------------------------------------
     * Precondition: This section is optional. Ex: b != 0
     ***********************************************/
-    int divideIntegers(int a, int b) 
-    {
-        // Use tab size 4 for indentation.
-        // Opening/Closing braces must be on a line by themselves.
-    }
-
+    int divideIntegers(int a, int b);
+    /***********************************************/
 
     // The below is an example of an IN reference parameter 
     /***********************************************
@@ -72,13 +111,8 @@ class Group22
     * Input: string& str -  a constant reference to the input string whose vowels need to be counted (in)
     * Output: int - the number of vowels in the input string
     ***********************************************/
-    int countVowels(const string& str) 
-    {   
-        // See "Rules for Reference Parameters" in the beginning of class Group22
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-    }
-
+    int countVowels(const string& str);
+    /***********************************************/
 
     // The below is an example of an OUT reference parameter with reference syntax
     /***********************************************
@@ -90,13 +124,8 @@ class Group22
     * Input: char& charPtr - a reference to a char that will be set to 'A' (out)
     * Output: void
     ***********************************************/
-    void initializeChar(char& charPtr) 
-    {
-        // See "Rules for Reference Parameters" in the beginning of class Group22
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-    }
-
+    void initializeChar(char& charPtr);
+    /***********************************************/
 
     // The below is an example of an OUT reference parameter with pointer
     /***********************************************
@@ -109,13 +138,8 @@ class Group22
     *        int n - the number of elements in the array  (in)
     * Output: void
     ***********************************************/
-    void initializeOne(int* arr, int n) 
-    {
-        // See "Rules for Reference Parameters" in the beginning of class Group22
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-    }
-
+    void initializeOne(int* arr, int n);
+    /***********************************************/
 
     // The below is an example of an IN/OUT reference parameter with reference syntax
     /***********************************************
@@ -128,19 +152,14 @@ class Group22
     * Input: double& num - a reference to the double value that needs to be multiplied by 2 (in/out)
     * Output: void
     ***********************************************/
-    void multiplyByTwo(double& num) 
-    {
-        // See "Rules for Reference Parameters" in the beginning of class Group22
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-    }
-
+    void multiplyByTwo(double& num);
+    /***********************************************/
 
     private:
         /***********************************************
         * Private data members go here
         ***********************************************/
-        const int capacity;
+        const int CAPACITY;
         char* name;
 
 };
