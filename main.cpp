@@ -15,7 +15,7 @@
  * Example: This class provides examples of different types of reference parameters: input (in), output (out), and input/output (in/out).
  * The purpose is to establish a coding convention for the team, ensuring consistency in the implementation and documentation of functions.
  * 
- * Below is an instruction/tip from Assignment 3 instruction paper:
+ * Below is the instructions/tips from Assignment 3 instruction paper:
  * It is important to state the nature of the cohesion of the module or the nature of (not implementation of) the data or control abstraction retained by/hidden in the module. You may also mention any general rules as to how the module should be used. e.g. "You must call CreateStack() before you can use a stack"
 ***********************************************/
 
@@ -50,7 +50,7 @@ class Group22
 
 
     /***********************************************
-    * Rules for name, capitalization, indentation
+    * Rules for name, capitalization, indentation, and positioning
     * ---------------------------------------------
     * Function Names: Use CamelCase. The first character in the function name must be in lower case.
     * Example: countVowels
@@ -85,74 +85,69 @@ class Group22
     }
     ***********************************************/
 
-    // The below is an example of an IN parameter (pass-by-value)
-    /***********************************************
-    * Function Name : divideIntegers
+    /* Function Name : divideIntegers
     * ---------------------------------------------
     * Write a detailed description of what the function does.
     * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
     * ---------------------------------------------
-    * Input: int a - dividend. i.e. the number to be divided (in)
-    *        int b - divisor. i.e. the number by which the dividend is to be divided (in)
-    * Output: int - The quotient of the division
+    * Output: The integer quotient of the division of a by b.
     * ---------------------------------------------
     * Precondition: This section is optional. Ex: b != 0
     ***********************************************/
-    int divideIntegers(int a, int b);
+    int divideIntegers(int a,   // int a - dividend. i.e. the number to be divided (in)
+                       int b    // int b - divisor. i.e. the number by which the dividend is to be divided (in)
+    );
+    
     /***********************************************/
 
-    // The below is an example of an IN reference parameter 
-    /***********************************************
-    * Function Name: countVowels
+    /* Function Name: countVowels
     * ---------------------------------------------
     * Brief description of what the function does.
     * Example: This function takes a string parameter by constant reference and counts the number of vowels in the string.
     * ---------------------------------------------
-    * Input: string& str -  a constant reference to the input string whose vowels need to be counted (in)
     * Output: int - the number of vowels in the input string
     ***********************************************/
-    int countVowels(const string& str);
+    int countVowels(const string& str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
+    );
+
     /***********************************************/
 
-    // The below is an example of an OUT reference parameter with reference syntax
-    /***********************************************
-    * Function Name: initializeChar
+    /* Function Name: initializeChar
     * ---------------------------------------------
     * Brief description of what the function does.
     * Example: This function assigns the character 'A' to the provided char reference.
     * ---------------------------------------------
-    * Input: char& charPtr - a reference to a char that will be set to 'A' (out)
     * Output: void
     ***********************************************/
-    void initializeChar(char& charPtr);
+    void initializeChar(char& charPtr   // char& charPtr - a reference to a char that will be set to 'A' (out)
+    );
+
     /***********************************************/
 
-    // The below is an example of an OUT reference parameter with pointer
-    /***********************************************
-    * Function Name: initializeOne
+    /* Function Name: initializeOne
     * ---------------------------------------------
     * Brief description of what the function does.
     * Example: This function assigns the value '1' to all elements in the provided array.
     * ---------------------------------------------
-    * Input: int* arr - a pointer to an array of integers (out)
-    *        int n - the number of elements in the array  (in)
     * Output: void
     ***********************************************/
-    void initializeOne(int* arr, int n);
+    void initializeOne(int* arr,    // a pointer to an array of integers (out)
+                       int n        // the number of elements in the array  (in)
+    );
+
     /***********************************************/
 
-    // The below is an example of an IN/OUT reference parameter with reference syntax
-    /***********************************************
-    * Function Name: multiplyByTwo
+    /* Function Name: multiplyByTwo
     * ---------------------------------------------
     * Brief description of what the function does.
     * Example: This function takes a double parameter by reference and multiply it by 2.
     * The result of multiplication will be stored in the parameter.
     * ---------------------------------------------
-    * Input: double& num - a reference to the double value that needs to be multiplied by 2 (in/out)
     * Output: void
     ***********************************************/
-    void multiplyByTwo(double& num);
+    void multiplyByTwo(double& num    // a reference to the double value that needs to be multiplied by 2 (in/out)
+    );
+
     /***********************************************/
 
     private:
