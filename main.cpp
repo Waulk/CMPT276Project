@@ -12,51 +12,52 @@
 
 
 /***********************************************
- * Include statements go here
+ * Header Guards/Include Statements/Using Directive go here
  * Example:
+ * #ifndef MAIN_H
+ * #define MAIN_H
  * #include <iostream>
  * #include "example.h"
+ * using std::string;
  ***********************************************/
 
 
 class Group22 
 {
+    public:
     /***********************************************
     * Rules for Reference Parameters
-    * These rules only apply when a function parameter is pass-by-reference.
-    * There is no need to specify when a function parameter is pass-by-value.
+    * When a function parameter is pass-by-value, denote it as 'in'.
+    * Whenever possible, use reference syntax rather than pointers for out and in/out parameters.
+    * That is, use 'function(int& a)' instead of 'function(int* a)' when possible.
     * ---------------------------------------------
-    * in       - Parameter is passed by reference with the 'const' keyword. 
-    *          - The function should NOT modify the parameter.
-    *          - The caller function is responsible for deleting the object when memory reallocation is needed.
+    * in       - Parameter is passed by reference WITH the 'const' keyword. 
+    *          - The function only reads the value of the parameter and does NOT modify the parameter.
     * 
-    * out      - Parameter is passed by reference WITHOUT the 'const' keyword.
-    *          - The function must modify the parameter.
-    *          - If the function needs to modify the parameter by creating a new object and making the parameter pointer point to that new object, 
-    *            the called function is responsible to reallocate the memory of the original object if needed.
-    *          - The caller function is responsible for deleting the object when memory reallocation is needed.
+    * out      - Parameter is passed by reference without the 'const' keyword.
+    *          - The function does NOT read the value of the parameter and completely overwrites/modifies the parameter.
     * 
-    * in/out   - Parameter is passed by reference. The parameter is whether nullptr or NULL.
-    *          - The function must fill out the parameter.
-    *          - The caller function is responsible for deleting the object when memory reallocation is needed.
+    * in/out   - Parameter is passed by reference without the 'const' keyword. 
+    *          - The function reads the value of the parameter, utilizes the value in some way, and modifies the parameter.
      ***********************************************/
 
     
     /***********************************************
-    * Function Name : addTwoNumbers
+    * Function Name : divideIntegers
     * ---------------------------------------------
     * Write a detailed description of what the function does.
-    * Example: This function takes two integers as inputs, adds them together, and return the result.
+    * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
     * ---------------------------------------------
-    * Input: int num1 - the first integer to be added
-    *        int num2 - the second integer to be added
-    * Output: int - the sum of num1 and num2
+    * Input: int a - dividend. i.e. the number to be divided (in)
+    *        int b - divisor. i.e. the number by which the dividend is to be divided (in)
+    * Output: int - The quotient of the division
+    * ---------------------------------------------
+    * Precondition: This section is optional. Ex: b != 0
     ***********************************************/
-    int addTwoNumbers(int num1, int num2) 
+    int divideIntegers(int a, int b) 
     {
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-        // Function implementation here
+        // Use tab size 4 for indentation.
+        // Opening/Closing braces must be on a line by themselves.
     }
 
 
@@ -75,18 +76,55 @@ class Group22
         // See "Rules for Reference Parameters" in the beginning of class Group22
         // Use tab size 4 for indentation
         // Opening/Closing braces must be on a line by themselves
-        // Function implementation here
     }
 
 
-    // The below is an example of an OUT reference parameter 
+    // The below is an example of an OUT reference parameter with reference syntax
+    /***********************************************
+    * Function Name: initializeChar
+    * ---------------------------------------------
+    * Brief description of what the function does.
+    * Example: This function assigns the character 'A' to the provided char reference.
+    * ---------------------------------------------
+    * Input: char& charRef - a reference to a char that will be set to 'A' (out)
+    * Output: void
+    ***********************************************/
+    void initializeChar(char& charPtr) 
+    {
+        // See "Rules for Reference Parameters" in the beginning of class Group22
+        // Use tab size 4 for indentation
+        // Opening/Closing braces must be on a line by themselves
+    }
+
+
+    // The below is an example of an OUT reference parameter with pointer
+    /***********************************************
+    * Function Name: initializeOne
+    * ---------------------------------------------
+    * Brief description of what the function does.
+    * Example: This function assigns the value '1' to all elements in the provided array.
+    * ---------------------------------------------
+    * Input: int* arr - a pointer to an array of integers (out)
+    *        int n - the number of elements in the array  (in)
+    * Output: void
+    ***********************************************/
+    void initializeOne(int* arr, int n) 
+    {
+        // See "Rules for Reference Parameters" in the beginning of class Group22
+        // Use tab size 4 for indentation
+        // Opening/Closing braces must be on a line by themselves
+    }
+
+
+    // The below is an example of an IN/OUT reference parameter with reference syntax
     /***********************************************
     * Function Name: multiplyByTwo
     * ---------------------------------------------
     * Brief description of what the function does.
     * Example: This function takes a double parameter by reference and multiply it by 2.
+    * The result of multiplication will be stored in the parameter.
     * ---------------------------------------------
-    * Input: double& num - a reference to the double value that needs to be multiplied by 2 (out)
+    * Input: double& num - a reference to the double value that needs to be multiplied by 2 (in/out)
     * Output: void
     ***********************************************/
     void multiplyByTwo(double& num) 
@@ -94,30 +132,16 @@ class Group22
         // See "Rules for Reference Parameters" in the beginning of class Group22
         // Use tab size 4 for indentation
         // Opening/Closing braces must be on a line by themselves
-        // Function implementation here
     }
 
 
-    // The below is an example of an IN/OUT reference parameter 
-    /***********************************************
-    * Function Name: initializeChar
-    * ---------------------------------------------
-    * Brief description of what the function does.
-    * Example: This function takes a nullptr by reference. 
-    * the function allocates memory for the char and sets its value to a specified character.
-    * ---------------------------------------------
-    * Input: char*& charPtr - a reference to a pointer to a char that needs to be initialized (in/out)
-    * Output: void
-    ***********************************************/
-    void initializeChar(char*& charPtr) 
-    {
-        // See "Rules for Reference Parameters" in the beginning of class Group22
-        // Use tab size 4 for indentation
-        // Opening/Closing braces must be on a line by themselves
-        // Function implementation here
-    }
+    private:
+        /***********************************************
+        * Private data members go here
+        ***********************************************/
+        const int capacity;
+        char* name;
 
 };
 
-
-// memo: Check lists, prrofread
+//#endif
