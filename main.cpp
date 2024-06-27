@@ -85,75 +85,55 @@ class Group22
     }
     ***********************************************/
 
-    /* Function Name : divideIntegers
-    * ---------------------------------------------
-    * Write a detailed description of what the function does.
-    * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
-    * ---------------------------------------------
-    * Output: The integer quotient of the division of a by b.
-    * ---------------------------------------------
-    * Precondition: This section is optional. Ex: b != 0
-    ***********************************************/
+
+    /***********************************************/
     int divideIntegers(int a,   // int a - dividend. i.e. the number to be divided (in)
                        int b    // int b - divisor. i.e. the number by which the dividend is to be divided (in)
     );
+    // Returns: int - The quotient of the division of a by b.
+    /* Write a detailed description of what the function does.
+    * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
+    * ---------------------------------------------
+    * Precondition: This section is optional. Ex: b != 0
     
     /***********************************************/
-
-    /* Function Name: countVowels
-    * ---------------------------------------------
-    * Brief description of what the function does.
+    int countVowels(
+        const string& str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
+    );
+    // Returns: int - the number of vowels in the input string
+    /* Brief description of what the function does.
     * Example: This function takes a string parameter by constant reference and counts the number of vowels in the string.
     * ---------------------------------------------
-    * Output: int - the number of vowels in the input string
-    ***********************************************/
-    int countVowels(const string& str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
-    );
+    * Precondition: This section is optional. Ex: str is NOT an empty string
 
     /***********************************************/
-
-    /* Function Name: initializeChar
-    * ---------------------------------------------
-    * Brief description of what the function does.
+    void initializeChar(
+        char& charPtr   // char& charPtr - a reference to a char that will be set to 'A' (out)
+    );
+    // Returns: void
+    /* Brief description of what the function does.
     * Example: This function assigns the character 'A' to the provided char reference.
-    * ---------------------------------------------
-    * Output: void
-    ***********************************************/
-    void initializeChar(char& charPtr   // char& charPtr - a reference to a char that will be set to 'A' (out)
-    );
 
     /***********************************************/
-
-    /* Function Name: initializeOne
-    * ---------------------------------------------
-    * Brief description of what the function does.
+    void initializeOne(
+        int* arr,    // a pointer to an array of integers (out)
+        int n        // the number of elements in the array  (in)
+    );
+    // Returns: void
+    /* Brief description of what the function does.
     * Example: This function assigns the value '1' to all elements in the provided array.
-    * ---------------------------------------------
-    * Output: void
-    ***********************************************/
-    void initializeOne(int* arr,    // a pointer to an array of integers (out)
-                       int n        // the number of elements in the array  (in)
-    );
-
+    
     /***********************************************/
-
-    /* Function Name: multiplyByTwo
-    * ---------------------------------------------
-    * Brief description of what the function does.
+    void multiplyByTwo(
+        double& num    // a reference to the double value that needs to be multiplied by 2 (in/out)
+    );
+    // Returns: void
+    /* Brief description of what the function does.
     * Example: This function takes a double parameter by reference and multiply it by 2.
     * The result of multiplication will be stored in the parameter.
-    * ---------------------------------------------
-    * Output: void
-    ***********************************************/
-    void multiplyByTwo(double& num    // a reference to the double value that needs to be multiplied by 2 (in/out)
-    );
-
-    /***********************************************/
-
+    */
+  
     private:
-        /***********************************************
-        * Private data members go here
-        ***********************************************/
         const int CAPACITY;
         char* name;
 
