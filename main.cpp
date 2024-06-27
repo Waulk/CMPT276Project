@@ -41,7 +41,8 @@ class Group22
     *          - The function reads the value of the parameter, utilizes the value in some way, and modifies the parameter.
      ***********************************************/
 
-    
+
+    // The below is an example of an IN parameter (pass-by-value)
     /***********************************************
     * Function Name : divideIntegers
     * ---------------------------------------------
@@ -68,7 +69,7 @@ class Group22
     * Brief description of what the function does.
     * Example: This function takes a string parameter by constant reference and counts the number of vowels in the string.
     * ---------------------------------------------
-    * Input: string str -  a constant reference to the input string whose vowels need to be counted (in)
+    * Input: string& str -  a constant reference to the input string whose vowels need to be counted (in)
     * Output: int - the number of vowels in the input string
     ***********************************************/
     int countVowels(const string& str) 
@@ -86,7 +87,7 @@ class Group22
     * Brief description of what the function does.
     * Example: This function assigns the character 'A' to the provided char reference.
     * ---------------------------------------------
-    * Input: char& charRef - a reference to a char that will be set to 'A' (out)
+    * Input: char& charPtr - a reference to a char that will be set to 'A' (out)
     * Output: void
     ***********************************************/
     void initializeChar(char& charPtr) 
