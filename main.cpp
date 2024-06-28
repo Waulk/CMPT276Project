@@ -74,7 +74,7 @@ class Group22
     * Position of Opening/Closing Braces 
     * Opening and closing braces must be on their own lines.
     * Good Example:
-    *  int divideIntegers(int a, int b) 
+    int divideIntegers(int a, int b) 
     {
         // implementation
     }
@@ -95,8 +95,9 @@ class Group22
     /* Write a detailed description of what the function does.
     * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
     * ---------------------------------------------
-    * Precondition: This section is optional. Ex: b != 0
-    * Explain what will happen......()
+    * Precondition: This section is optional. Example: b != 0
+    * Explain what will happen if precondition is not met
+    * Example: If this precondition is not met, division by zero will occur, leading to a runtime error.
     
     /***********************************************/
     int countVowels(
@@ -107,7 +108,8 @@ class Group22
     * Example: This function takes a string parameter by constant reference and counts the number of vowels in the string.
     * ---------------------------------------------
     * Precondition: This section is optional. Ex: str is NOT an empty string
-    * Explain what will happen......()
+    * Explain what will happen if precondition is not met
+    * Example: If this precondition is not met, the function will return -1 to indicate an error.
 
     /***********************************************/
     void initializeChar(
