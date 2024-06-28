@@ -65,7 +65,7 @@ class Group22
     * Example: const COLOR;
     * ---------------------------------------------
     * File Name: Use lowercase letters for all characters in file name.
-    *            If neccessary, use '-'.
+    *            If necessary, use '-'.
     * Examples: filename.h / filename.cpp / long-filename.h
     * ---------------------------------------------
     * Indentation and Spacing
