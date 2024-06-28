@@ -58,8 +58,15 @@ class Group22
     * Class Names: Use Pascalcase. The first character in the class name must be in upper case.
     * Example: ExampleClassName
     * ---------------------------------------------
+    * Variable Names: Use Camelcase. The first character in the variable name must be in lower case.
+    * Example: int numOfExample;
+    * ---------------------------------------------
     * Constant Variables: Use uppercase letters for all characters in constant variable names.
     * Example: const COLOR;
+    * ---------------------------------------------
+    * File Name: Use lowercase letters for all characters in file name.
+    *            If neccessary, use '-'.
+    * Examples: filename.h / filename.cpp / long-filename.h
     * ---------------------------------------------
     * Indentation and Spacing
     * Indentation: Use a tab size of 4.
