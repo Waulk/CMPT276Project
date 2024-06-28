@@ -18,3 +18,28 @@
  * #define PRODUCT_H
  * #include <iostream>
  ***********************************************/
+
+
+class Product
+{
+    public:
+        /***********************************************/
+        Product();
+        // Returns: None since this is a constructor
+        /* This is a constructor of Product
+        *  This constructor initializes productName with nullptr
+   
+        /***********************************************/
+        Product(
+            char *productName
+        );
+        // Returns: None since this is a constructor
+        /* This is a constructor of Product
+        *  This constructor initializes productName with nullptr
+        */
+
+
+    private:
+        char *productName;
+
+};
