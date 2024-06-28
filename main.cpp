@@ -52,10 +52,10 @@ class Group22
     /***********************************************
     * Rules for name, capitalization, indentation, and positioning
     * ---------------------------------------------
-    * Function Names: Use CamelCase. The first character in the function name must be in lower case.
+    * Function Names: Use Camelcase. The first character in the function name must be in lower case.
     * Example: countVowels
     * ---------------------------------------------
-    * Class Names: Use CamelCase. The first character in the class name must be in upper case.
+    * Class Names: Use Pascalcase. The first character in the class name must be in upper case.
     * Example: ExampleClassName
     * ---------------------------------------------
     * Constant Variables: Use uppercase letters for all characters in constant variable names.
@@ -65,7 +65,7 @@ class Group22
     * Indentation: Use a tab size of 4.
     * Spacing: Surround '=' with spaces. 
     * Place a space after ','
-    * Do NOT place a space after ';'.
+    * Do NOT place a space before ';'.
     * Good Examples: int num = 1;
     *                int addNums(int a, int b);
     * Bad Examples:  int num=1 ;
@@ -83,7 +83,7 @@ class Group22
     int divideIntegers(int a, int b) {
         // implementation
     }
-    ***********************************************/
+    /***********************************************/
 
 
     /***********************************************/
@@ -96,20 +96,22 @@ class Group22
     * Example: This function takes two integers (a and b) as inputs, divides a by b, and returns the quotient.
     * ---------------------------------------------
     * Precondition: This section is optional. Ex: b != 0
+    * Explain what will happen......()
     
     /***********************************************/
     int countVowels(
-        const string& str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
+        const string &str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
     );
     // Returns: int - the number of vowels in the input string
     /* Brief description of what the function does.
     * Example: This function takes a string parameter by constant reference and counts the number of vowels in the string.
     * ---------------------------------------------
     * Precondition: This section is optional. Ex: str is NOT an empty string
+    * Explain what will happen......()
 
     /***********************************************/
     void initializeChar(
-        char& charPtr   // char& charPtr - a reference to a char that will be set to 'A' (out)
+        char &charPtr   // char& charPtr - a reference to a char that will be set to 'A' (out)
     );
     // Returns: void
     /* Brief description of what the function does.
@@ -117,7 +119,7 @@ class Group22
 
     /***********************************************/
     void initializeOne(
-        int* arr,    // a pointer to an array of integers (out)
+        int *arr,    // a pointer to an array of integers (out)
         int n        // the number of elements in the array  (in)
     );
     // Returns: void
@@ -126,7 +128,7 @@ class Group22
     
     /***********************************************/
     void multiplyByTwo(
-        double& num    // a reference to the double value that needs to be multiplied by 2 (in/out)
+        double &num    // a reference to the double value that needs to be multiplied by 2 (in/out)
     );
     // Returns: void
     /* Brief description of what the function does.
@@ -135,8 +137,11 @@ class Group22
     */
   
     private:
+        // description of CAPACITY
         const int CAPACITY;
-        char* name;
+
+        // description of name
+        char *name;
 
 };
 
