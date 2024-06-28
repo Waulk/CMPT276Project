@@ -18,3 +18,15 @@
  * #define PRODUCTRELEASE_H
  * #include <iostream>
  ***********************************************/
+
+
+class ProductRelease
+{
+    public:
+        ProductRelease();
+
+    private:
+        char *productName;
+        char *releaseId;
+        char *date;
+};
