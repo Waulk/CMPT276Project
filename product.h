@@ -7,18 +7,18 @@
  ***********************************************/
 
 /***********************************************
- * Example: The Product class provides blah blah blah......
- * 
- * Below is the instructions/tips from Assignment 3 instruction paper:
- * It is important to state the nature of the cohesion of the module or the nature of (not implementation of) the data or control abstraction retained by/hidden in the module. You may also mention any general rules as to how the module should be used. e.g. "You must call CreateStack() before you can use a stack"
+ * Example: The Product class provides name of the product.
+ * You must call the constructor Product() or Product(char *productName) before you can use this class.
 ***********************************************/
 
 /***********************************************
  * #ifndef PRODUCT_H
  * #define PRODUCT_H
  * #include <iostream>
+ * using namespace std;
  ***********************************************/
-
+#include <iostream>
+using namespace std;
 
 class Product
 {
@@ -38,8 +38,28 @@ class Product
         *  This constructor initializes productName with nullptr
         */
 
+       // getters, setters, user interface, pring product name
+
 
     private:
-        char *productName;
+        const int SIZE = 20;
+        char productName[SIZE];
 
 };
+
+/***********************************************
+UI for Product
+
+=======Product=======
+SELECTION  PRODUCT     
+---------  -------                              
+       1)  xxxxxxxxxx
+       2)  Sea Water
+       ...
+      19)  Canvas
+      20)  ProdMan
+                       <-P  N->
+Make a Selection:
+
+
+***********************************************/
