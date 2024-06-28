@@ -59,7 +59,8 @@ class Group22
     * Example: ExampleClassName
     * ---------------------------------------------
     * Variable Names: Use Camelcase. The first character in the variable name must be in lower case.
-    * Example: int numOfExample;
+    * Examples: int numOfExample;
+    *           int num;
     * ---------------------------------------------
     * Constant Variables: Use uppercase letters for all characters in constant variable names.
     * Example: const COLOR;
