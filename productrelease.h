@@ -111,8 +111,6 @@ class ProductRelease
         // Returns: void
         /* This function prints the product name
 
-        // 3 user interfaces, print a product name
-
         /***********************************************/
         void setProductNameUI();
         // Returns: void
