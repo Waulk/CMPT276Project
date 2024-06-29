@@ -11,15 +11,10 @@
  * You must call the constructor Product() or Product(string productName) before you can use this class.
 ***********************************************/
 
-/***********************************************
- * #ifndef PRODUCT_H
- * #define PRODUCT_H
- * #include <iostream>
- * using namespace std;
- ***********************************************/
-
+#ifndef PRODUCT_H
+#define PRODUCT_H
 #include <iostream>
-using namespace std;
+using std::string;
 
 class Product
 {
@@ -36,6 +31,10 @@ class Product
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Product
+        * ---------------------------------------------
+        * Precondition: 
+        * productName != "" (empty string). The max length of productName is 10. 
+        * If these preconditions are not met, it will throw an exception with an error message
        
         /***********************************************/
         string getProductName();
@@ -44,11 +43,15 @@ class Product
 
         /***********************************************/
         void setProductName(
-            string productName  // string productName - a name to assign the product (in)
+            const string &productName  // string productName - a name to assign the product (in)
         );
         // Returns: void
         /* This is a setter of productName
          * It assigns the parameter value to the productName
+         * ---------------------------------------------
+         * Precondition: productName != "" (empty string). The max length of productName is 10.
+         * If this precondition is not met, it will display an error message and return the function 
+         * WITHOUT assigning the parameter value to the productName
 
         /***********************************************/
         void printProductName();
@@ -72,7 +75,7 @@ class Product
         *  ...
         * 19)  Canvas
         * 20)  ProdMan
-        *              <-P  N->
+        *             <-P X N->
         * Make a Selection:
         */
        
@@ -85,3 +88,4 @@ class Product
 
 };
 
+#endif
