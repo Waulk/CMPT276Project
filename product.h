@@ -3,7 +3,9 @@
  * 
  * Code Version History: 
  * Ver. 1: - 2024-06-28 Original by Maki Hosokawa
- *         - Initial version 
+ *         - Initial version
+ * Ver. 2: - 2024-07-02 Edited by Jayden Brown
+ *         - Updated the prototypes to handle UI internally.
  ***********************************************/
 
 /***********************************************
@@ -18,6 +20,10 @@ using std::string;
 
 class Product
 {
+    public:
+        // Size of product name
+        static const int PRODUCTNAMESIZE = 10;
+
     public:
         /***********************************************/
         Product();
@@ -59,12 +65,13 @@ class Product
         /* This functions print the product name
 
         /***********************************************/
-        void displayProductUI();
-        // Returns: void
-        /* Write a detailed description of what the function does.
-        * This function displays a user interface to show a list of products.
-        * t displays up to 20 products on each page.
-        * If there are more than 20 products, it includes buttons to move to the next or previous set of 20 products.
+        static Product getProductFromUser(
+            bool createNew = false  // bool createNew - If the User Interface should allow a user to create a new Product (in)
+        );
+        // Returns: Product
+        /* This function displays a user interface for the selection of a product.
+        *  It displays up to 20 products per page from the local file.
+        *  If there are more than 20 products, it includes buttons to move to the next or previous set of 20 products.
         * 
         * Example UI:
         * =======Product=======
@@ -78,13 +85,18 @@ class Product
         *             <-P X N->
         * Make a Selection:
         */
+
+        /***********************************************/
+        bool isValid();
+        // Returns: True if the Product is valid and was created properly, False otherwise
+        /* This method determines if a generated Product from the function getProductFromUser is valid.
+        */
        
     private:
         // char[] - name of the product. Fixed length (10 char)
-        char productName[SIZE];
+        char productName[PRODUCTNAMESIZE];
 
-        // size of product name
-        static const SIZE = 10;
+        
 
 };
 
