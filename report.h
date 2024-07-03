@@ -23,8 +23,6 @@ class Report
     public:
         // size of email address
         static const int EMAILDATASIZE = 24;
-        // size of change id 
-        static const int CHANGEIDSIZE = 7;
         // size of releaseId
         static const int IDSIZE = 8;
 
@@ -37,7 +35,7 @@ class Report
         /***********************************************/
         Report(
             string email,          // string email - a email assign the customer (in)
-            string changeId,       // string changeId - the changeId of the report (in)
+            int changeId,       // int changeId - the changeId of the report (in)
             string ReleasId       // string ReleasId - the releaseId of the report (in)
         );
         // Returns: None since this is a constructor
@@ -46,27 +44,27 @@ class Report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 24.
-        * changeId != "" (empty string). The max length of releaseId is 7.
+        * changeId != 0 or negtive. The max int of change id is 999,999.
         * releaseId != "" (empty string). The max length of releaseId is 8. 
         * If these preconditions are not met, it will throw an exception with an error message
 
         /***********************************************/
         string getreport(
             const string &email,          // string email - a email assign the customer (in)
-            const string &changeId       // string changeId - the changeId of the report (in)
+            const int &changeId       // int changeId - the changeId of the report (in)
         );
         // Returns: string - email, changeid, releaseid and date of report
         /* This is a getter of report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
+        * changeId != 0 or negtive. The max int of releaseId is 999,999.
         * If these preconditions are not met, it will throw an exception with an error message
 
         /***********************************************/
         bool setReport(
             const string &email,          // string email - a email assign the customer (in)
-            const string &changeId,       // string changeId - the changeId of the report (in)
+            const int &changeId,       // int changeId - the changeId of the report (in)
             const string &ReleasId       // string ReleasId - the releaseId of the report (in)
         );
         // Returns: True or False
@@ -74,7 +72,7 @@ class Report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
+        * changeId != 0 or negtive. The max int of change id is 999,999.
         * releaseId != "" (empty string). The max length of releaseId is 8. 
         * If these preconditions are not met, it will throw an exception with an error message and will return False
 
@@ -112,14 +110,14 @@ class Report
     private:
         bool checkreport(
             const string &email,          // string email - a email assign the customer (in)
-            const string &changeId       // string changeId - the changeId of the report (in)
+            const int &changeId       // int changeId - the changeId of the report (in)
         );
         // Returns: True or False
         /* This checks if a report is already in the data
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
+        * changeId != 0 or negtive. The max int of change id is 999,999.
         * If these preconditions are not met, it will throw an exception with an error message and return False
         
         /***********************************************/
@@ -130,8 +128,8 @@ class Report
         // char[] - the ID of the release version. Fixed length (Fixed Length: 8 chars)
         char releaseId[IDSIZE];
 
-        // char[] - the change Id. Fixed length (Fixed Length: 7 chars)
-        char changeId[CHANGEIDSIZE]; 
+        // int - Id of the change. Max/min size between 1-999,999.
+        int changeId; 
 
         // fstream - File to save Report objects
         static std::fstream file;
