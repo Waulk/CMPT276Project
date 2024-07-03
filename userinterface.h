@@ -65,6 +65,15 @@ class UserInterface
         */
 
         /***********************************************/
+        static bool isYesOrNo(
+            const std::string& entered      // std::string& entered - a constant reference to a string that must be in the format of 'Y' or 'N' (in)
+        );
+        // Returns: True if the string == 'Y' and false if the string == 'N'
+        // Exception: If the string is neither 'Y' or 'N' an "std::invalid_argument" exception is thrown.
+        /* This method determines if an entered string is a yes or a no for a (Y/N) question.
+        */
+
+        /***********************************************/
         std::string getDate();
         // Returns: The current date in the format "YYYY-MM-DD"
 };
