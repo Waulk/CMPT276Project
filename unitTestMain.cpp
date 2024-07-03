@@ -1,5 +1,13 @@
-// unitTestMain.cpp
+/***********************************************
+ * Module: unitTestMain.cpp
+ * 
+ * Ver. 1: - 2024-07-02 Original by Matthew Liu
+ *         - Initial version
+ ***********************************************/
 
+/***********************************************
+ * Handles tests for each module
+***********************************************/
 #include "product.h"
 #include <iostream>
 
