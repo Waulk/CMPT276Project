@@ -13,12 +13,22 @@
 #ifndef Reporter_H
 #define Reporter_H
 #include <iostream>
+#include <fstream>
 using std::string;
 
 class Reporter
 {
     public:
-    // Reporter UI in a stactic funcation
+        // size of email address
+        static const int EMAILDATASIZE = 24;
+        // size of customers name 
+        static const int CUSTOMERNAMESIZE = 30;
+        // size of phone number
+        static const int PHONENUMBERSIZE = 11;
+        // size of department id
+        static const int DEPTIDSIZE = 12;
+
+        // Reporter UI in a stactic funcation
         /***********************************************/
         Reporter();
         // Returns: None since this is a constructor
@@ -89,7 +99,35 @@ class Reporter
         /* This function dispalys an UI and shows a list of all the customers
 
         /***********************************************/
-      
+
+       static *char openReporterFileAndRead();
+       // Returns: char pointer to start of file 
+        /* This function opens the file and points to the top of the file
+         * ---------------------------------------------
+         * Precondition: The file to get opened exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool openReporterFileAndWrite(
+        string &addToFile       // string addTofile - the that is added to end of file
+       );
+       // Returns: bool - return true if the file opened and had the string successfully add to it, false otherwise
+        /* This function open and write in the file
+         * ---------------------------------------------
+         * Precondition: The file to get opened exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool closeReporterFile();
+       // Returns: bool - return true if the file got closed successfully, false otherwise
+        /* This function closes the file
+         * ---------------------------------------------
+         * Precondition: The file to get closed exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+              
 
     private:
         bool checkDep (
@@ -102,6 +140,21 @@ class Reporter
         * If this precondition is not met, it will display an error message and the function will return False
           
         /***********************************************/ 
+
+        // char[] - email address. Fixed length (Fixed Length: 24 chars)
+        char email[EMAILDATASIZE];
+
+        // char[] - the customers name. Fixed length (Fixed Length: 30 chars)
+        char customerName[CUSTOMERNAMESIZE];
+
+        // char[] - the phone number. Fixed length (Fixed Length: 11 chars)
+        char phoneNumber[PHONENUMBERSIZE]; 
+
+        // char[] - the department name. Fixed length (Fixed Length: 12 chars)
+        char deparmentId[DEPTIDSIZE]; 
+
+        // fstream - File to save Report objects
+        static std::fstream file;
 
 };
 
