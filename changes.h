@@ -90,44 +90,58 @@ class Changes
         /* This is a getter of isBug
 
         /***********************************************/
-        int setchangeId();
+        int setchangeId(
+            const int &changeId
+        );
         // Returns: voId
         /* This is a setter of ChangeId
         *  It assigns the parameter value to the changeId
 
         /***********************************************/
-        string setchangeStatus();
+        void setchangeStatus(
+            const string &changeStatus
+        );
         // Returns: voId
         /* This is a setter of ChangeStatus
         *  It assigns the parameter value to the ChangeStatus
 
         /***********************************************/
-        void setProductName();
+        void setProductName(
+            const string &productName
+        );
         // Returns: voId
         // Returns: string - product name of the Change
         /* This is a setter of ProductName
         *  It assigns the parameter value to the productName
 
         /***********************************************/
-        string setReleaseId();
+        void setReleaseId(
+            const string &releaseId
+        );
         // Returns: voId
         /* This is a setter of ReleaseId
         *  It assigns the parameter value to the ReleaseId
 
         /***********************************************/
-        int setPriority();
+        void setPriority(
+            const int &priority
+        );
         // Returns: voId
         /* This is a setter of Priority
         *  It assigns the parameter value to the Priority
         
         /***********************************************/
-        string setDescription();
+        void setDescription(
+            const string &description
+        );
         // Returns: voId
         /* This is a setter of description
         *  It assigns the parameter value to the description
 
         /***********************************************/
-        bool setIsBug();
+        void setIsBug(
+            const bool &isBug
+        );
         // Returns: voId
         /* This is a setter of isBug
         *  It assigns the parameter value to isBug
@@ -150,16 +164,6 @@ class Changes
         string viewNewChangesUI();
         // Returns: string
         /* This function prints the UI for new changes.
-        
-        /***********************************************/
-
-        /***********************************************/
-        bool isValid();
-        // Returns: True if the Change is valId and was created properly, False otherwise
-        /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valId.
-        */
-
-        /***********************************************/
         /*
         =======Changes=======
         SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
@@ -171,6 +175,12 @@ class Changes
             20)  Done           4         App should save                 F
                                 <-P X N->
         Make a Selection:
+        */
+        /***********************************************/
+
+        bool isValid();
+        // Returns: True if the Change is valId and was created properly, False otherwise
+        /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valId.
         */
 
         /***********************************************/
