@@ -56,7 +56,7 @@ class ProductRelease
 
        /***********************************************/
        static ProductRelease createNewProductRelease(
-            string productName      // string productName - the name of the product we're getting the release for
+            string productName      // string productName - the name of the product we're getting the release for (in)
        );
        // Returns: The new ProductRelease created by prompts
        /* Prompts the user to create a new Product Release
@@ -67,7 +67,7 @@ class ProductRelease
 
        /***********************************************/
        static ProductRelease getProductReleaseFromUser(
-            string productName      // string productName - the name of the product we're getting the release for
+            string productName      // string productName - the name of the product we're getting the release for (in)
        );
        // Returns: A ProductRelease from the user's selection
        /* Prompts the user for a Product Release for a specific Product
