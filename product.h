@@ -68,7 +68,7 @@ class Product
         static Product getProductFromUser(
             bool createNew = false  // bool createNew - If the User Interface should allow a user to create a new Product (in)
         );
-        // Returns: Product
+        // Returns: Product - the Product from the user's selection
         /* This function displays a user interface for the selection of a product.
         *  It displays up to 20 products per page from the local file.
         *  If there are more than 20 products, it includes buttons to move to the next or previous set of 20 products.
