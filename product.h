@@ -16,6 +16,7 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 #include <iostream>
+#include <fstream>
 using std::string;
 
 class Product
@@ -65,6 +66,12 @@ class Product
         /* This functions print the product name
 
         /***********************************************/
+        bool isValid();
+        // Returns: True if the Product is valid and was created properly, False otherwise
+        /* This method determines if a generated Product from the function getProductFromUser is valid.
+        */
+
+        /***********************************************/
         static Product getProductFromUser(
             bool createNew = false  // bool createNew - If the User Interface should allow a user to create a new Product (in)
         );
@@ -86,15 +93,61 @@ class Product
         * Make a Selection:
         */
 
-        /***********************************************/
-        bool isValid();
-        // Returns: True if the Product is valid and was created properly, False otherwise
-        /* This method determines if a generated Product from the function getProductFromUser is valid.
+       /***********************************************/
+        static Product readFromFile(
+            bool &isEnd    // bool &notEnd - indicates whether it has reached to the end of the file. True if it has reached the end, false otherwise (out)
+        );
+        // Returns: Product - the Product from the file
+        /* This function read and return the Product from the file
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+        static bool writeToFile(
+            Product product     // product to add to the file (in)
+        );
+        // Returns: bool - return true if writing to the file succeed, false otherwise
+        /* This function write a Procut to the file
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool seekToBeginningOfFile();
+        // Returns: bool - return true if reached to the beginning of file successfully, false otherwise
+        /* This function rewinds to the beginning of the file 
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool openProductFile();
+       // Returns: bool - return true if the file got opened successfully, false otherwise
+        /* This function opens the file
+         * ---------------------------------------------
+         * Precondition: The file to get opened exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool closeProductFile();
+       // Returns: bool - return true if the file got closed successfully, false otherwise
+        /* This function closes the file
+         * ---------------------------------------------
+         * Precondition: The file to get closed exists
+         * If this precondition is not met, it will display an error message and throw an exception
         */
        
     private:
         // char[] - name of the product. Fixed length (10 char)
         char productName[PRODUCTNAMESIZE];
+
+        // fstream - File to save Product objects
+        static std::fstream file;
 
         
 

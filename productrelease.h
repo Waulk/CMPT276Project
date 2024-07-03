@@ -16,6 +16,7 @@
 #ifndef PRODUCTRELEASE_H
 #define PRODUCTRELEASE_H
 #include <iostream>
+#include <fstream>
 using std::string;
 
 class ProductRelease
@@ -185,6 +186,55 @@ class ProductRelease
         * and getProductReleaseFromUser were generated correctly
         */
 
+       /***********************************************/
+        static ProductRelease readFromFile(
+            bool &isEnd    // bool &notEnd - indicates whether it has reached to the end of the file. True if it has reached the end, false otherwise (out)
+        );
+        // Returns: ProductRelease - the ProductRelease from the file
+        /* This function read and return the ProductRelease from the file
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+        static bool writeToFile(
+            ProductRelease productRelease     // product to add to the file (in)
+        );
+        // Returns: bool - return true if writing to the file succeed, false otherwise
+        /* This function write a ProcutRelease to the file
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool seekToBeginningOfFile();
+        // Returns: bool - return true if reached to the beginning of file successfully, false otherwise
+        /* This function rewinds to the beginning of the file 
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool openProductReleaseFile();
+       // Returns: bool - return true if the file got opened successfully, false otherwise
+        /* This function opens the file
+         * ---------------------------------------------
+         * Precondition: The file to get opened exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       static bool closeProductReleaseFile();
+       // Returns: bool - return true if the file got closed successfully, false otherwise
+        /* This function closes the file
+         * ---------------------------------------------
+         * Precondition: The file to get closed exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
     private:
         // char[] - name of the product. Fixed length (Fixed Length: 10 chars)
         char productName[NAMEDATESIZE];
@@ -194,6 +244,9 @@ class ProductRelease
 
         // char[] - Release date. The format must be YYYY-MM-DD (Fixed Length: 10 chars)
         char date[NAMEDATESIZE]; 
+
+        // fstream - File to save ProductRelease objects
+        static std::fstream file;
         
         
 };
