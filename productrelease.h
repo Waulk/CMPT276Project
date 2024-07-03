@@ -147,12 +147,6 @@ class ProductRelease
         */
 
         /***********************************************/
-        void printProductName();
-        // Returns: void
-        /* This function prints the product name
-        */
-
-        /***********************************************/
         void setProductNameUI();
         // Returns: void
         /* This function displays an UI to prompt a user to enter a product name
