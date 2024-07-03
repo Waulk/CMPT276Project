@@ -2,10 +2,10 @@
  * Module: product.h
  * 
  * Code Version History: 
- * Ver. 1: - 2024-06-28 Original by Maki Hosokawa
- *         - Initial version
  * Ver. 2: - 2024-07-02 Edited by Jayden Brown
  *         - Updated the prototypes to handle UI internally.
+ * Ver. 1: - 2024-06-28 Original by Maki Hosokawa
+ *         - Initial version
  ***********************************************/
 
 /***********************************************
