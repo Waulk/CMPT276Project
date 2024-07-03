@@ -1,4 +1,29 @@
 /***********************************************
+ * Module: main.cpp
+ * 
+ * Ver. 1: - 2024-07-02 Original by Jayden Brown
+ *         - Initial version
+ ***********************************************/
+
+/***********************************************
+ * Main handles startup and shutdown, and its main purpose is initializing the UserInterface.
+***********************************************/
+
+#include <iostream>
+#include "userinterface.h"
+
+int main()
+{
+    // Initialize the UserInterface and run the Main Menu
+    UserInterface userInterface;
+    userInterface.runMainMenu();
+    return 0;
+}
+
+/***********************************************
+ * Coding Conventions
+
+/***********************************************
  * Module: main.h
  * 
  * Code Version History: (The latest top and the oldest bottom)
@@ -109,7 +134,7 @@ class Group22
     
     /***********************************************/
     int countVowels(
-        const string &str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
+        const std::string &str   // string& str -  a constant reference to the input string whose vowels need to be counted (in)
     );
     // Returns: int - the number of vowels in the input string
     /* Brief description of what the function does.
