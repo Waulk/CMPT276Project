@@ -7,8 +7,8 @@
  ***********************************************/
 
 /***********************************************
- * Example: The Changes class provides description of a change.
- * You must call the constructor Changes() or Changes(int changeID, string changeStatus, ... bool isBug) before using this class.
+ * Example: The Changes class provIdes description of a change.
+ * You must call the constructor Changes() or Changes(int changeId, string changeStatus, ... bool isBug) before using this class.
 ***********************************************/
 
 #ifndef Changes_H
@@ -23,8 +23,8 @@ class Changes
         static const int CHANGESTATUSSIZE = 10;
         // size of product name
         static const int PRODUCTNAMESIZE = 10;
-        // size of release id
-        static const int RELEASE_IDSIZE = 8;
+        // size of release Id
+        static const int RELEASE_IdSIZE = 8;
         // size of description size
         static const int DESCRIPTIONSIZE = 30;
 
@@ -34,30 +34,30 @@ class Changes
         Changes();
         // Returns: None since this is a constructor
         /* This is a constructor of Changes
-        *  This constructor initializes changeID with a nullptr
+        *  This constructor initializes changeId with a nullptr
 
         /***********************************************/
         Changes(
-            int changeID,  // int changeID - a number assigned to a change (in)
+            int changeId,  // int changeId - a number assigned to a change (in)
             string changeStatus, // string changeStatus - current status of the change (in)
             string productName, // string productName - 1-10 characters, name of the product (in)
-            string release_id, // string release_id - current release id (in)
+            string release_Id, // string release_Id - current release Id (in)
             int priority, // int priority - current priority level of the change (in)
             string description, // string description - a description of the bug/feature (in)
             bool isBug  // bool isBug - a boolean value that determines if the change is a bug or feature (in)
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Changes
-        *  This constructor initializes changeID, changeStatus, productName, release_id, priority, description, and isBug.
+        *  This constructor initializes changeId, changeStatus, productName, release_Id, priority, description, and isBug.
         * ---------------------------------------------
         * Precondition: 
-        * changeID != "" (empty string). **********************************************The max value of changeID is 999999. ****************
+        * changeId != "" (empty string). **********************************************The max value of changeId is 999999. ****************
         * If these preconditions are not met, it will throw an exception with an error message
        
         /***********************************************/
-        int getchangeID();
-        // Returns: int - changeID of the Change
-        /* This is a getter of ChangeID
+        int getchangeId();
+        // Returns: int - changeId of the Change
+        /* This is a getter of ChangeId
 
         /***********************************************/
         string getchangeStatus();
@@ -71,8 +71,8 @@ class Changes
 
         /***********************************************/
         string getReleaseId();
-        // Returns: string - release id of the Change
-        /* This is a getter of ReleaseID
+        // Returns: string - release Id of the Change
+        /* This is a getter of ReleaseId
 
         /***********************************************/
         int getPriority();
@@ -90,59 +90,60 @@ class Changes
         /* This is a getter of isBug
 
         /***********************************************/
-        int setchangeID();
-        // Returns: void
-        /* This is a setter of ChangeID
-        *  It assigns the parameter value to the changeID
+        int setchangeId();
+        // Returns: voId
+        /* This is a setter of ChangeId
+        *  It assigns the parameter value to the changeId
 
         /***********************************************/
         string setchangeStatus();
-        // Returns: void
+        // Returns: voId
         /* This is a setter of ChangeStatus
         *  It assigns the parameter value to the ChangeStatus
 
         /***********************************************/
-        // Returns: void
+        voId setProductName();
+        // Returns: voId
         // Returns: string - product name of the Change
         /* This is a setter of ProductName
         *  It assigns the parameter value to the productName
 
         /***********************************************/
         string setReleaseId();
-        // Returns: void
-        /* This is a setter of ReleaseID
-        *  It assigns the parameter value to the ReleaseID
+        // Returns: voId
+        /* This is a setter of ReleaseId
+        *  It assigns the parameter value to the ReleaseId
 
         /***********************************************/
         int setPriority();
-        // Returns: void
+        // Returns: voId
         /* This is a setter of Priority
         *  It assigns the parameter value to the Priority
         
         /***********************************************/
         string setDescription();
-        // Returns: void
+        // Returns: voId
         /* This is a setter of description
         *  It assigns the parameter value to the description
 
         /***********************************************/
         bool setIsBug();
-        // Returns: void
+        // Returns: voId
         /* This is a setter of isBug
         *  It assigns the parameter value to isBug
 
         /***********************************************/
 
-        void setChangeID(
-            const int &changeID  // string changeID - a name to assign the product (in)
+        voId setChangeId(
+            const int &changeId  // string changeId - a name to assign the product (in)
         );
-        // Returns: void
-        /* This is a setter of changeID
-         * It assigns the parameter value to the changeID
+        // Returns: voId
+        /* This is a setter of changeId
+         * It assigns the parameter value to the changeId
          * ---------------------------------------------
-         * Precondition: changeID != "" (empty string). The max length of changeID is 999,999.
+         * Precondition: changeId != "" (empty string). The max length of changeId is 999,999.
          * If this precondition is not met, it will display an error message and return the function 
-         * WITHOUT assigning the parameter value to the changeID
+         * WITHOUT assigning the parameter value to the changeId
 
         /***********************************************/
 
@@ -153,9 +154,9 @@ class Changes
         /***********************************************/
 
         /***********************************************/
-        bool isValid();
-        // Returns: True if the Change is valid and was created properly, False otherwise
-        /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valid.
+        bool isValId();
+        // Returns: True if the Change is valId and was created properly, False otherwise
+        /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valId.
         */
 
         /***********************************************/
@@ -278,8 +279,8 @@ class Changes
     private:       
 
 
-        // int - ID of the change. Max/min size between 1-999,999.
-        int changeID;       
+        // int - Id of the change. Max/min size between 1-999,999.
+        int changeId;       
         // int - priority level of the change. A number between 1 and 5.
         int priority; 
 
@@ -289,8 +290,8 @@ class Changes
         // char[] - the name of the product associated with this change.
         char productName[PRODUCTNAMESIZE]; 
 
-        // char[] - the release id associated with this change.
-        char release_id[RELEASE_IDSIZE]; 
+        // char[] - the release Id associated with this change.
+        char release_Id[RELEASE_IdSIZE]; 
 
         // char[] - a brief description of the bug or feature.
         char description[DESCRIPTIONSIZE]; 
