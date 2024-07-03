@@ -102,7 +102,7 @@ class Changes
         *  It assigns the parameter value to the ChangeStatus
 
         /***********************************************/
-        voId setProductName();
+        void setProductName();
         // Returns: voId
         // Returns: string - product name of the Change
         /* This is a setter of ProductName
@@ -134,7 +134,7 @@ class Changes
 
         /***********************************************/
 
-        voId setChangeId(
+        void setChangeId(
             const int &changeId  // string changeId - a name to assign the product (in)
         );
         // Returns: voId
@@ -154,13 +154,13 @@ class Changes
         /***********************************************/
 
         /***********************************************/
-        bool isValId();
+        bool isValid();
         // Returns: True if the Change is valId and was created properly, False otherwise
         /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valId.
         */
 
         /***********************************************/
-
+        /*
         =======Changes=======
         SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
         ---------  ------      --------  -----------                     ---                    
