@@ -94,12 +94,16 @@ class Reporter
         * If these preconditions are not met, it will throw an exception with an error message
         
         /***********************************************/
-        void reporterUI();
+        void viewAllReporter();
         // Returns: void
         /* This function dispalys an UI and shows a list of all the customers
+        
+        /***********************************************/
+        void viewReporterRequesters();
+        // Returns: void
+        /* This function dispalys an UI and shows a list of all the customers who have requested a change
 
         /***********************************************/
-
        static *char openReporterFileAndRead();
        // Returns: char pointer to start of file 
         /* This function opens the file and points to the top of the file
