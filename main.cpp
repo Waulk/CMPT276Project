@@ -173,7 +173,7 @@ class Group22
   
     private:
         // description of CAPACITY
-        const int CAPACITY;
+        const int CAPACITY = 1;
 
         // description of name
         char *name;
