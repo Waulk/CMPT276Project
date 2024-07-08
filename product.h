@@ -9,7 +9,7 @@
  ***********************************************/
 
 /***********************************************
- * Example: The Product class provides name of the product.
+ * The Product class provides name of the product.
  * You must call the constructor Product() or Product(string productName) before you can use this class.
 ***********************************************/
 
@@ -144,7 +144,7 @@ class Product
        
     private:
         // char[] - name of the product. Fixed length (10 char)
-        char productName[PRODUCTNAMESIZE];
+        char productName[PRODUCTNAMESIZE + 1];
 
         // fstream - File to save Product objects
         static std::fstream file;
