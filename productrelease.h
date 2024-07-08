@@ -9,7 +9,7 @@
  ***********************************************/
 
 /***********************************************
- * Example: The ProductRelease class provides the name of the product.
+ * The ProductRelease class provides the name of the product.
  * You must call the constructor ProductRelease() or ProductRelease(char *productName, char *releaseId, char *date) before you can use this class.
 ***********************************************/
 
@@ -231,13 +231,13 @@ class ProductRelease
 
     private:
         // char[] - name of the product. Fixed length (Fixed Length: 10 chars)
-        char productName[NAMEDATESIZE];
+        char productName[NAMEDATESIZE + 1];
 
         // char[] - the ID of the release version. Fixed length (Fixed Length: 8 chars)
-        char releaseId[IDSIZE];
+        char releaseId[IDSIZE + 1];
 
         // char[] - Release date. The format must be YYYY-MM-DD (Fixed Length: 10 chars)
-        char date[NAMEDATESIZE]; 
+        char date[NAMEDATESIZE + 1]; 
 
         // fstream - File to save ProductRelease objects
         static std::fstream file;
