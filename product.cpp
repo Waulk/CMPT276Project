@@ -19,7 +19,7 @@ using std::string;
 /***********************************************/
 Product::Product()
 {
-    memset(productName, '\0', sizeof(productName));
+    memset(productName, '\0', PRODUCTNAMESIZE + 1);
 }
 
 /***********************************************/
@@ -34,5 +34,36 @@ Product::Product(string name)
     for(int i=name.length(); i < PRODUCTNAMESIZE + 1; i++){
          productName[i] = '\0';
     }
+}
+
+/***********************************************/
+string Product::getProductName()
+{
+    string name(productName);
+    return name;
+}
+
+/***********************************************/
+void Product::setProductName(const string &name)
+{
+    strncpy(productName, name.c_str(), PRODUCTNAMESIZE);
+}
+
+/***********************************************/
+void Product::printProductName()
+{
+
+}
+
+/***********************************************/
+bool Product::isValid()
+{
+
+}
+
+/***********************************************/
+Product Product::getProductFromUser(bool createNew)
+{
+
 }
 

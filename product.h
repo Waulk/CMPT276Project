@@ -34,7 +34,7 @@ class Product
 
         /***********************************************/
         Product(
-            string productName  // string productName - a name to assign the product (in)
+            string name  // string productName - a name to assign the product (in)
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Product
@@ -50,7 +50,7 @@ class Product
 
         /***********************************************/
         void setProductName(
-            const string &productName  // string productName - a name to assign the product (in)
+            const string &name  // string name - a name to assign the product (in)
         );
         // Returns: void
         /* This is a setter of productName
