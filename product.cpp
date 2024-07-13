@@ -7,7 +7,8 @@
  ***********************************************/
 
 /***********************************************
- * description
+ * product.cpp
+ * This file implements the member functions defined in the product.h header file.
 ***********************************************/
 
 #include <iostream>
@@ -149,6 +150,10 @@ Product Product::getProductFromUser(bool createNew)
 
                 return readFromFile(isEnd);
             }
+            else
+            {
+                throw std::out_of_range("Invalid selection number.");
+            }
         }
     }
 
@@ -158,14 +163,33 @@ Product Product::getProductFromUser(bool createNew)
 /***********************************************/
 Product Product::setProductNameUI()
 {
-    // Maki 
+    Product newProduct;
+    string inputName;
+    bool isValid = false;
+
+    cout << "=====New Product=====" << endl;
+    while(!isValid)
+    {
+        cout << "Enter the Product Name (max 10 char.): ";
+        std::getline(std::cin, inputName);
+
+        if (inputName.empty())
+        {
+            cout << "Error: Product name cannot be empty. Please try again." << endl;
+        }
+        else if (inputName.length() > PRODUCTNAMESIZE)
+        {
+            cout << "Error: Product name cannot be longer than 10 characters. Please try again." << endl;
+        }
+        else
+        {
+            newProduct.setProductName(inputName);
+            isValid = true;
+        }
+    }
+
+    return newProduct;
 }
-        // Returns: void
-        /* This function displays an UI to prompt a user to enter a product name
-        * Example UI:
-        * =====New Product=====
-        * Enter the Product Name (max 10 char.):
-        */
 
 /***********************************************/
 Product Product::readFromFile(bool &isEnd)
@@ -185,11 +209,13 @@ bool Product::seekToBeginningOfFile()
 
 }
 
+/***********************************************/
 bool Product::openProductFile()
 {
 
 }
 
+/***********************************************/
 bool Product::closeProductFile()
 {
 

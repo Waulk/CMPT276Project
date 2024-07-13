@@ -5,9 +5,9 @@
  * Ver. 1: - 2024-07-08 Original by Maki Hosokawa
  *         - Initial version 
  ***********************************************/
-
 /***********************************************
- * description
+ * productrelease.cpp
+ * This file implements the member functions defined in the productrelease.h header file.
 ***********************************************/
 
 #include <iostream>
@@ -226,7 +226,7 @@ void ProductRelease::setDateUI()
             cout << "Invalid date format. Please try again.\n"; // Maki
         }
     }
-/*  Maki
+/*  
     if(!valid)
     {
         throw std::invalid_argument("Invalid date format. Please enter the date in the format YYYY-MM-DD.");
@@ -234,7 +234,6 @@ void ProductRelease::setDateUI()
 }
 
 /***********************************************/
-
 void ProductRelease::setReleaseIdUI()
 {
     string inputReleaseId;
@@ -261,7 +260,7 @@ void ProductRelease::setReleaseIdUI()
             valid = true;
         }
     }
-/*  Maki
+/*  
     if(!valid)
     {
         throw std::invalid_argument("Invalid release ID. Please enter a valid release ID with a maximum of 8 characters.");

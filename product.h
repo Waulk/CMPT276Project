@@ -73,10 +73,11 @@ class Product
         static Product getProductFromUser(
             bool createNew = false  // bool createNew - If the User Interface should allow a user to create a new Product (in)
         );
-        // Returns: Product - the Product from the user's selection
+        // Returns: Product - the Product from the user's selection. It throws an out_of_range exception if user selects invalid number.
         /* This function displays a user interface for the selection of a product.
         *  It displays up to 20 products per page from the local file.
         *  If there are more than 20 products, it includes buttons to move to the next or previous set of 20 products.
+        * It does NOT display 'X' when createNew == false.
         * 
         * Example UI:
         * =======Product=======

@@ -78,6 +78,18 @@ class ProductRelease
        *  If there are more than 20 product releases, it includes buttons to move to the next or previous set of 20 product releases.
        * ---------------------------------------------
        * Precondition: productName must be a valid product within the system.
+       * * Example UI:
+        *   =======Release=======
+            SELECTION  RELEASE   DATE    
+            ---------  --------  --------            
+                1)  xxxxxxxx  dddd-dd-dd
+                2)  1.19.1    2024-09-04
+                ...
+                19)  1.20.6    2025-01-10
+                20)  1.25.93   2028-09-06
+                                <-P  N->
+            Make a Selection:
+       *
        */
 
         /***********************************************/
