@@ -2,6 +2,10 @@
  * Module: product.h
  * 
  * Code Version History: 
+ * Ver. 3: - 2024-07-12 Edited by Maki Hosokawa
+ *         - Removed isValid()
+ *         - adjust comments for the costructors
+ *         - moved setProductNameUI() from productrelease.h
  * Ver. 2: - 2024-07-02 Edited by Jayden Brown
  *         - Updated the prototypes to handle UI internally.
  * Ver. 1: - 2024-06-28 Original by Maki Hosokawa
@@ -41,7 +45,7 @@ class Product
         * ---------------------------------------------
         * Precondition: 
         * productName != "" (empty string). The max length of productName is 10. 
-        * If these preconditions are not met, it will throw an exception with an error message
+        * If these preconditions are not met, it will create a Product object with invalid name
        
         /***********************************************/
         string getProductName();
@@ -66,12 +70,6 @@ class Product
         /* This functions print the product name
 
         /***********************************************/
-        bool isValid();
-        // Returns: True if the Product is valid and was created properly, False otherwise
-        /* This method determines if a generated Product from the function getProductFromUser is valid.
-        */
-
-        /***********************************************/
         static Product getProductFromUser(
             bool createNew = false  // bool createNew - If the User Interface should allow a user to create a new Product (in)
         );
@@ -91,6 +89,15 @@ class Product
         * 20)  ProdMan
         *             <-P X N->
         * Make a Selection:
+        */
+
+       /***********************************************/
+        static Product setProductNameUI();
+        // Returns: Product
+        /* This function displays an UI to prompt a user to enter a product name
+        * Example UI:
+        * =====New Product=====
+        * Enter the Product Name (max 10 char.):
         */
 
        /***********************************************/

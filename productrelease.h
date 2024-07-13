@@ -2,6 +2,8 @@
  * Module: productrelease.h
  * 
  * Code Version History: 
+ * Ver. 3: - 2024-07-12 Edited by Maki Hosokawa
+ *         - Removed isValid() and adjust comments for the costructors
  * Ver. 2: - 2024-07-02 Edited by Jayden Brown
  *         - Updated the prototypes to handle UI internally.
  * Ver. 1: - 2024-06-28 Original by Maki Hosokawa
@@ -52,7 +54,7 @@ class ProductRelease
         *   - The year is in the format "2024" or "1990", NOT "24" or "90".
         *   - The month is in the format of "11" for November or "01" for January, NOT "1" for January.
         *   - The date is in the format of "25" for the 25th or "03" for the 3rd, NOT "3" for the 3rd. 
-        * If these preconditions are not met, it will throw an exception with an error message
+        * If these preconditions are not met, it will create a ProductRelease object with invalid name
         */
 
        /***********************************************/
@@ -145,15 +147,6 @@ class ProductRelease
         // Returns: void
         /* This function prints the product name
         */
-
-        /***********************************************/
-        void setProductNameUI();
-        // Returns: void
-        /* This function displays an UI to prompt a user to enter a product name
-        * Example UI:
-        * =====New Product=====
-        * Enter the Product Name (max 10 char.):
-        */
         
         /***********************************************/
         void setDateUI();
@@ -171,13 +164,6 @@ class ProductRelease
         * Example UI:
         * =====New Release=====
         * Enter Release Version (max 8 char.):
-        */
-
-        /***********************************************/
-        bool isValid();
-        // Returns: True if the ProductRelease is valid and was created properly, False otherwise
-        /* This function determines if a generated ProductRelease from functions such as createNewProductRelease
-        * and getProductReleaseFromUser were generated correctly
         */
 
        /***********************************************/
