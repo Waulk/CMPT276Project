@@ -90,7 +90,6 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
     newRelease.setDateUI()
 
     return newRelease;
-
 }
 
 /***********************************************/
@@ -193,17 +192,16 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
     }
 
     return ProductRelease();   // Return a default ProductRelease object if no valid selection was made
-
 }
 
 /***********************************************/
+string ProductRelease::getProductName()
 /*
  * Function to get the product name as a string.
  * 
  * Implementation Details:
  * - Constructs a string from the fixed-size character array.
  */
-string ProductRelease::getProductName()
 {
     string name(productName);
     return name;
