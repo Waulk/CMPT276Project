@@ -32,7 +32,6 @@ Product::Product()
     memset(productName, '\0', PRODUCTNAMESIZE + 1);
 }
 
-
 /***********************************************/
 Product::Product(string name)
 /* 
@@ -87,6 +86,7 @@ void Product::setProductName(const string &name)
 }
 
 /***********************************************/
+void Product::printProductName()
 /*
  * This function prints the product name to the console. It first converts 
  * the productName array to a string object, then uses cout to display it.
@@ -95,7 +95,6 @@ void Product::setProductName(const string &name)
  * - Constructs a string from the productName array.
  * - Outputs the string to the console using cout.
  */
-void Product::printProductName()
 {
     string name(productName); 
     cout << name << endl;  

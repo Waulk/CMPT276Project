@@ -1,6 +1,7 @@
 /***********************************************
  * Module: main.cpp
- * 
+ * Ver. 2: - 2024-07-15 Edited by Maki Hosokawa
+ *         - Added the convention for commenting in a cpp file
  * Ver. 1: - 2024-07-02 Original by Jayden Brown
  *         - Initial version
  ***********************************************/
@@ -181,3 +182,26 @@ class Group22
 };
 
 //#endif
+
+// Below is the convention for commenting in a C++ file
+/***********************************************/
+Product Product::getProductFromUser(bool createNew)
+/*
+ * This function interacts with the user to display a list of products and 
+ * allows the user to select one. It handles pagination to display products 
+ * in chunks of 20 per page. If createNew is true, the user has the option 
+ * to create a new product.
+ * 
+ * Implementation Details:
+ * - Initializes control variables for pagination and user input handling.
+ * - Uses a while loop to continuously interact with the user until they exit.
+ * - Seeks to the beginning of the file and skips products from previous pages 
+ *   to display the current page's products.
+ * - Displays the products for the current page and handles user input for 
+ *   pagination or selection.
+ * - If the user selects a valid product number, the function seeks the 
+ *   corresponding position in the file and reads the product.
+ */
+{
+    // function implementation.....
+}
