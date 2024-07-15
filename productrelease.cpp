@@ -21,6 +21,13 @@ using std::endl;
 
 /***********************************************/
 ProductRelease::ProductRelease()
+/*
+ * Default constructor that initializes member variables
+ * productName, releaseId, and date to empty strings using memset.
+ * 
+ * Implementation Details:
+ * - Uses memset to set all characters in the arrays to '\0'.
+ */
 {
     memset(productName, '\0', NAMEDATESIZE + 1); 
     memset(releaseId, '\0', IDSIZE + 1); 
@@ -29,6 +36,15 @@ ProductRelease::ProductRelease()
 
 /***********************************************/
 ProductRelease::ProductRelease(string productName, string releaseId, string date)
+/*
+ * Parameterized constructor that initializes member variables
+ * with provided values. It uses strncpy to copy the values 
+ * into the fixed-size arrays and ensures null-termination.
+ * 
+ * Implementation Details:
+ * - Uses strncpy to copy strings into fixed-size arrays.
+ * - Ensures null termination by explicitly setting the last character.
+ */
 {
     strncpy(productName, productName.c_str(), NAMEDATESIZE);
     strncpy(releaseId, releaseId.c_str(), IDSIZE);
@@ -48,6 +64,16 @@ ProductRelease::ProductRelease(string productName, string releaseId, string date
 
 /***********************************************/
 ProductRelease ProductRelease::createNewProductRelease(string productName)
+/*
+ * Static function that creates a new ProductRelease object with the 
+ * provided product name. It checks the validity of the product name,
+ * then sets the release ID and date using user input.
+ * 
+ * Implementation Details:
+ * - Validates product name length.
+ * - Initializes a new ProductRelease object.
+ * - Prompts the user to set release ID and date.
+ */
 {
     if(productName.empty() || productName.length() > NAMEDATESIZE)
     {
@@ -69,33 +95,47 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
 
 /***********************************************/
 ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
+/*
+ * Function to interactively retrieve a ProductRelease object from the user
+ * by displaying paginated releases and allowing the user to select one.
+ * 
+ * Implementation Details:
+ * - Initializes control variables for pagination and user input handling.
+ * - Uses a while loop to continuously interact with the user until they exit.
+ * - Seeks to the beginning of the file and skips releases from previous pages 
+ *   to display the current page's releases.
+ * - Displays the releases for the current page and handles user input for 
+ *   pagination or selection.
+ * - If the user selects a valid release number, the function seeks to the 
+ *   corresponding position in the file and reads the release.
+ */
 {
-    const int RELEASES_PER_PAGE = 20;
-    bool isEnd = false;
-    bool exit = false;
-    int currentPage = 0;
+    const int RELEASES_PER_PAGE = 20;    // Number of releases displayed per page
+    bool isEnd = false;                  // Flag to indicate end of file
+    bool exit = false;                   // Flag to indicate user wants to exit
+    int currentPage = 0;                 // Current page number
 
-    while(!exit)
+    while(!exit)                         // Loop until user chooses to exit
     {
         // seek to the beginning of the file
-        seekToBeginningOfFile();
+        seekToBeginningOfFile();         // Reset file pointer to the beginning
 
         // skip releases of previous pages
         for(int i = 0; i < currentPage * RELEASES_PER_PAGE; ++i)
         {
-            readFromFile(isEnd);
-            if(isEnd)
+            readFromFile(isEnd);         // Read and discard releases to skip to the current page
+            if(isEnd)                    // If end of file is reached
             {
-                currentPage--;
-                break;
+                currentPage--;           // Adjust current page number
+                break;                   // Exit the loop
             }
         }
 
-        if(isEnd)
+        if(isEnd)                        // If end of file was reached during skipping
         {
-            std::cout << "No more releases to display." << std::endl;
-            currentPage--;
-            continue;
+            std::cout << "No more releases to display." << std::endl; // Inform the user
+            currentPage--;               // Adjust current page number
+            continue;                    // Continue to next iteration
         }
 
         // display the product releases
@@ -105,10 +145,10 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
 
         for(int i = 0; i < RELEASES_PER_PAGE && !isEnd; ++i)
         {
-            ProductRelease release = readFromFile(isEnd);
-            if(!isEnd)
+            ProductRelease release = readFromFile(isEnd); // Read a release from the file
+            if(!isEnd)                // If end of file is not reached
             {
-                std::cout << i + 1 << ") " << release.getReleaseId() << "  " << release.getDate() << "\n";
+                std::cout << i + 1 << ") " << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
             }
         }
 
@@ -117,46 +157,52 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
 
         // get user input
         std::string input;
-        std::cin >> input;
+        std::cin >> input;              // Read user input
 
-        if(input == "P" || input == "p")
+        if(input == "P" || input == "p") // If user wants to go to previous page
         {
-            if(currentPage > 0)
+            if(currentPage > 0)          // If not already on the first page
             {
-                currentPage--;
+                currentPage--;           // Go to previous page
             }
         }
-        else if(input == "N" || input == "n")
+        else if(input == "N" || input == "n") // If user wants to go to next page
         {
-            if(!isEnd)
+            if(!isEnd)                   // If not already at the end of the file
             {
-                currentPage++;
+                currentPage++;           // Go to next page
             }
         }
-        else
+        else                            // If user entered a selection number
         {
-            int selection = std::stoi(input);
-            if(selection > 0 && selection <= RELEASES_PER_PAGE)
+            int selection = std::stoi(input); // Convert input to an integer
+            if(selection > 0 && selection <= RELEASES_PER_PAGE) // If selection is valid
             {
                 // seek again to the beginning of the file
-                seekToBeginningOfFile();
+                seekToBeginningOfFile();  // Reset file pointer to the beginning
 
                 // skip releases of previous pages and selected releases on the current page
                 for(int i = 0; i < currentPage * RELEASES_PER_PAGE + selection - 1; ++i)
                 {
-                    readFromFile(isEnd);
+                    readFromFile(isEnd);  // Read and discard releases to skip to the selected release
                 }
 
-                return readFromFile(isEnd);
+                return readFromFile(isEnd); // Return the selected release
             }
         }
     }
 
-    return ProductRelease();
+    return ProductRelease();   // Return a default ProductRelease object if no valid selection was made
 
 }
 
 /***********************************************/
+/*
+ * Function to get the product name as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+ */
 string ProductRelease::getProductName()
 {
     string name(productName);
@@ -165,6 +211,12 @@ string ProductRelease::getProductName()
 
 /***********************************************/
 string ProductRelease::getReleaseId()
+/*
+ * Function to get the release ID as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+ */
 {
     string id(releaseId);
     return id;
@@ -172,6 +224,12 @@ string ProductRelease::getReleaseId()
 
 /***********************************************/
 string ProductRelease::getDate()
+/*
+ * Function to get the release date as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+ */
 {
     string date(date);
     return date;   
@@ -179,24 +237,55 @@ string ProductRelease::getDate()
 
 /***********************************************/
 void ProductRelease::setProductName(const string &productName)
+/*
+ * Function to set the product name. It uses strncpy to copy the 
+ * provided string into the fixed-size array and ensures null-termination.
+ * 
+ * Implementation Details:
+ * - Uses strncpy to copy the string.
+ * - Ensures the last character is null-terminated.
+ */
 {
     strncpy(productName, productName.c_str(), NAMEDATESIZE);
 }
 
 /***********************************************/
 void ProductRelease::setReleaseId(const string &releaseId)
+/*
+ * Function to set the release ID. It uses strncpy to copy the 
+ * provided string into the fixed-size array and ensures null-termination.
+ * 
+ * Implementation Details:
+ * - Uses strncpy to copy the string.
+ * - Ensures the last character is null-terminated.
+ */
 {
     strncpy(releaseId, releaseId.c_str(), IDSIZE);
 }
 
 /***********************************************/
 void ProductRelease::setDate(const string &date)
+/*
+ * Function to set the release date. It uses strncpy to copy the 
+ * provided string into the fixed-size array and ensures null-termination.
+ * 
+ * Implementation Details:
+ * - Uses strncpy to copy the string.
+ * - Ensures the last character is null-terminated.
+ */
 {
     strncpy(date, date.c_str(), NAMEDATESIZE);
 }
 
 /***********************************************/
 void ProductRelease::printProductName()
+/*
+ * Function to print the product name to the console.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+ * - Outputs the string to the console.
+ */
 {
     string name(productName); 
     cout << name << endl;  
@@ -204,67 +293,73 @@ void ProductRelease::printProductName()
 
 /***********************************************/
 void ProductRelease::setDateUI()
+/*
+ * Function to prompt the user for a release date and set it.
+ * It validates the date format to ensure it matches YYYY-MM-DD.
+ * 
+ * Implementation Details:
+ * - Uses a loop to repeatedly prompt the user until a valid date is entered.
+ * - Validates the input date using a regex pattern.
+ * - Sets the date if the input is valid.
+ */
 {
-    std::string inputDate;
-    bool valid = false;
+    std::string inputDate;  // Declare a string variable to store the user's input
+    bool valid = false;     // Declare and initialize a flag to track the validity of the input
 
-    while(!valid)
+    while(!valid)  // Loop until a valid date is entered
     {
-        cout << "=====New Release=====\n";
-        cout << "Enter Release Date (YYYY-MM-DD): ";
-        cin >> inputDate;
+        cout << "=====New Release=====\n";  // Display a header for the input prompt
+        cout << "Enter Release Date (YYYY-MM-DD): ";  // Prompt the user to enter the release date
+        cin >> inputDate;  // Read the user's input
 
-        // validate the date format
-        const std::regex pattern("^(\\d{4})-(\\d{2})-(\\d{2})$");
-        if(std::regex_match(inputDate, pattern))
+        // Validate the date format using a regular expression
+        const std::regex pattern("^(\\d{4})-(\\d{2})-(\\d{2})$");  // Define a regex pattern for YYYY-MM-DD format
+        if(std::regex_match(inputDate, pattern))  // Check if the input matches the regex pattern
         {
-            setDate(inputDate);
-            valid = true;
+            setDate(inputDate);  // If valid, set the release date
+            valid = true;  // Set the flag to true to exit the loop
         }
-        else
+        else  // If the input is not valid
         {
-            cout << "Invalid date format. Please try again.\n"; // Maki
+            cout << "Invalid date format. Please try again.\n";  // Display an error message and prompt again
         }
     }
-/*  
-    if(!valid)
-    {
-        throw std::invalid_argument("Invalid date format. Please enter the date in the format YYYY-MM-DD.");
-    }*/
 }
 
 /***********************************************/
 void ProductRelease::setReleaseIdUI()
+/*
+ * Function to prompt the user for a release ID and set it.
+ * It validates the length to ensure it does not exceed 8 characters.
+ * 
+ * Implementation Details:
+ * - Uses a loop to repeatedly prompt the user until a valid release ID is entered.
+ */ 
 {
-    string inputReleaseId;
-    bool valid = false;
+    string inputReleaseId;  // Declare a string variable to store the user's input
+    bool valid = false;     // Declare and initialize a flag to track the validity of the input
 
-    while(!valid)
+    while(!valid)  // Loop until a valid release ID is entered
     {
-        cout << "=====New Release=====\n";
-        cout << "Enter Release Version (max 8 char.): ";
-        cin >> inputReleaseId;
+        cout << "=====New Release=====\n";  // Display a header for the input prompt
+        cout << "Enter Release Version (max 8 char.): ";  // Prompt the user to enter the release ID
+        cin >> inputReleaseId;  // Read the user's input
 
-        // validate the release ID length
-        if(inputReleaseId.length() > IDSIZE)
+        // Validate the release ID length
+        if(inputReleaseId.length() > IDSIZE)  // Check if the length of the input exceeds the maximum allowed length
         {
-            cout << "Release ID too long. Please enter a release ID with a maximum of 8 characters.\n";
+            cout << "Release ID too long. Please enter a release ID with a maximum of 8 characters.\n";  // Display an error message if the input is too long
         }
-        else if(inputReleaseId.empty())
+        else if(inputReleaseId.empty())  // Check if the input is empty
         {
-            cout << "Release ID cannot be empty. Please enter a valid release ID.\n"; // Maki
+            cout << "Release ID cannot be empty. Please enter a valid release ID.\n";  // Display an error message if the input is empty
         }
-        else
+        else  // If the input is valid
         {
-            setReleaseId(inputReleaseId);
-            valid = true;
+            setReleaseId(inputReleaseId);  // Set the release ID using the input
+            valid = true;  // Set the flag to true to exit the loop
         }
     }
-/*  
-    if(!valid)
-    {
-        throw std::invalid_argument("Invalid release ID. Please enter a valid release ID with a maximum of 8 characters.");
-    }*/
 }
 
 /***********************************************/
