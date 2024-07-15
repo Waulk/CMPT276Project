@@ -76,6 +76,10 @@ class UserInterface
         /***********************************************/
         std::string getDate();
         // Returns: The current date in the format "YYYY-MM-DD"
+    private:
+
+        // Whether the main menu should keep running or exit and return.
+        bool m_bRunMenu = true;
 };
 
 #endif
