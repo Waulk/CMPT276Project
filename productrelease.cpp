@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <fstream>
+#include <regex>
 #include "productrelease.h"
 using std::string;
 using std::cout;
@@ -29,9 +30,9 @@ ProductRelease::ProductRelease()
  * - Uses memset to set all characters in the arrays to '\0'.
  */
 {
-    memset(productName, '\0', NAMEDATESIZE + 1); 
+    memset(productName, '\0', Product::PRODUCTNAMESIZE + 1); 
     memset(releaseId, '\0', IDSIZE + 1); 
-    memset(date, '\0', NAMEDATESIZE + 1); 
+    memset(date, '\0', DATESIZE + 1); 
 }
 
 /***********************************************/
@@ -46,11 +47,11 @@ ProductRelease::ProductRelease(string productName, string releaseId, string date
  * - Ensures null termination by explicitly setting the last character.
  */
 {
-    strncpy(productName, productName.c_str(), NAMEDATESIZE);
-    strncpy(releaseId, releaseId.c_str(), IDSIZE);
-    strncpy(date, date.c_str(), NAMEDATESIZE);
+    strncpy(this->productName, productName.c_str(), Product::PRODUCTNAMESIZE);
+    strncpy(this->releaseId, releaseId.c_str(), IDSIZE);
+    strncpy(this->date, date.c_str(), DATESIZE);
 
-    for(int i=productName.length(); i <  NAMEDATESIZE + 1; i++)
+    for(int i=productName.length(); i <  Product::PRODUCTNAMESIZE + 1; i++)
     {
         productName[i] = '\0';
         date[i] = '\0';
@@ -75,7 +76,7 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
  * - Prompts the user to set release ID and date.
  */
 {
-    if(productName.empty() || productName.length() > NAMEDATESIZE)
+    if(productName.empty() || productName.length() > Product::PRODUCTNAMESIZE)
     {
         throw std::invalid_argument("Invalid product name. The product name must be a valid product within the system and have a maximum of 10 characters.");
     }
@@ -87,7 +88,7 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
     newRelease.setReleaseIdUI();
 
     // prompt user for release date
-    newRelease.setDateUI()
+    newRelease.setDateUI();
 
     return newRelease;
 }
@@ -244,7 +245,7 @@ void ProductRelease::setProductName(const string &productName)
  * - Ensures the last character is null-terminated.
  */
 {
-    strncpy(productName, productName.c_str(), NAMEDATESIZE);
+    strncpy(this->productName, productName.c_str(), Product::PRODUCTNAMESIZE);
 }
 
 /***********************************************/
@@ -258,7 +259,7 @@ void ProductRelease::setReleaseId(const string &releaseId)
  * - Ensures the last character is null-terminated.
  */
 {
-    strncpy(releaseId, releaseId.c_str(), IDSIZE);
+    strncpy(this->releaseId, releaseId.c_str(), IDSIZE);
 }
 
 /***********************************************/
@@ -272,7 +273,7 @@ void ProductRelease::setDate(const string &date)
  * - Ensures the last character is null-terminated.
  */
 {
-    strncpy(date, date.c_str(), NAMEDATESIZE);
+    strncpy(this->date, date.c_str(), DATESIZE);
 }
 
 /***********************************************/
@@ -361,31 +362,74 @@ void ProductRelease::setReleaseIdUI()
 }
 
 /***********************************************/
-ProductRelease ProductRelease:readFromFile(bool &isEnd)
+ProductRelease ProductRelease::readFromFile(bool &isEnd)
+/*
+ * This function reads the next file from the internal file member.
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
+ */
 {
+    if(file.peek() == EOF)
+    {
+        isEnd = true;
+        return ProductRelease();
+    }
 
+    ProductRelease toReturn;
+    file.read(toReturn.productName, sizeof(char) * Product::PRODUCTNAMESIZE);
+    file.read(toReturn.releaseId, sizeof(char) * IDSIZE);
+    file.read(toReturn.date, sizeof(char) * DATESIZE);
+    return toReturn;
 }
 
 /***********************************************/
 bool ProductRelease::writeToFile(ProductRelease productRelease)
 {
-
+    
 }
 
 /***********************************************/
 bool ProductRelease::seekToBeginningOfFile()
+/*
+ * This function simply just seeks to the beggining of the file.
+ */
 {
-
+    file.seekg(0);
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
 bool ProductRelease::openProductReleaseFile()
+/*
+ * This function will open the productreleases.bin file and will return false on failure
+ * 
+ * Implementation Details:
+ * - The file will be opened with reading & writing capabilities, as well in binary mode
+ */
 {
+    // Attempt to open the file
+    file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
 
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
 }
 
 /***********************************************/
 bool ProductRelease::closeProductReleaseFile()
+/*
+ * Closes the file and verifies it closed properly
+ */
 {
-
+    file.close();
+    return !(file.fail() || file.bad());
 }

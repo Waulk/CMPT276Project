@@ -29,6 +29,27 @@ UserInterface::UserInterface()
     Reporter::openReporterFile();
 }
 
+void createNewProductRelease()
+{
+    Product prod = Product::getProductFromUser(true);
+    if(prod.getProductName() == "")
+        prod.setProductName(prod.getProductName());
+    ProductRelease newRelease;
+    newRelease.setProductName(Product::getProductFromUser().getProductName());
+    while(true)
+    {
+        newRelease.setReleaseIdUI();
+        if(!ProductRelease::productReleaseExists(newRelease))
+        {
+            break;
+        }
+        std::cout << "Invalid input! A release with that ID already exists!\n";
+    }
+    newRelease.setDateUI();
+    Product::writeToFile(prod);
+    ProductRelease::writeToFile(newRelease);
+}
+
 /***********************************************/
 void UserInterface::runMainMenu()
 {
@@ -60,12 +81,7 @@ void UserInterface::runMainMenu()
                     customerMenu();
                     break;
                 case 4:
-                    Product prod = Product::getProductFromUser(true);
-                    if(prod.getProductName() == "")
-                        prod.setProductName(prod.getProductName());
-                    ProductRelease newRelease = ProductRelease::getProductReleaseFromUser(prod.getProductName());
-                    Product::writeToFile(prod);
-                    ProductRelease::writeToFile(newRelease);
+                    createNewProductRelease();
                     break;
                 case 5:
                     this->m_bRunMenu = false;

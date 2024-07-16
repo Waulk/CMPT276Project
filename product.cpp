@@ -287,7 +287,7 @@ Product Product::readFromFile(bool &isEnd)
     if(file.peek() == EOF)
     {
         isEnd = true;
-        return NULL;
+        return Product();
     }
 
     // Read the next file if it's not EOF, this will move the seek
@@ -302,10 +302,19 @@ Product Product::readFromFile(bool &isEnd)
  * 
  * Implementation Details:
  * - It's assumed the file is already opened and valid
- * - This function will NOT check for any entity integrity violations, it assumes that there is none.
+ * - This function will check for any entity integrity violations, if there is one it will ignore the new entry.
  */
 bool Product::writeToFile(Product product)
 {
+    bool read = true;
+    Product nextToCheck = readFromFile(read);
+    while(read)
+    {
+        if(nextToCheck.getProductName() == product.getProductName())
+        {
+            return true;
+        }
+    }
     file.seekg(0, std::ios::end);
     file.write(product.productName, sizeof(char) * PRODUCTNAMESIZE);
     return !(file.fail() || file.bad());
@@ -347,7 +356,7 @@ bool Product::openProductFile()
 
 /***********************************************/
 /*
- * Closes the file and make's sure it closed well
+ * Closes the file and verifies it closed properly
  */
 bool Product::closeProductFile()
 {

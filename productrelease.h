@@ -19,13 +19,14 @@
 #define PRODUCTRELEASE_H
 #include <iostream>
 #include <fstream>
+#include "product.h" // Required for "PRODUCTNAMESIZE"
 using std::string;
 
 class ProductRelease
 {
     public:
-        // size of productName and date
-        static const int NAMEDATESIZE = 10;
+        // size of date
+        static const int DATESIZE = 10;
 
         // size of releaseId
         static const int IDSIZE = 8;
@@ -227,15 +228,23 @@ class ProductRelease
          * If this precondition is not met, it will display an error message and throw an exception
         */
 
+       /***********************************************/
+       static bool productReleaseExists(ProductRelease input);
+       // Returns: bool - return true if there exists a product with the name and releaseID
+        /* This will search through the file to check if a product exists for entity integrity
+         * ---------------------------------------------
+         * Precondition: The file is open and valid
+        */
+
     private:
         // char[] - name of the product. Fixed length (Fixed Length: 10 chars)
-        char productName[NAMEDATESIZE + 1];
+        char productName[Product::PRODUCTNAMESIZE + 1];
 
         // char[] - the ID of the release version. Fixed length (Fixed Length: 8 chars)
         char releaseId[IDSIZE + 1];
 
         // char[] - Release date. The format must be YYYY-MM-DD (Fixed Length: 10 chars)
-        char date[NAMEDATESIZE + 1]; 
+        char date[DATESIZE + 1]; 
 
         // fstream - File to save ProductRelease objects
         static std::fstream file;
