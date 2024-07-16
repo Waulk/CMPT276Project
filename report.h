@@ -23,6 +23,8 @@ class Report
     public:
         // size of email address
         static const int EMAILDATASIZE = 24;
+        // size of change id 
+        static const int CHANGEIDSIZE = 7;
         // size of releaseId
         static const int IDSIZE = 8;
 
@@ -35,7 +37,7 @@ class Report
         /***********************************************/
         Report(
             string email,          // string email - a email assign the customer (in)
-            int changeId,       // int changeId - the changeId of the report (in)
+            string changeId,       // string changeId - the changeId of the report (in)
             string ReleasId       // string ReleasId - the releaseId of the report (in)
         );
         // Returns: None since this is a constructor
@@ -44,27 +46,27 @@ class Report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 24.
-        * changeId != 0 or negtive. The max int of change id is 999,999.
+        * changeId != "" (empty string). The max length of releaseId is 7.
         * releaseId != "" (empty string). The max length of releaseId is 8. 
         * If these preconditions are not met, it will throw an exception with an error message
 
         /***********************************************/
         string getreport(
             const string &email,          // string email - a email assign the customer (in)
-            const int &changeId       // int changeId - the changeId of the report (in)
+            const string &changeId       // string changeId - the changeId of the report (in)
         );
         // Returns: string - email, changeid, releaseid and date of report
         /* This is a getter of report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != 0 or negtive. The max int of releaseId is 999,999.
+        * changeId != "" (empty string). The max length of releaseId is 7.
         * If these preconditions are not met, it will throw an exception with an error message
 
         /***********************************************/
         bool setReport(
             const string &email,          // string email - a email assign the customer (in)
-            const int &changeId,       // int changeId - the changeId of the report (in)
+            const string &changeId,       // string changeId - the changeId of the report (in)
             const string &ReleasId       // string ReleasId - the releaseId of the report (in)
         );
         // Returns: True or False
@@ -72,15 +74,23 @@ class Report
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != 0 or negtive. The max int of change id is 999,999.
+        * changeId != "" (empty string). The max length of releaseId is 7.
         * releaseId != "" (empty string). The max length of releaseId is 8. 
         * If these preconditions are not met, it will throw an exception with an error message and will return False
 
         /***********************************************/
-
-       static char* openReportFileAndRead();
+       void reportFileStart();
        // Returns: char pointer to start of file 
-        /* This function opens the file and points to the top of the file
+        /* This function points to the top of the file
+         * ---------------------------------------------
+         * Precondition: The file os opened 
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+        /***********************************************/
+        bool openReportFile();
+       // Returns: True or False
+        /* This function opens the file
          * ---------------------------------------------
          * Precondition: The file to get opened exists
          * If this precondition is not met, it will display an error message and throw an exception
@@ -105,22 +115,24 @@ class Report
          * Precondition: The file to get closed exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
-        
 
-    private:
+        /***********************************************/
         bool checkreport(
             const string &email,          // string email - a email assign the customer (in)
-            const int &changeId       // int changeId - the changeId of the report (in)
+            const string &changeId       // string changeId - the changeId of the report (in)
         );
         // Returns: True or False
         /* This checks if a report is already in the data
         * ---------------------------------------------
         * Precondition: 
         * email != "" (empty string). The max length of productName is 10.
-        * changeId != 0 or negtive. The max int of change id is 999,999.
+        * changeId != "" (empty string). The max length of releaseId is 7.
         * If these preconditions are not met, it will throw an exception with an error message and return False
         
         /***********************************************/
+
+    private:
+       
 
         // char[] - email address. Fixed length (Fixed Length: 24 chars)
         char email[EMAILDATASIZE];
@@ -128,8 +140,8 @@ class Report
         // char[] - the ID of the release version. Fixed length (Fixed Length: 8 chars)
         char releaseId[IDSIZE];
 
-        // int - Id of the change. Max/min size between 1-999,999.
-        int changeId; 
+        // char[] - the change Id. Fixed length (Fixed Length: 7l chars)
+        char changeId[CHANGEIDSIZE]; 
 
         // fstream - File to save Report objects
         static std::fstream file;
