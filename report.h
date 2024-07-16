@@ -65,9 +65,7 @@ class Report
 
         /***********************************************/
         bool setReport(
-            const string &email,          // string email - a email assign the customer (in)
-            const string &changeId,       // string changeId - the changeId of the report (in)
-            const string &ReleasId       // string ReleasId - the releaseId of the report (in)
+            const Report report
         );
         // Returns: True or False
         /* This add report to the data file
