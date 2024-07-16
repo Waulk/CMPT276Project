@@ -14,6 +14,7 @@
 #ifndef Changes_H
 #define Changes_H
 #include <iostream>
+#include <vector>
 using std::string;
 
 class Changes
@@ -179,7 +180,7 @@ class Changes
         /***********************************************/
 
         bool isValid();
-        // Returns: True if the Change is valId and was created properly, False otherwise
+        // Returns: True if the Change is valid and was created properly, False otherwise.
         /* This method determines if a generated Change selection from the change functions such as viewChangesFromProduct or viewUnfinishedChanges is valId.
         */
 
@@ -306,10 +307,11 @@ class Changes
 
        
     private:       
-
+        static std::vector<Changes> array;
 
         // int - Id of the change. Max/min size between 1-999,999.
-        int changeId;       
+        int changeId;
+
         // int - priority level of the change. A number between 1 and 5.
         int priority; 
 
@@ -327,6 +329,8 @@ class Changes
 
         //bool - true means the change is a bug, and false means that this change is a feature.
         bool isBug;  
+
+        static int lastChangeId;
 
 
 
