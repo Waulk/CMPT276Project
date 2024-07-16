@@ -104,7 +104,7 @@ bool Report::setReport(Report report)
 {
     reportFileStart();
     std::stringstream ss;
-    ss << report->email << " " << report->changeId << " " << report->releaseId;
+    ss << report.email << " " << report.changeId << " " << report.releaseId;
     string combinedString = ss.str();
     if (!openReportFileAndWrite(combinedString)) 
     {
