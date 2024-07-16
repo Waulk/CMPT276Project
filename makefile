@@ -20,6 +20,11 @@ productrelease.o: productrelease.cpp product.h
 product.o: product.cpp product.h
 	g++ -c -std=c++17 -Wall product.cpp
 
+report.o: report.cpp report.h
+	g++ -c -std=c++17 -Wall report.cpp
+reporter.o: reporter.cpp reporter.h
+	g++ -c -std=c++17 -Wall reporter.cpp
+
 cleanWindows:	
 	del -f *.o
 clean:	
