@@ -386,8 +386,20 @@ ProductRelease ProductRelease::readFromFile(bool &isEnd)
 
 /***********************************************/
 bool ProductRelease::writeToFile(ProductRelease productRelease)
+/*
+ * This function will append a ProductRelease to the file
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - This function will not check for any entity integrity violations and will add the instance to the end of the file
+ */
 {
+    file.seekg(0, std::ios::end);
+    file.write(productRelease.productName, sizeof(char) * Product::PRODUCTNAMESIZE);
+    file.write(productRelease.releaseId, sizeof(char) * IDSIZE);
+    file.write(productRelease.date, sizeof(char) * DATESIZE);
     
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
@@ -432,4 +444,25 @@ bool ProductRelease::closeProductReleaseFile()
 {
     file.close();
     return !(file.fail() || file.bad());
+}
+
+/***********************************************/
+bool ProductRelease::productReleaseExists(ProductRelease input)
+/*
+ * Checks if a productRelease already exists within the system
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - Loops through the file linearly and checks every single instance
+ */
+{
+    seekToBeginningOfFile();
+    bool nextValid = true;
+    ProductRelease nextRead = readFromFile(nextValid);
+    while(nextValid)
+    {
+        if(nextRead.getProductName() == input.getProductName() && nextRead.getReleaseId() == input.getReleaseId())
+            return true;
+    }
+    return false;
 }
