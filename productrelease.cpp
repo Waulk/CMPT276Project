@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <regex>
+#include <cstring>
 #include "productrelease.h"
 using std::string;
 using std::cout;

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <fstream>
+#include <cstring>
 #include "product.h"
 using std::string;
 using std::cout;
