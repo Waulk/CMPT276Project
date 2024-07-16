@@ -276,31 +276,82 @@ Product Product::setProductNameUI()
 
 /***********************************************/
 Product Product::readFromFile(bool &isEnd)
+/*
+ * This function reads the next file from the internal file member.
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
+ */
 {
+    if(file.peek() == EOF)
+    {
+        isEnd = true;
+        return NULL;
+    }
 
+    // Read the next file if it's not EOF, this will move the seek
+    Product toReturn;
+    file.read(toReturn.productName, sizeof(char) * PRODUCTNAMESIZE);
+    return toReturn;
 }
 
 /***********************************************/
+/*
+ * This function will append a Product to the file
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - This function will NOT check for any entity integrity violations, it assumes that there is none.
+ */
 bool Product::writeToFile(Product product)
 {
-
+    file.seekg(0, std::ios::end);
+    file.write(product.productName, sizeof(char) * PRODUCTNAMESIZE);
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
+/*
+ * This function simply just seeks to the beggining of the file.
+ */
 bool Product::seekToBeginningOfFile()
 {
-
+    file.seekg(0);
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
+/*
+ * This function will open the products.bin file and will return false on failure
+ * 
+ * Implementation Details:
+ * - The file will be opened with reading & writing capabilities, as well in binary mode
+ */
 bool Product::openProductFile()
 {
+    // Attempt to open the file
+    file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
 
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
 }
 
 /***********************************************/
+/*
+ * Closes the file and make's sure it closed well
+ */
 bool Product::closeProductFile()
 {
-
+    file.close();
+    return !(file.fail() || file.bad());
 }
 
