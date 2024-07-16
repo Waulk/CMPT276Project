@@ -161,9 +161,9 @@ class Changes
 
         /***********************************************/
 
-        string viewNewChangesUI();
-        // Returns: string
-        /* This function prints the UI for new changes.
+        Changes viewNewChangesUI();
+        // Returns: Changes
+        /* This function returns a Changes object.
         /*
         =======Changes=======
         SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
@@ -185,9 +185,9 @@ class Changes
 
         /***********************************************/
 
-        string viewChangesFromProduct();
-        // Returns: string       
-        /* This function prints the UI for the changes for a specific product.
+        Changes viewChangesFromProduct(const string &product);
+        // Returns: Changes
+        /* This function returns a Changes object.
         =======Changes=======
         SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
         ---------  ------      --------  -----------                     ---                    
@@ -203,9 +203,9 @@ class Changes
 
         /***********************************************/
 
-        string viewUnfinishedChanges();
-        // returns: string
-        /* This function prints the UI for the unfinished changes for release.
+        Changes viewUnfinishedChanges(const string &productRelease, const string &product);
+        // Returns: Changes
+        /* This function returns a Changes object.
         =======Changes=======
         STATUS      PRIORITY  DESCRIPTION                     BUG
         ------      --------  -----------                     ---                    
@@ -220,9 +220,9 @@ class Changes
 
         /***********************************************/
 
-        string viewCustomerRequestedChanges();
-        // returns: string
-        /* This functions prints the UI for all changes requested by a customer.
+        Changes viewCustomerRequestedChanges(const string &customer);
+        // Returns: Changes
+        /* This function returns a Changes object.
         =======Changes=======
         SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
         ---------  ------      --------  -----------                     ---                    
@@ -234,6 +234,25 @@ class Changes
                                 <-P  N->
         Make a Selection:
         */
+
+        /***********************************************/
+
+        Changes editChanges(const string &product, int newPriority, string newDescription, bool isBug, string newRelease, string newChangeStatus);
+        // Returns: Changes
+        /* This function returns a Changes object, and allows for editing of the Changes object..
+        If user selects completed change, an error prompt will appear:
+        "Error: Attempting to edit completed change!"
+        Otherwise, the following will appear:
+        =====Edit Change=====
+        ChangeID:    4295
+        Priority:    5
+        Description: Submission crashes site
+        Is Bug:      True
+        Release:     1.19.1
+        Status:      Assessed
+        Would you like to edit the Priority (Y/N)?
+        */
+
 
         /***********************************************/
 
@@ -268,7 +287,7 @@ class Changes
         */
 
        /***********************************************/
-       static bool openProductFile();
+       static bool openChangesFile();
        // Returns: bool - return true if the file got opened successfully, false otherwise
         /* This function opens the file
          * ---------------------------------------------
@@ -277,7 +296,7 @@ class Changes
         */
 
        /***********************************************/
-       static bool closeProductFile();
+       static bool closeChangesFile();
        // Returns: bool - return true if the file got closed successfully, false otherwise
         /* This function closes the file
          * ---------------------------------------------
