@@ -277,7 +277,7 @@ Changes Changes::viewCustomerRequestedChanges(const string &customer)
 }
 
 Changes Changes::editChanges(const string &product, int newPriority, string newDescription, bool isBug, string newRelease, string newChangeStatus) {
-    if (strcmp(this->changeStatus, "Done") == 0 || strcmp(this->changeStatus, "Completed") == 0) {
+    if (strcmp(this->changeStatus, "Done") == 0 || strcmp(this->changeStatus, "Cancelled") == 0) {
         std::cout << "Error: Attempting to edit completed change!" << std::endl;
         return *this;
     }
