@@ -22,7 +22,7 @@ UserInterface::UserInterface()
 {
     // Initializes files for every object
     // If an object doesn't have a file a new one will be created
-    //Changes::openProductFile();
+    Changes::openChangesFile();
     Product::openProductFile();
     ProductRelease::openProductReleaseFile();
     Report::openReportFile();
@@ -61,6 +61,8 @@ void UserInterface::runMainMenu()
                     break;
                 case 4:
                     Product prod = Product::getProductFromUser(true);
+                    if(prod.getProductName() == "")
+                        prod.setProductName(prod.getProductName());
                     ProductRelease newRelease = ProductRelease::getProductReleaseFromUser(prod.getProductName());
                     Product::writeToFile(prod);
                     ProductRelease::writeToFile(newRelease);
@@ -131,7 +133,7 @@ int getUserSelectionForMenu(int min, int max) // TODO: change this to public too
             std::cout << "Invalid selection!\n";
         }
     }
-    return response;
+    return selection;
 }
 
 /***********************************************/
