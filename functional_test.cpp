@@ -70,10 +70,12 @@ void addCustomer() {
     cout << "Enter the Customer's Phone Number (10-11 digits): ";
     cin >> phoneNumber;
     //if phone number is not valid, continue requesting phone number
-    while (!isValidPhoneNumber(phoneNumber)) {
+    bool isValid = isValidPhoneNumber(phoneNumber);
+    while (isValid) {
         cout << "Error! Invalid phone number." << endl;
         cout << "Enter the Customer's Phone Number (10-11 digits): ";
         cin >> phoneNumber;
+        isValid = isValidPhoneNumber(phoneNumber);
     }
     //create new reporter object using provided information
     Reporter *reportObj = new Reporter(email, name, phoneNumber);
