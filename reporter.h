@@ -2,6 +2,9 @@
  * Module: Reporter.h
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-17 by Anmol Sangha 
+ *         - Edited function prototypes 
+ *         - Increased array sizes by 1 for null terminator
  * Ver. 1: - 2024-06-30 by Anmol Sangha 
  *         - Initial version 
  ***********************************************/

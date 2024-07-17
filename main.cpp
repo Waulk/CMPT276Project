@@ -1,5 +1,7 @@
 /***********************************************
  * Module: main.cpp
+ * 
+ * Code Version History: 
  * Ver. 2: - 2024-07-15 Edited by Maki Hosokawa
  *         - Added the convention for commenting in a cpp file
  * Ver. 1: - 2024-07-02 Original by Jayden Brown

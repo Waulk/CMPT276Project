@@ -2,6 +2,10 @@
  * Module: Report.h
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-16 Updated by Anmol Sangha
+ *         - Updated function prototypes
+ *         - Increased array sizes by 1 for null terminator
+ *         - Converted changeId to use an int instead of an array
  * Ver. 1: - 2024-06-30 Original by Anmol Sangha
  *         - Initial version 
  ***********************************************/
@@ -129,10 +133,10 @@ class Report
        
 
         // char[] - email address. Fixed length (Fixed Length: 24 chars)
-        char email[EMAILDATASIZE];
+        char email[EMAILDATASIZE + 1];
 
         // char[] - the ID of the release version. Fixed length (Fixed Length: 8 chars)
-        char releaseId[IDSIZE];
+        char releaseId[IDSIZE + 1];
 
         // int - the change Id. Fixed length (Max Value: 999,999)
         int changeId; 
