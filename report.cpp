@@ -29,12 +29,12 @@ Report::Report()
 */
 {
     memset(email, '\0', EMAILDATASIZE + 1);
-    memset(changeId, '\0', CHANGEIDSIZE + 1);
+    changeId = 0;
     memset(releaseId, '\0', IDSIZE + 1);
 }
 
 /***********************************************/
-Report::Report(string email, string changeId, string releaseId) 
+Report::Report(string email, int changeId, string releaseId) 
 /*
  * Constructor that initializes member variables with values
  *
@@ -44,7 +44,6 @@ Report::Report(string email, string changeId, string releaseId)
 */
 {
     if (email.empty() || email.length() > EMAILDATASIZE + 1 ||
-        changeId.empty() || changeId.length() > CHANGEIDSIZE + 1 ||
         releaseId.empty() || releaseId.length() > IDSIZE + 1) 
         {
         throw std::invalid_argument("Invalid argument length");
@@ -52,67 +51,42 @@ Report::Report(string email, string changeId, string releaseId)
 
     strncpy(this->email, email.c_str(), EMAILDATASIZE);
     this->email[EMAILDATASIZE] = '\0'; // Ensure null termination
-
-    strncpy(this->changeId, changeId.c_str(), CHANGEIDSIZE);
-    this->changeId[CHANGEIDSIZE] = '\0'; // Ensure null termination
+    this->changeId = changeId;
 
     strncpy(this->releaseId, releaseId.c_str(), IDSIZE);
     this->releaseId[IDSIZE] = '\0'; // Ensure null termination
 }
 
 /***********************************************/
-string Report::getreport(const string &email, const string &changeId) 
+Report Report::getReport(const string &email, const int &changeId) 
 /*
  * Uses the email and changeid to find and get all the information about the report
  *
  * Implementation Details:
  * Checks each string to insure valid input (not empty and not longer than fixed size)
  * goes through the file and finds the matching email and change id 
- * reutrn the informaation or if not found returns an error message 
+ * reutrn the information or if not found returns an error message 
 */
 {
-    if (email.empty() || email.length() > EMAILDATASIZE + 1 ||
-        changeId.empty() || changeId.length() > CHANGEIDSIZE + 1) 
+    if (email.empty() || email.length() > EMAILDATASIZE + 1) 
     {
         throw std::invalid_argument("Invalid argument length");
     }
 
-    reportFileStart();
+    seekToBeginningOfFile();
     string line;
-    while (getline(file, line)) {
-        string storedEmail = line.substr(0, EMAILDATASIZE);
-        string storedChangeId = line.substr(EMAILDATASIZE + 1, CHANGEIDSIZE);
-        storedChangeId.erase(storedChangeId.find_last_not_of(" \n\r\t")+1);
+    bool read = true;
+    Report nextToCheck = readFromFile(read);
 
-        if (storedEmail == email && storedChangeId == changeId) {
-            return line;
-        }
+    // Check to see if any change in the system matches our current change
+    while(read)
+    {
+        if(nextToCheck.email == email && nextToCheck.changeId == changeId)
+            return nextToCheck;
+        nextToCheck = readFromFile(read);
     }
    
-    return "Report not found"; 
-}
-
-/***********************************************/
-bool Report::setReport(Report report) 
-/*
- * Adds new report to the data file
- *
- * Implementation Details:
- * adds the information, sends error message if an error ouccurs
-*/ 
-{
-    if (!writeToFile(report)) 
-    {
-        std::cerr << "Failed to write to file" << std::endl;
-        return false;
-    }
-    return true;
-}
-
-/***********************************************/
-void Report::reportFileStart() 
-{
-    return;
+    return Report(); 
 }
 
 /***********************************************/
@@ -134,35 +108,106 @@ Report Report::readFromFile(bool &isEnd)
     // Read the next file if it's not EOF, this will move the seek
     Report toReturn;
     file.read(toReturn.email, sizeof(char) * EMAILDATASIZE);
-    file.read(toReturn.changeId, sizeof(char) * CHANGEIDSIZE);
+    file.read((char*)&toReturn.changeId, sizeof(int));
     file.read(toReturn.releaseId, sizeof(char) * IDSIZE);
     return toReturn;
 }
 
 /***********************************************/
-bool Report::openReportFile() 
+bool Report::seekToBeginningOfFile()
+/*
+ * This function simply just seeks to the beggining of the file.
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
-    return true;
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Report file was not open when it was expected to be!\n";
+        throw std::runtime_error("Report file not open on seekToBeginningOfFile");
+    }
+    file.seekg(0);
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
-bool Report::writeToFile(Report report) 
+bool Report::openReportFile() 
+/*
+ * This function will open the reports.bin file and will return false on failure
+ * 
+ * Implementation Details:
+ * - The file will be opened with reading & writing capabilities, as well in binary mode
+ */
 {
-    std::cout << report.email << std::endl;
-    return true;
+    // Attempt to open the file
+    file.open("/etc/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
+
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
+}
+
+/***********************************************/
+bool Report::writeToFile(Report report)
+/*
+ * This function will append a Report to the file
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ * - This function will NOT check for any entity integrity violations
+ */ 
+{
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Report file was not open when it was expected to be!\n";
+        throw std::runtime_error("Report file not open on writeToFile");
+    }
+    
+    // Seek to the end of the file
+    file.seekg(0, std::ios::end);
+    file.write(report.email, sizeof(char) * EMAILDATASIZE);
+    file.write((char*)&report.changeId, sizeof(int));
+    file.write(report.releaseId, sizeof(char) * IDSIZE);
+    
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
 bool Report::closeReportFile() 
+/*
+ * Closes the file and verifies it closed properly
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
-   return true;
+   if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Reports file was not open when it was expected to be!\n";
+        throw std::runtime_error("Reports file not open on closeReportFile");
+    }
+    file.close();
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
-bool Report::checkreport(const string &email, const string &changeId) 
+bool Report::checkreport(const string &email, const int &changeId) 
 {
-    if (email.empty() || email.length() > EMAILDATASIZE - 1 ||
-        changeId.empty() || changeId.length() > CHANGEIDSIZE - 1) {
+    if (email.empty() || email.length() > EMAILDATASIZE - 1) {
         throw std::invalid_argument("Invalid argument length");
         return false;
     }
