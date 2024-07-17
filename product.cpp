@@ -298,6 +298,7 @@ Product Product::readFromFile(bool &isEnd)
 }
 
 /***********************************************/
+bool Product::writeToFile(Product product)
 /*
  * This function will append a Product to the file
  * 
@@ -305,7 +306,6 @@ Product Product::readFromFile(bool &isEnd)
  * - It's assumed the file is already opened and valid
  * - This function will check for any entity integrity violations, if there is one it will ignore the new entry.
  */
-bool Product::writeToFile(Product product)
 {
     bool read = true;
     Product nextToCheck = readFromFile(read);
@@ -322,23 +322,23 @@ bool Product::writeToFile(Product product)
 }
 
 /***********************************************/
+bool Product::seekToBeginningOfFile()
 /*
  * This function simply just seeks to the beggining of the file.
  */
-bool Product::seekToBeginningOfFile()
 {
     file.seekg(0);
     return !(file.fail() || file.bad());
 }
 
 /***********************************************/
+bool Product::openProductFile()
 /*
  * This function will open the products.bin file and will return false on failure
  * 
  * Implementation Details:
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
-bool Product::openProductFile()
 {
     // Attempt to open the file
     file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
@@ -356,10 +356,10 @@ bool Product::openProductFile()
 }
 
 /***********************************************/
+bool Product::closeProductFile()
 /*
  * Closes the file and verifies it closed properly
  */
-bool Product::closeProductFile()
 {
     file.close();
     return !(file.fail() || file.bad());
