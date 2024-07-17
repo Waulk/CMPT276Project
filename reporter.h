@@ -14,6 +14,8 @@
 #define Reporter_H
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <cstring>
 using std::string;
 
 class Reporter
@@ -40,7 +42,7 @@ class Reporter
             string email,           // string email - a email associated with the customer (in)
             string customerName,     // string customerName - name of the customer (in)
             string phoneNumber,       // string phoneNumber - a phone number associated with the customer (in)
-            string deparmentId | ""   // string deparmentId - the name of the deparment the customer works for (in)
+            string deparmentId = ""   // string deparmentId - the name of the deparment the customer works for (in)
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Reporter
@@ -50,7 +52,7 @@ class Reporter
         * email != "" (empty string). The max length of email is 24.
         * customerName != "" (empty string). The max length of customerName is 30.
         * phoneNumber != "" (empty string). The max length of phoneNumber is 11.
-        * deparmentId != "" (empty string). The max length of deparmentId is 12. 
+        * The max length of deparmentId is 12. 
         * If these preconditions are not met, it will throw an exception with an error message
 
 
@@ -76,13 +78,10 @@ class Reporter
         * If this precondition is not met, the function will display and return an error message  
 
         /***********************************************/
-        void setCustomer(
-            string &email,           // string email - a email associated with the customer (in)
-            string &customerName,     // string customerName - name of the customer (in)
-            string &phoneNumber,       // string phoneNumber - a phone number associated with the customer (in)
-            string &deparmentId | ""   // string deparmentId - the name of the deparment the customer works for (in)
+        bool setCustomer(
+            Reporter reporter
         );
-        // Returns: void
+        // Returns: true or false
         /* This is a setter of customer
          * It adds the customer to the data file
          * ---------------------------------------------
@@ -90,31 +89,29 @@ class Reporter
         * email != "" (empty string). The max length of email is 24.
         * customerName != "" (empty string). The max length of customerName is 30.
         * phoneNumber != "" (empty string). The max length of phoneNumber is 11.
-        * deparmentId != "" (empty string). The max length of deparmentId is 12. 
+        * The max length of deparmentId is 12. 
         * If these preconditions are not met, it will throw an exception with an error message
         
         /***********************************************/
-        void viewAllReporter();
+        void reporterUI(
+            bool createNew // Ture or False
+        );
         // Returns: void
         /* This function dispalys an UI and shows a list of all the customers
-        
-        /***********************************************/
-        void viewReporterRequesters();
-        // Returns: void
-        /* This function dispalys an UI and shows a list of all the customers who have requested a change
 
         /***********************************************/
-       static *char openReporterFileAndRead();
-       // Returns: char pointer to start of file 
-        /* This function opens the file and points to the top of the file
+
+       bool openReporterFile();
+       // Returns: true or flase
+        /* This function opens the file 
          * ---------------------------------------------
          * Precondition: The file to get opened exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
 
        /***********************************************/
-       static bool openReporterFileAndWrite(
-        string &addToFile       // string addTofile - the that is added to end of file
+       bool writeToFile(
+        Reporter reporter      // Reporter reporter - the the info that need to be added to end of file (out)
        );
        // Returns: bool - return true if the file opened and had the string successfully add to it, false otherwise
         /* This function open and write in the file
@@ -123,8 +120,28 @@ class Reporter
          * If this precondition is not met, it will display an error message and throw an exception
         */
 
+        /***********************************************/
+        static Reporter readFromFile(
+            bool &isEnd    // bool &notEnd - indicates whether it has reached to the end of the file. True if it has reached the end, false otherwise (out)
+        );
+        // Returns: Reporter - the reporter from the file
+        /* This function read and return the Product from the file
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
        /***********************************************/
-       static bool closeReporterFile();
+       void reporterFileStart();
+       // Returns: void
+        /* This function points to the top of the file
+         * ---------------------------------------------
+         * Precondition: The file is opened
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+       /***********************************************/
+       bool closeReporterFile();
        // Returns: bool - return true if the file got closed successfully, false otherwise
         /* This function closes the file
          * ---------------------------------------------
@@ -134,17 +151,6 @@ class Reporter
               
 
     private:
-        bool checkDep (
-             const string &deparmentId       // string deparment - department of customer (in)
-        );
-        // Returns: True or Flase  
-        /* This checks if the deparmentId exists
-        * ---------------------------------------------
-        * Precondition: deparmentId != "" (empty string). The max length of email is 12.
-        * If this precondition is not met, it will display an error message and the function will return False
-          
-        /***********************************************/ 
-
         // char[] - email address. Fixed length (Fixed Length: 24 chars)
         char email[EMAILDATASIZE];
 
@@ -163,3 +169,5 @@ class Reporter
 };
 
 #endif
+
+
