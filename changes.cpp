@@ -1,3 +1,15 @@
+/***********************************************
+ * Module: changes.cpp
+ * 
+ * Code Version History: 
+ * Ver. 1: - 2024-07-17 Original by Matthew Liu
+ *         - Initial version 
+ ***********************************************/
+
+/***********************************************
+ * Example: The Changes class provides description of a change.
+ * You must call the constructor Changes() or Changes(int changeId, string changeStatus, ... bool isBug) before using this class.
+***********************************************/
 #include "changes.h"
 #include <cstring>
 #include <fstream>
