@@ -95,7 +95,7 @@ class Changes
         /* This is a getter of isBug
 
         /***********************************************/
-        int setchangeId(
+        void setchangeId(
             const int &changeId
         );
         // Returns: voId

@@ -160,7 +160,7 @@ bool Changes::getIsBug()
     return this->isBug; 
 }
 
-int Changes::setchangeId(const int &changeId) 
+void Changes::setchangeId(const int &changeId) 
 {
 /*
  * This function sets the changeId to the parameter passed in.
