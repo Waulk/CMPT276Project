@@ -377,7 +377,7 @@ ProductRelease ProductRelease::readFromFile(bool &isEnd)
     {
         std::cout << "An error has occured!\n";
         std::cout << "The ProductRelease file was not open when it was expected to be!\n";
-        throw std::runtime_error("Product file not open on readFromFile");
+        throw std::runtime_error("ProductRelease file not open on readFromFile");
     }
 
     if(file.peek() == EOF)
@@ -408,7 +408,7 @@ bool ProductRelease::writeToFile(ProductRelease productRelease)
     {
         std::cout << "An error has occured!\n";
         std::cout << "The ProductRelease file was not open when it was expected to be!\n";
-        throw std::runtime_error("Product file not open on writeToFile");
+        throw std::runtime_error("ProductRelease file not open on writeToFile");
     }
     file.seekg(0, std::ios::end);
     file.write(productRelease.productName, sizeof(char) * Product::PRODUCTNAMESIZE);
@@ -432,7 +432,7 @@ bool ProductRelease::seekToBeginningOfFile()
     {
         std::cout << "An error has occured!\n";
         std::cout << "The ProductRelease file was not open when it was expected to be!\n";
-        throw std::runtime_error("Product file not open on seekToBeginningOfFile");
+        throw std::runtime_error("ProductRelease file not open on seekToBeginningOfFile");
     }
     file.seekg(0);
     return !(file.fail() || file.bad());
@@ -476,7 +476,7 @@ bool ProductRelease::closeProductReleaseFile()
     {
         std::cout << "An error has occured!\n";
         std::cout << "The ProductRelease file was not open when it was expected to be!\n";
-        throw std::runtime_error("Product file not open on closeProductReleaseFile");
+        throw std::runtime_error("ProductRelease file not open on closeProductReleaseFile");
     }
     file.close();
     return !(file.fail() || file.bad());
@@ -497,7 +497,7 @@ bool ProductRelease::productReleaseExists(ProductRelease input)
     {
         std::cout << "An error has occured!\n";
         std::cout << "The ProductRelease file was not open when it was expected to be!\n";
-        throw std::runtime_error("Product file not open on productReleaseExists");
+        throw std::runtime_error("ProductRelease file not open on productReleaseExists");
     }
     seekToBeginningOfFile();
     bool nextValid = true;

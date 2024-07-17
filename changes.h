@@ -307,21 +307,24 @@ class Changes
         int priority; 
 
         // char[] - current status of the change. Can choose between New, Assessed, InProgress, Cancelled, and Done. Since InProgress has length 10, that is the maximum size of the char[].
-        char changeStatus[CHANGESTATUSSIZE];
+        char changeStatus[CHANGESTATUSSIZE + 1];
 
         // char[] - the name of the product associated with this change.
-        char productName[PRODUCTNAMESIZE]; 
+        char productName[PRODUCTNAMESIZE + 1]; 
 
         // char[] - the release Id associated with this change.
-        char release_Id[RELEASE_IdSIZE]; 
+        char release_Id[RELEASE_IdSIZE + 1]; 
 
         // char[] - a brief description of the bug or feature.
-        char description[DESCRIPTIONSIZE]; 
+        char description[DESCRIPTIONSIZE + 1]; 
 
         //bool - true means the change is a bug, and false means that this change is a feature.
         bool isBug;  
 
         static int lastChangeId;
+
+        // fstream - File to save Change objects
+        static std::fstream file;
 
 
 

@@ -331,6 +331,7 @@ bool Product::writeToFile(Product product)
         {
             return true;
         }
+        nextToCheck = readFromFile(read);
     }
     file.seekg(0, std::ios::end);
     file.write(product.productName, sizeof(char) * PRODUCTNAMESIZE);

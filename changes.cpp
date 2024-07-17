@@ -753,25 +753,165 @@ Changes Changes::viewCustomerRequestedChanges(const string &product)
     return *this;
 }
 
-Changes Changes::readFromFile(bool &isEnd) 
+Changes Changes::readFromFile(bool &isEnd)
+/*
+ * This function reads the next file from the internal file member.
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
+ */ 
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Changes file was not open when it was expected to be!\n";
+        throw std::runtime_error("Changes file not open on readFromFile");
+    }
+    Changes toReturn;
+
+    if(file.peek() == EOF)
+    {
+        isEnd = true;
+        return toReturn;
+    }
+    
+    // Read all members from disk in the EXACT same order as they were written
+    file.read((char*)&toReturn.changeId, sizeof(int));
+    file.read(toReturn.changeStatus, sizeof(char) * CHANGESTATUSSIZE);
+    file.read(toReturn.productName, sizeof(char) * PRODUCTNAMESIZE);
+    file.read(toReturn.release_Id, sizeof(char) * RELEASE_IdSIZE);
+    file.read((char*)&toReturn.priority, sizeof(int));
+    file.read(toReturn.description, sizeof(char) * DESCRIPTIONSIZE);
+    file.read((char*)&toReturn.isBug, sizeof(bool));
+
+    return toReturn;
 }
 
-bool Changes::writeToFile(Changes change) 
+bool Changes::writeToFile(Changes change)
+/*
+ * This function will append a Product to the file
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ * - This function will check for any entity integrity violations, if there is one it will overwrite the entry.
+ */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Changes file was not open when it was expected to be!\n";
+        throw std::runtime_error("Changes file not open on writeToFile");
+    }
+        
+    bool read = true;
+    Changes nextToCheck = readFromFile(read);
+
+    // Check to see if any change in the system matches our current change
+    while(read)
+    {
+        if(nextToCheck.getchangeId() == change.getchangeId())
+        {
+            // Move back in the file to make sure it's working on the same entry
+            // Change ID
+            file.seekg(-sizeof(int), std::fstream::cur);
+            // Change Status
+            file.seekg(-sizeof(char) * CHANGESTATUSSIZE, std::fstream::cur);
+            // Product Name
+            file.seekg(-sizeof(char) * PRODUCTNAMESIZE, std::fstream::cur);
+            // Release ID
+            file.seekg(-sizeof(char) * RELEASE_IdSIZE, std::fstream::cur);
+            // Priority
+            file.seekg(-sizeof(int), std::fstream::cur);
+            // Description
+            file.seekg(-sizeof(char) * DESCRIPTIONSIZE, std::fstream::cur);
+            // Bug
+            file.seekg(-sizeof(bool), std::fstream::cur);
+            break;
+        }
+        nextToCheck = readFromFile(read);
+    }
+
+    // Seek to the end of the file if we're not overwriting an entry
+    if(read == false)
+        file.seekg(0, std::ios::end);
+
+    // Write all elements of the Change to disk
+    file.write((char*)&change.changeId, sizeof(int));
+    file.write(change.changeStatus, sizeof(char) * CHANGESTATUSSIZE);
+    file.write(change.productName, sizeof(char) * PRODUCTNAMESIZE);
+    file.write(change.release_Id, sizeof(char) * RELEASE_IdSIZE);
+    file.write((char*)&change.priority, sizeof(int));
+    file.write(change.description, sizeof(char) * DESCRIPTIONSIZE);
+    file.write((char*)&change.isBug, sizeof(bool));
+
+    return !(file.fail() || file.bad());
 }
 
 bool Changes::seekToBeginningOfFile() 
+/*
+ * This function simply just seeks to the beggining of the file.
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Changes file was not open when it was expected to be!\n";
+        throw std::runtime_error("Changes file not open on seekToBeginningOfFile");
+    }
+    file.seekg(0);
+    return !(file.fail() || file.bad());
 }
 
 bool Changes::openChangesFile() 
+/*
+ * This function will open the changes.bin file and will return false on failure
+ * 
+ * Implementation Details:
+ * - The file will be opened with reading & writing capabilities, as well in binary mode
+ */
 {
+    // Attempt to open the file
+    file.open("/etc/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
+
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
 }
 
-bool Changes::closeChangesFile() 
+bool Changes::closeChangesFile()
+/*
+ * Closes the file and verifies it closed properly
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Changes file was not open when it was expected to be!\n";
+        throw std::runtime_error("Changes file not open on closeChangesFile");
+    }
+
+    file.close();
+    return !(file.fail() || file.bad());
 }
+
 bool Changes::ChangesExists(Changes input)
 /*
  * Checks if a change already exists within the system
@@ -786,10 +926,9 @@ bool Changes::ChangesExists(Changes input)
     Changes nextRead = readFromFile(nextValid);
     while(nextValid)
     {
-        if(nextRead.getchangeId() == input.getchangeId() && nextRead.getchangeStatus() == input.getchangeStatus()
-        && nextRead.getDescription() == input.getDescription() && nextRead.getIsBug() == input.getIsBug() && nextRead.getPriority() == input.getPriority()
-        && nextRead.getProductName() == input.getProductName() && nextRead.getReleaseId() == input.getReleaseId())
+        if(nextRead.getchangeId() == input.getchangeId())
             return true;
+        nextRead = readFromFile(nextValid);
     }
     return false;
 }
