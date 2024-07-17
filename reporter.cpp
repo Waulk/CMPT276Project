@@ -16,7 +16,6 @@
 #include <cstring>
 #include <sstream>
 using namespace std;
-std::fstream Reporter::file;
 
 /***********************************************/
 Reporter::Reporter() 

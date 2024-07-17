@@ -244,7 +244,7 @@ class ProductRelease
         char date[DATESIZE + 1]; 
 
         // fstream - File to save ProductRelease objects
-        static std::fstream file;
+        inline static std::fstream file;
         
         
 };

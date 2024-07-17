@@ -82,7 +82,7 @@ void viewCustomersRequestedChange()
 {
     Product prouctToView = Product::getProductFromUser();
     Changes changeToView = Changes::viewChangesFromProduct(prouctToView.getProductName());
-    // TODO: figure out a good way of getting the customers to do with the change
+    // TODO: Finish this
 }
 
 
@@ -166,7 +166,6 @@ void viewChangesForProduct()
 {
     Product productToView = Product::getProductFromUser();
     Changes changeToEdit = Changes::viewChangesFromProduct(productToView.getProductName()); 
-    //TODO: fix this when updated (section 4.3, edit change, will be a new function call)
 
     std::cout << "Would you like to edit the Change Product Release (Y/N)?\n";
     bool editRelease = getTrueorFalseFromUser();

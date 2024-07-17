@@ -17,7 +17,6 @@
 #include <ctime>
 #include <fstream>
 #include <sstream> 
-std::fstream Report::file;
 
 /***********************************************/
 Report::Report() 

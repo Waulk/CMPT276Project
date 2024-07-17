@@ -19,6 +19,7 @@
 #define Changes_H
 #include <iostream>
 #include <vector>
+#include <fstream>
 using std::string;
 
 class Changes
@@ -189,7 +190,6 @@ class Changes
         */
 
         /***********************************************/
-
         static Changes viewChangesFromProduct(const string &product);
         // Returns: Changes
         /* This function returns a Changes object.
@@ -307,7 +307,7 @@ class Changes
         static int lastChangeId;
 
         // fstream - File to save Change objects
-        static std::fstream file;
+        inline static std::fstream file;
 
 
 

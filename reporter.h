@@ -151,7 +151,7 @@ class Reporter
         char deparmentId[DEPTIDSIZE + 1]; 
 
         // fstream - File to save Report objects
-        static std::fstream file;
+        inline static std::fstream file;
 
 };
 

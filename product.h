@@ -152,7 +152,7 @@ class Product
         char productName[PRODUCTNAMESIZE + 1];
 
         // fstream - File to save Product objects
-        static std::fstream file;
+        inline static std::fstream file;
 
         
 
