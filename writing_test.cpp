@@ -6,6 +6,7 @@ using std::endl;
 
 // Test function to handle edge cases, such as an empty change
 void test_Edge_Cases() {
+    Changes::openChangesFile();
     // Create a change object with empty/zero fields
     Changes* emptyChange = new Changes(0, "", "", "", 0, "", false);
     // Write the empty change to the file
@@ -20,6 +21,7 @@ void test_Edge_Cases() {
 
 // Test function to write a change object to the file and verify its existence
 void write_Changes_Test() {
+    Changes::openChangesFile();
     // Create a change object with specific fields
     Changes* changeObject = new Changes(1, "Completed", "Tennis Rack", "1.021.5", 5, "Big Tennis Racket", true);
     // Write the change object to the file
@@ -34,6 +36,7 @@ void write_Changes_Test() {
 
 // Test function to write a product release to the file and verify its existence
 void write_Product_Release_Test() {
+    ProductRelease::openProductReleaseFile();
     // Create a product release object with specific fields
     ProductRelease* product = new ProductRelease("Tennis Rack", "1.021.5", "2022-06-05");
     // Write the product release object to the file
