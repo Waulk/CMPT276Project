@@ -166,7 +166,7 @@ class Changes
 
         /***********************************************/
 
-        Changes viewNewChangesUI();
+        static Changes viewNewChangesUI();
         // Returns: Changes
         /* This function returns a Changes object.
         /*
@@ -190,7 +190,7 @@ class Changes
 
         /***********************************************/
 
-        Changes viewChangesFromProduct(const string &product);
+        static Changes viewChangesFromProduct(const string &product);
         // Returns: Changes
         /* This function returns a Changes object.
         =======Changes=======
@@ -208,7 +208,7 @@ class Changes
 
         /***********************************************/
 
-        Changes viewUnfinishedChanges(const string &productRelease, const string &product);
+        static Changes viewUnfinishedChanges(const string &productRelease, const string &product);
         // Returns: Changes
         /* This function returns a Changes object.
         =======Changes=======
@@ -221,23 +221,6 @@ class Changes
         InProgress  4         App should save                 F
                                <-P  N->
         Next or Previous?
-        */
-
-        /***********************************************/
-
-        Changes viewCustomerRequestedChanges(const string &product);
-        // Returns: Changes
-        /* This function returns a Changes object.
-        =======Changes=======
-        SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG
-        ---------  ------      --------  -----------                     ---                    
-            1)  xxxxxxxxxx      d         xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  T/F
-            2)  InProgress      3         There is no sea                 T
-            ...
-            19)  Assessed       5         Submission crashes site         T
-            20)  Done           4         App should save                 F
-                                <-P  N->
-        Make a Selection:
         */
 
         /***********************************************/

@@ -36,6 +36,7 @@ class Reporter
         // Returns: None since this is a constructor
         /* This is a constructor of Reporter
         *  This constructor initializes email with nullptr
+        */
 
         /***********************************************/
         Reporter(
@@ -54,6 +55,8 @@ class Reporter
         * phoneNumber != "" (empty string). The max length of phoneNumber is 11.
         * The max length of deparmentId is 12. 
         * If these preconditions are not met, it will throw an exception with an error message
+        */
+
 
 
         /***********************************************/
@@ -65,39 +68,20 @@ class Reporter
         * ---------------------------------------------
         * Precondition: email != "" (empty string). The max length of email is 24.
         * If this precondition is not met, it will display an error message and the function will return False  
-        
+        */
 
-        /***********************************************/
-        string getCustomerInfo(
-            const string &email     // string email - email of customer (in)
-        );
-        // Returns: string - name and phone number of customer
-        /* This is a getter of customer's information
-        * ---------------------------------------------
-        * Precondition: email != "" (empty string). The max length of email is 24.
-        * If this precondition is not met, the function will display and return an error message  
-
-        /***********************************************/
-        bool setCustomer(
-            Reporter reporter
-        );
-        // Returns: true or false
-        /* This is a setter of customer
-         * It adds the customer to the data file
-         * ---------------------------------------------
-         * Precondition: 
-        * email != "" (empty string). The max length of email is 24.
-        * customerName != "" (empty string). The max length of customerName is 30.
-        * phoneNumber != "" (empty string). The max length of phoneNumber is 11.
-        * The max length of deparmentId is 12. 
-        * If these preconditions are not met, it will throw an exception with an error message
+       /***********************************************/
+        std::string getEmail();
+        // Returns: std::string
+        /* This function returns the email address of the current reporter
+         */
         
         /***********************************************/
-        void reporterUI(
-            bool createNew // Ture or False
+        static void reporterUI(
+            bool createNew // True or False
         );
         // Returns: void
-        /* This function dispalys an UI and shows a list of all the customers
+        /* This function displays an UI and shows a list of all the customers
 
 
         /***********************************************/
@@ -110,7 +94,7 @@ class Reporter
         */
 
         /***********************************************/
-        bool openReporterFile();
+        static bool openReporterFile();
         // Returns: true or flase
         /* This function opens the file 
          * ---------------------------------------------
@@ -119,7 +103,7 @@ class Reporter
         */
 
        /***********************************************/
-       bool writeToFile(
+       static bool writeToFile(
         Reporter reporter      // Reporter reporter - the the info that need to be added to end of file (out)
        );
        // Returns: bool - return true if the file opened and had the string successfully add to it, false otherwise
@@ -141,7 +125,7 @@ class Reporter
         */
 
         /***********************************************/
-        bool closeReporterFile();
+        static bool closeReporterFile();
         // Returns: bool - return true if the file got closed successfully, false otherwise
         /* This function closes the file
          * ---------------------------------------------

@@ -95,54 +95,10 @@ bool Reporter::checkEmail(const string &email)
 }
 
 /***********************************************/
-string Reporter::getCustomerInfo(const string &email) 
-/*
- * Gets all the information about the customer
- *
- * Implementation Details:
- * Checks if email exists
-*/
+std::string Reporter::getEmail()
+// Simple getter that returns the email as a string
 {
-    if (!checkEmail(email)) 
-    {
-        return "Customer does not exist";
-    }
-
-    
-
-    string line;
-    while (getline(file, line)) 
-    {
-        istringstream iss(line);
-        string fileEmail;
-        iss >> fileEmail;
-
-        if (fileEmail == email) 
-        {
-            string customerInfo;
-            getline(iss, customerInfo);
-            return customerInfo;
-        }
-    }
-    return "Error: Customer information not found";
-}
-
-/***********************************************/
-bool Reporter::setCustomer(Reporter reporter)
-/*
- * Adds the customers information to the reporter file
- *
- * Implentation Details:
- * 
-*/ 
-{
-    if (!writeToFile(reporter)) 
-    {
-        std::cerr << "Failed to write to file" << std::endl;
-        return false;
-    }
-    return true;
-    
+    return std::string(this->email);
 }
 
 /***********************************************/

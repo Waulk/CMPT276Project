@@ -37,7 +37,7 @@ class Report
         Report(
             string email,          // string email - a email assign the customer (in)
             int changeId,          // int changeId - the changeId of the report (in)
-            string ReleasId        // string ReleasId - the releaseId of the report (in)
+            string ReleaseId        // string ReleasId - the releaseId of the report (in)
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Report
