@@ -9,6 +9,7 @@
 /***********************************************
  * Example: The Changes class provides description of a change.
  * You must call the constructor Changes() or Changes(int changeId, string changeStatus, ... bool isBug) before using this class.
+ * All data members are stored linearly unsorted in the file for ease of access.
 ***********************************************/
 #include "changes.h"
 #include <cstring>

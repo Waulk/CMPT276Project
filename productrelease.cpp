@@ -8,6 +8,7 @@
 /***********************************************
  * productrelease.cpp
  * This file implements the member functions defined in the productrelease.h header file.
+ * All data members are stored linearly unsorted in the file for ease of access.
 ***********************************************/
 
 #include <iostream>
