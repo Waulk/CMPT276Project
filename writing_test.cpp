@@ -33,7 +33,7 @@ void write_Changes_Test() {
 }
 
 // Test function to write a product release to the file and verify its existence
-void write_Report_Test() {
+void write_Product_Release_Test() {
     // Create a product release object with specific fields
     ProductRelease* product = new ProductRelease("Tennis Rack", "1.021.5", "2022-06-05");
     // Write the product release object to the file
@@ -51,7 +51,7 @@ int main() {
     // Run test for writing and verifying changes
     write_Changes_Test();
     // Run test for writing and verifying product releases
-    write_Report_Test();
+    write_Product_Release_Test();
     // Run test for edge cases
     test_Edge_Cases();
     return 0;
