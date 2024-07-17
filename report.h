@@ -32,7 +32,8 @@ class Report
         Report();
         // Returns: None since this is a constructor
         /* This is a constructor of Report
-        *  This constructor initializes email with nullptr
+         *  This constructor initializes email with nullptr
+        */
 
         /***********************************************/
         Report(
@@ -42,13 +43,14 @@ class Report
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Report
-        *  This constructor initializes email, changeId, releaseId
-        * ---------------------------------------------
-        * Precondition: 
-        * email != "" (empty string). The max length of productName is 24.
-        * changeId != "" (empty string). The max length of releaseId is 7.
-        * releaseId != "" (empty string). The max length of releaseId is 8. 
-        * If these preconditions are not met, it will throw an exception with an error message
+         *  This constructor initializes email, changeId, releaseId
+         * ---------------------------------------------
+         * Precondition: 
+         * email != "" (empty string). The max length of productName is 24.
+         * changeId != "" (empty string). The max length of releaseId is 7.
+         * releaseId != "" (empty string). The max length of releaseId is 8. 
+         * If these preconditions are not met, it will throw an exception with an error message
+        */
 
         /***********************************************/
         string getreport(
@@ -57,11 +59,12 @@ class Report
         );
         // Returns: string - email, changeid, releaseid and date of report
         /* This is a getter of report
-        * ---------------------------------------------
-        * Precondition: 
-        * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
-        * If these preconditions are not met, it will throw an exception with an error message
+         * ---------------------------------------------
+         * Precondition: 
+         * email != "" (empty string). The max length of productName is 10.
+         * changeId != "" (empty string). The max length of releaseId is 7.
+         * If these preconditions are not met, it will throw an exception with an error message
+        */
 
         /***********************************************/
         bool setReport(
@@ -69,15 +72,16 @@ class Report
         );
         // Returns: True or False
         /* This add report to the data file
-        * ---------------------------------------------
-        * Precondition: 
-        * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
-        * releaseId != "" (empty string). The max length of releaseId is 8. 
-        * If these preconditions are not met, it will throw an exception with an error message and will return False
+         * ---------------------------------------------
+         * Precondition: 
+         * email != "" (empty string). The max length of productName is 10.
+         * changeId != "" (empty string). The max length of releaseId is 7.
+         * releaseId != "" (empty string). The max length of releaseId is 8. 
+         * If these preconditions are not met, it will throw an exception with an error message and will return False
+        */
 
         /***********************************************/
-       void reportFileStart();
+       static void reportFileStart();
        // Returns: char pointer to start of file 
         /* This function points to the top of the file
          * ---------------------------------------------
@@ -86,7 +90,7 @@ class Report
         */
 
         /***********************************************/
-        bool openReportFile();
+        static bool openReportFile();
        // Returns: True or False
         /* This function opens the file
          * ---------------------------------------------
@@ -95,8 +99,8 @@ class Report
         */
 
        /***********************************************/
-       static bool openReportFileAndWrite(
-        string &addToFile       // string addTofile - the that is added to end of file (out)
+       static bool writeToFile(
+        Report report      // Report report - the the info that need to be added to end of file (out)
        );
        // Returns: bool - return true if the file opened and had the string successfully add to it, false otherwise
         /* This function open and write in the file
@@ -106,11 +110,13 @@ class Report
         */
 
        /***********************************************/
-       static bool closeReportFile();
-       // Returns: bool - return true if the file got closed successfully, false otherwise
-        /* This function closes the file
+        static Report readFromFile(
+            bool &isEnd    // bool &notEnd - indicates whether it has reached to the end of the file. True if it has reached the end, false otherwise (out)
+        );
+        // Returns: Report - the report from the file
+        /* This function read and return the Product from the file
          * ---------------------------------------------
-         * Precondition: The file to get closed exists
+         * Precondition: file is properly open
          * If this precondition is not met, it will display an error message and throw an exception
         */
 
@@ -121,14 +127,22 @@ class Report
         );
         // Returns: True or False
         /* This checks if a report is already in the data
-        * ---------------------------------------------
-        * Precondition: 
-        * email != "" (empty string). The max length of productName is 10.
-        * changeId != "" (empty string). The max length of releaseId is 7.
-        * If these preconditions are not met, it will throw an exception with an error message and return False
-        
+         * ---------------------------------------------
+         * Precondition: 
+         * email != "" (empty string). The max length of productName is 10.
+         * changeId != "" (empty string). The max length of releaseId is 7.
+         * If these preconditions are not met, it will throw an exception with an error message and return False
+        */
+      
         /***********************************************/
-
+        static bool closeReportFile();
+       // Returns: bool - return true if the file got closed successfully, false otherwise
+        /* This function closes the file
+         * ---------------------------------------------
+         * Precondition: The file to get closed exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+        /***********************************************/
     private:
        
 
