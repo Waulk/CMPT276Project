@@ -2,12 +2,16 @@
  * Module: changes.h
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-17 Edited by Matthew Liu
+ *         - added additional comments
+ *         - added parameters to UI methods
+ *         - changed return types to Changes from string
  * Ver. 1: - 2024-07-01 Original by Matthew Liu
  *         - Initial version 
  ***********************************************/
 
 /***********************************************
- * Example: The Changes class provIdes description of a change.
+ * Example: The Changes class provides description of a change.
  * You must call the constructor Changes() or Changes(int changeId, string changeStatus, ... bool isBug) before using this class.
 ***********************************************/
 
@@ -221,7 +225,7 @@ class Changes
 
         /***********************************************/
 
-        Changes viewCustomerRequestedChanges(const string &customer);
+        Changes viewCustomerRequestedChanges(const string &product);
         // Returns: Changes
         /* This function returns a Changes object.
         =======Changes=======
@@ -235,25 +239,6 @@ class Changes
                                 <-P  N->
         Make a Selection:
         */
-
-        /***********************************************/
-
-        Changes editChanges(const string &product, int newPriority, string newDescription, bool isBug, string newRelease, string newChangeStatus);
-        // Returns: Changes
-        /* This function returns a Changes object, and allows for editing of the Changes object..
-        If user selects completed change, an error prompt will appear:
-        "Error: Attempting to edit completed change!"
-        Otherwise, the following will appear:
-        =====Edit Change=====
-        ChangeID:    4295
-        Priority:    5
-        Description: Submission crashes site
-        Is Bug:      True
-        Release:     1.19.1
-        Status:      Assessed
-        Would you like to edit the Priority (Y/N)?
-        */
-
 
         /***********************************************/
 
@@ -304,10 +289,16 @@ class Changes
          * Precondition: The file to get closed exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
+       static bool ChangesExists(Changes change);
+       // Returns: bool - return true if the instance/object exists, false otherwise
+        /* This function checks if an object exists in the file
+         * ---------------------------------------------
+         * Precondition: The file to get checked exists
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
 
        
     private:       
-        static std::vector<Changes> array;
 
         // int - Id of the change. Max/min size between 1-999,999.
         int changeId;
