@@ -368,10 +368,18 @@ ProductRelease ProductRelease::readFromFile(bool &isEnd)
  * This function reads the next file from the internal file member.
  * 
  * Implementation Details:
- * - It's assumed the file is already opened and valid
+ * - It's assumed the file is already opened and valid.
+ * - If this is not the case then an error is thrown and a message is displayed.
  * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The ProductRelease file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on readFromFile");
+    }
+
     if(file.peek() == EOF)
     {
         isEnd = true;
@@ -391,10 +399,17 @@ bool ProductRelease::writeToFile(ProductRelease productRelease)
  * This function will append a ProductRelease to the file
  * 
  * Implementation Details:
- * - It's assumed the file is already opened and valid
+ * - It's assumed the file is already opened and valid.
+ * - If this is not the case then an error is thrown and a message is displayed.
  * - This function will not check for any entity integrity violations and will add the instance to the end of the file
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The ProductRelease file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on writeToFile");
+    }
     file.seekg(0, std::ios::end);
     file.write(productRelease.productName, sizeof(char) * Product::PRODUCTNAMESIZE);
     file.write(productRelease.releaseId, sizeof(char) * IDSIZE);
@@ -407,8 +422,18 @@ bool ProductRelease::writeToFile(ProductRelease productRelease)
 bool ProductRelease::seekToBeginningOfFile()
 /*
  * This function simply just seeks to the beggining of the file.
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not the case then an error is thrown and a message is displayed.
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The ProductRelease file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on seekToBeginningOfFile");
+    }
     file.seekg(0);
     return !(file.fail() || file.bad());
 }
@@ -441,8 +466,18 @@ bool ProductRelease::openProductReleaseFile()
 bool ProductRelease::closeProductReleaseFile()
 /*
  * Closes the file and verifies it closed properly
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not the case then an error is thrown and a message is displayed.
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The ProductRelease file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on closeProductReleaseFile");
+    }
     file.close();
     return !(file.fail() || file.bad());
 }
@@ -453,10 +488,17 @@ bool ProductRelease::productReleaseExists(ProductRelease input)
  * Checks if a productRelease already exists within the system
  *
  * Implementation Details:
- * - It's assumed the file is already opened and valid
+ * - It's assumed the file is already opened and valid.
+ * - If this is not the case then an error is thrown and a message is displayed.
  * - Loops through the file linearly and checks every single instance
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The ProductRelease file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on productReleaseExists");
+    }
     seekToBeginningOfFile();
     bool nextValid = true;
     ProductRelease nextRead = readFromFile(nextValid);

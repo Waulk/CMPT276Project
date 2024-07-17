@@ -213,10 +213,7 @@ class ProductRelease
        /***********************************************/
        static bool openProductReleaseFile();
        // Returns: bool - return true if the file got opened successfully, false otherwise
-        /* This function opens the file
-         * ---------------------------------------------
-         * Precondition: The file to get opened exists
-         * If this precondition is not met, it will display an error message and throw an exception
+        /* This function opens the file and creates a new one if it does not already exist
         */
 
        /***********************************************/

@@ -281,10 +281,18 @@ Product Product::readFromFile(bool &isEnd)
  * This function reads the next file from the internal file member.
  * 
  * Implementation Details:
- * - It's assumed the file is already opened and valid
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
  * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Product file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on readFromFile");
+    }
+
     if(file.peek() == EOF)
     {
         isEnd = true;
@@ -303,10 +311,18 @@ bool Product::writeToFile(Product product)
  * This function will append a Product to the file
  * 
  * Implementation Details:
- * - It's assumed the file is already opened and valid
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
  * - This function will check for any entity integrity violations, if there is one it will ignore the new entry.
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Product file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on writeToFile");
+    }
+        
     bool read = true;
     Product nextToCheck = readFromFile(read);
     while(read)
@@ -325,8 +341,18 @@ bool Product::writeToFile(Product product)
 bool Product::seekToBeginningOfFile()
 /*
  * This function simply just seeks to the beggining of the file.
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Product file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on seekToBeginningOfFile");
+    }
     file.seekg(0);
     return !(file.fail() || file.bad());
 }
@@ -359,8 +385,18 @@ bool Product::openProductFile()
 bool Product::closeProductFile()
 /*
  * Closes the file and verifies it closed properly
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
  */
 {
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Product file was not open when it was expected to be!\n";
+        throw std::runtime_error("Product file not open on closeProductFile");
+    }
     file.close();
     return !(file.fail() || file.bad());
 }
