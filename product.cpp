@@ -322,7 +322,8 @@ bool Product::writeToFile(Product product)
         std::cout << "The Product file was not open when it was expected to be!\n";
         throw std::runtime_error("Product file not open on writeToFile");
     }
-        
+    
+    seekToBeginningOfFile();
     bool read = true;
     Product nextToCheck = readFromFile(read);
     while(read)

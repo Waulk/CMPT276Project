@@ -267,21 +267,87 @@ void Reporter::reporterUI(bool createNew)
 
 /***********************************************/
 bool Reporter::openReporterFile() 
+/*
+ * This function will open the products.bin file and will return false on failure
+ * 
+ * Implementation Details:
+ * - The file will be opened with reading & writing capabilities, as well in binary mode
+ */
 {
-    return true;
+    // Attempt to open the file
+    file.open("/etc/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
+
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
 }
 
 /***********************************************/
-void reporterFileStart()
+bool Reporter::seekToBeginningOfFile()
+/*
+ * This function simply just seeks to the beggining of the file.
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
-    return;
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Reporter file was not open when it was expected to be!\n";
+        throw std::runtime_error("Reporter file not open on seekToBeginningOfFile");
+    }
+    file.seekg(0);
+    return !(file.fail() || file.bad());
 }
 
 /***********************************************/
 bool Reporter::writeToFile(Reporter reporter) 
+/*
+ * This function will append a Product to the file
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ * - This function will check for any entity integrity violations, if there is one it will return false.
+ */
 {
-    std::cout << reporter.email << std::endl;
-    return true;
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Reporter file was not open when it was expected to be!\n";
+        throw std::runtime_error("Reporter file not open on writeToFile");
+    }
+
+    seekToBeginningOfFile();
+    bool read = true;
+    Reporter nextToCheck = readFromFile(read);
+    // Check if the reporter already exists in the file
+    // If they do return false
+    while(read)
+    {
+        if(nextToCheck.email == reporter.email)
+        {
+            return false;
+        }
+        nextToCheck = readFromFile(read);
+    }
+
+    // Write the entirety of the reporter to the file
+    file.seekg(0, std::ios::end);
+    file.write(reporter.email, sizeof(char) * EMAILDATASIZE);
+    file.write(reporter.customerName, sizeof(char) * CUSTOMERNAMESIZE);
+    file.write(reporter.phoneNumber, sizeof(char) * PHONENUMBERSIZE);
+    file.write(reporter.deparmentId, sizeof(char) * DEPTIDSIZE);
+    return !(file.fail() || file.bad());
 }
 /***********************************************/
 
@@ -312,7 +378,21 @@ Reporter Reporter::readFromFile(bool &isEnd)
 
 /***********************************************/
 bool Reporter::closeReporterFile() 
+/*
+ * Closes the file and verifies it closed properly
+ *
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid.
+ * - If this is not true, then an error is thrown and displayed to the user.
+ */
 {
-    return true;
+    if(!file.is_open())
+    {
+        std::cout << "An error has occured!\n";
+        std::cout << "The Reporter file was not open when it was expected to be!\n";
+        throw std::runtime_error("Reporter file not open on closeReporterFile");
+    }
+    file.close();
+    return !(file.fail() || file.bad());
 }
 

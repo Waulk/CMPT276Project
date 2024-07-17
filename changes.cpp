@@ -805,7 +805,7 @@ bool Changes::writeToFile(Changes change)
         std::cout << "The Changes file was not open when it was expected to be!\n";
         throw std::runtime_error("Changes file not open on writeToFile");
     }
-        
+    seekToBeginningOfFile();
     bool read = true;
     Changes nextToCheck = readFromFile(read);
 

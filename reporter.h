@@ -99,10 +99,19 @@ class Reporter
         // Returns: void
         /* This function dispalys an UI and shows a list of all the customers
 
-        /***********************************************/
 
-       bool openReporterFile();
-       // Returns: true or flase
+        /***********************************************/
+        static bool seekToBeginningOfFile();
+        // Returns: bool - return true if reached to the beginning of file successfully, false otherwise
+        /* This function rewinds to the beginning of the file 
+         * ---------------------------------------------
+         * Precondition: file is properly open
+         * If this precondition is not met, it will display an error message and throw an exception
+        */
+
+        /***********************************************/
+        bool openReporterFile();
+        // Returns: true or flase
         /* This function opens the file 
          * ---------------------------------------------
          * Precondition: The file to get opened exists
@@ -131,18 +140,9 @@ class Reporter
          * If this precondition is not met, it will display an error message and throw an exception
         */
 
-       /***********************************************/
-       void reporterFileStart();
-       // Returns: void
-        /* This function points to the top of the file
-         * ---------------------------------------------
-         * Precondition: The file is opened
-         * If this precondition is not met, it will display an error message and throw an exception
-        */
-
-       /***********************************************/
-       bool closeReporterFile();
-       // Returns: bool - return true if the file got closed successfully, false otherwise
+        /***********************************************/
+        bool closeReporterFile();
+        // Returns: bool - return true if the file got closed successfully, false otherwise
         /* This function closes the file
          * ---------------------------------------------
          * Precondition: The file to get closed exists
@@ -152,16 +152,16 @@ class Reporter
 
     private:
         // char[] - email address. Fixed length (Fixed Length: 24 chars)
-        char email[EMAILDATASIZE];
+        char email[EMAILDATASIZE + 1];
 
         // char[] - the customers name. Fixed length (Fixed Length: 30 chars)
-        char customerName[CUSTOMERNAMESIZE];
+        char customerName[CUSTOMERNAMESIZE + 1];
 
         // char[] - the phone number. Fixed length (Fixed Length: 11 chars)
-        char phoneNumber[PHONENUMBERSIZE]; 
+        char phoneNumber[PHONENUMBERSIZE + 1]; 
 
         // char[] - the department name. Fixed length (Fixed Length: 12 chars)
-        char deparmentId[DEPTIDSIZE]; 
+        char deparmentId[DEPTIDSIZE + 1]; 
 
         // fstream - File to save Report objects
         static std::fstream file;
@@ -169,5 +169,3 @@ class Reporter
 };
 
 #endif
-
-
