@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include "reporter.h"
+#include <regex>
+#include "Reporter.h"
 
 using namespace std;
 
@@ -71,7 +72,7 @@ void addCustomer() {
     cin >> phoneNumber;
     //if phone number is not valid, continue requesting phone number
     bool isValid = isValidPhoneNumber(phoneNumber);
-    while (isValid) {
+    while (!isValid) {
         cout << "Error! Invalid phone number." << endl;
         cout << "Enter the Customer's Phone Number (10-11 digits): ";
         cin >> phoneNumber;
@@ -86,9 +87,8 @@ void addCustomer() {
 }
 
 //method for determing if a phone number is valid
-bool isValidPhoneNumber(const string &phoneNumber){
-    if (phoneNumber.empty() || phoneNumber.size() > 11 + 1){
-        return false;
-    }
-    return true;
+bool isValidPhoneNumber(const string &phoneNumber) {
+    // Phone number validation: ensure it's 10 or 11 digits, regex
+    const regex pattern ("\\d{10,11}");
+    return regex_match(phoneNumber, pattern);
 }
