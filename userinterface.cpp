@@ -270,5 +270,12 @@ void UserInterface::runMainMenu()
             
         } 
     }
+
+    // Run shutdown procedure
+    Changes::closeChangesFile();
+    Product::closeProductFile();
+    ProductRelease::closeProductReleaseFile();
+    Report::closeReportFile();
+    Reporter::closeReporterFile();
 }
 
