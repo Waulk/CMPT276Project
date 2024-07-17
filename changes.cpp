@@ -384,7 +384,7 @@ Changes Changes::viewNewChangesUI()
 
     }    
     // Return the selected change or *this if selection is invalid
-    return *this;
+    return changeObj;
 }
 
 bool Changes::isValid() 
@@ -410,7 +410,7 @@ Changes Changes::viewChangesFromProduct(const string &product)
     int currentPageProducts = 0;         // Current page num for products
     int currentPageChanges = 0;          // Current page number
     int productSelection = 0;            // product selection
-
+    Changes changeObj;
     while(!exit)
     {
         seekToBeginningOfFile();
@@ -467,7 +467,7 @@ Changes Changes::viewChangesFromProduct(const string &product)
         else                            // If user entered a selection number
         {
             int selection = std::stoi(input); // Convert input to an integer               
-            Changes changeObj;      
+                  
             for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; ++i)
             {
                 readFromFile(isEnd);
@@ -554,7 +554,7 @@ Changes Changes::viewChangesFromProduct(const string &product)
 
     }
     // Return the selected change or *this if selection is invalid
-    return *this;
+    return changeObj;
 
 }
 
@@ -654,7 +654,7 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
 
     }    
     // Return the selected change or *this if selection is invalid
-    return *this;
+    return changeObj;
 }
 
 Changes Changes::readFromFile(bool &isEnd)
