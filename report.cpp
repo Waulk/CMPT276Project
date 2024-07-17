@@ -11,7 +11,7 @@
  * This file implements the member functions defined in the product.h header file.
 ***********************************************/
 
-#include "Report.h"
+#include "report.h"
 #include <iostream>
 #include <cstring>
 #include <ctime>
@@ -98,15 +98,10 @@ bool Report::setReport(Report report)
  * Adds new report to the data file
  *
  * Implementation Details:
- * Makes all the information in to a string
  * adds the information, sends error message if an error ouccurs
 */ 
 {
-    reportFileStart();
-    std::stringstream ss;
-    ss << report.email << " " << report.changeId << " " << report.releaseId;
-    string combinedString = ss.str();
-    if (!openReportFileAndWrite(combinedString)) 
+    if (!writeToFile(report)) 
     {
         std::cerr << "Failed to write to file" << std::endl;
         return false;
@@ -120,14 +115,40 @@ void Report::reportFileStart()
     return;
 }
 
+/***********************************************/
+Report Report::readFromFile(bool &isEnd)
+/*
+ * This function reads the next file from the internal file member.
+ * 
+ * Implementation Details:
+ * - It's assumed the file is already opened and valid
+ * - This moves the file "position" to the next element, so a subsequent call to readFromFile will return the next element in the file
+ */
+{
+    if(file.peek() == EOF)
+    {
+        isEnd = true;
+        return Report();
+    }
+
+    // Read the next file if it's not EOF, this will move the seek
+    Report toReturn;
+    file.read(toReturn.email, sizeof(char) * EMAILDATASIZE);
+    file.read(toReturn.changeId, sizeof(char) * CHANGEIDSIZE);
+    file.read(toReturn.releaseId, sizeof(char) * IDSIZE);
+    return toReturn;
+}
+
+/***********************************************/
 bool Report::openReportFile() 
 {
     return true;
 }
 
 /***********************************************/
-bool Report::openReportFileAndWrite(string &addToFile) 
+bool Report::writeToFile(Report report) 
 {
+    std::cout << report.email << std::endl;
     return true;
 }
 
@@ -148,3 +169,4 @@ bool Report::checkreport(const string &email, const string &changeId)
 
     return (this->email == email && this->changeId == changeId);
 }
+
