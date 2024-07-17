@@ -9,7 +9,11 @@ main.o: main.cpp userinterface.o
 	g++ -c -std=c++17 -Wall main.cpp 
 
 writing_test: writing_test.o product.o productrelease.o report.o reporter.o changes.o
-	g++ -o writing_test.exe -std=c++17 product.o productrelease.o report.o reporter.o changes.o writing_test.o
+	g++ -o writing_test -std=c++17 product.o productrelease.o report.o reporter.o changes.o writing_test.o
+functional_test: functional_test.o product.o productrelease.o report.o reporter.o changes.o
+	g++ -o functional_test -std=c++17 functional_test.o product.o productrelease.o report.o reporter.o changes.o
+functional_test.o: functional_test.cpp reporter.h
+	g++ -c -std=c++17 -Wall functional_test.cpp
 
 writing_test.o: writing_test.cpp product.h productrelease.h report.h reporter.h changes.h
 	g++ -c -std=c++17 -Wall writing_test.cpp

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "Reporter.h"
+#include "reporter.h"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "changes.h"
-#include "productRelease.h"
+#include "productrelease.h"
 using std::cout;
 using std::endl;
 
