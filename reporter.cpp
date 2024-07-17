@@ -290,7 +290,7 @@ bool Reporter::writeToFile(Reporter reporter)
     // If they do return false
     while(read)
     {
-        if(nextToCheck.email == reporter.email)
+        if(strcmp(nextToCheck.email, reporter.email) == 0)
         {
             return false;
         }

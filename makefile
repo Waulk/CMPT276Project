@@ -27,5 +27,6 @@ reporter.o: reporter.cpp reporter.h
 
 cleanWindows:	
 	del -f *.o
+	del technovo.exe
 clean:	
 	rm -f *.o

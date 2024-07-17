@@ -1,6 +1,8 @@
 /***********************************************
  * Module: userinterface.h
- * 
+ * Ver. 2: - 2024-07-14 Updated by Jayden Brown
+ *         - Added a member to track if the main menu should loop
+ *         - Removed several functions that were deemed as unrequired
  * Ver. 1: - 2024-07-02 Original by Jayden Brown
  *         - Initial version
  ***********************************************/
@@ -32,17 +34,6 @@ class UserInterface
         *  This will only return if the user selects to exit the program.
         *  Should only be run once, and if it returns should not be ran again.
         */
-       
-       /***********************************************/
-        template<typename T>
-        static bool isEnteredValid(
-            const T& entered,               // T& entered - a constant reference to the input value which is compared against the domain (in)
-            const std::vector<T>& domain    // std::vector<T>& domain - a constant reference to the domain which possible values can be a part of (in)
-        );
-        // Returns: True if the entered value is within the domain, false otherwise
-        /* This method determines if an entered value from the user is within a domain.
-        *  This is a templated method which can be used for any object which has an equals operator.
-        */
 
         /***********************************************/
         static bool isEnteredValid(
@@ -73,9 +64,6 @@ class UserInterface
         /* This method determines if an entered string is a yes or a no for a (Y/N) question.
         */
 
-        /***********************************************/
-        std::string getDate();
-        // Returns: The current date in the format "YYYY-MM-DD"
     private:
 
         // Whether the main menu should keep running or exit and return.

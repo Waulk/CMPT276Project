@@ -185,7 +185,7 @@ class Group22
 
 // Below is the convention for commenting in a C++ file
 /***********************************************/
-Product Product::getProductFromUser(bool createNew)
+void getProductFromUser(bool createNew)
 /*
  * This function interacts with the user to display a list of products and 
  * allows the user to select one. It handles pagination to display products 
