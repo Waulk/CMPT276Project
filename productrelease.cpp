@@ -117,23 +117,25 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPage = 0;                 // Current page number
 
-    while(!exit)                         // Loop until user chooses to exit
+    while (!exit)                        // Loop until user chooses to exit
     {
         // seek to the beginning of the file
         seekToBeginningOfFile();         // Reset file pointer to the beginning
 
+        int skippedReleases = 0;         // Count of skipped releases
+        int displayedReleases = 0;       // Count of displayed releases
+
         // skip releases of previous pages
-        for(int i = 0; i < currentPage * RELEASES_PER_PAGE; ++i)
+        while (skippedReleases < currentPage * RELEASES_PER_PAGE && !isEnd)
         {
-            readFromFile(isEnd);         // Read and discard releases to skip to the current page
-            if(isEnd)                    // If end of file is reached
+            ProductRelease release = readFromFile(isEnd); // Read a release from the file
+            if (release.getProductName() == productName)  // If the release matches the product name
             {
-                currentPage--;           // Adjust current page number
-                break;                   // Exit the loop
+                skippedReleases++;       // Increment the skipped release count
             }
         }
 
-        if(isEnd)                        // If end of file was reached during skipping
+        if (isEnd)                        // If end of file was reached during skipping
         {
             std::cout << "No more releases to display." << std::endl; // Inform the user
             currentPage--;               // Adjust current page number
@@ -141,16 +143,17 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         }
 
         // display the product releases
-        std::cout << "=======Product Releases=======\n";
+        std::cout << "=======Product Releases for " << productName << "=======\n";
         std::cout << "SELECTION  RELEASE ID  DATE\n";
         std::cout << "-----------------------------\n";
 
-        for(int i = 0; i < RELEASES_PER_PAGE && !isEnd; ++i)
+        while (displayedReleases < RELEASES_PER_PAGE && !isEnd)
         {
             ProductRelease release = readFromFile(isEnd); // Read a release from the file
-            if(!isEnd)                // If end of file is not reached
+            if (release.getProductName() == productName)  // If the release matches the product name
             {
-                std::cout << i + 1 << ") " << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
+                std::cout << displayedReleases + 1 << ") " << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
+                displayedReleases++;      // Increment the displayed release count
             }
         }
 
@@ -159,37 +162,45 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
 
         // get user input
         std::string input;
-        std::cin >> input;              // Read user input
+        std::cin >> input;                // Read user input
 
-        if(input == "P" || input == "p") // If user wants to go to previous page
+        if (input == "P" || input == "p") // If user wants to go to previous page
         {
-            if(currentPage > 0)          // If not already on the first page
+            if (currentPage > 0)          // If not already on the first page
             {
-                currentPage--;           // Go to previous page
+                currentPage--;            // Go to previous page
             }
         }
-        else if(input == "N" || input == "n") // If user wants to go to next page
+        else if (input == "N" || input == "n") // If user wants to go to next page
         {
-            if(!isEnd)                   // If not already at the end of the file
+            if (!isEnd)                   // If not already at the end of the file
             {
-                currentPage++;           // Go to next page
+                currentPage++;            // Go to next page
             }
         }
         else                            // If user entered a selection number
         {
             int selection = std::stoi(input); // Convert input to an integer
-            if(selection > 0 && selection <= RELEASES_PER_PAGE) // If selection is valid
+            if (selection > 0 && selection <= displayedReleases) // If selection is valid
             {
                 // seek again to the beginning of the file
                 seekToBeginningOfFile();  // Reset file pointer to the beginning
 
                 // skip releases of previous pages and selected releases on the current page
-                for(int i = 0; i < currentPage * RELEASES_PER_PAGE + selection - 1; ++i)
+                skippedReleases = 0;      // Reset the skipped releases count
+                while (skippedReleases < currentPage * RELEASES_PER_PAGE + selection - 1 && !isEnd)
                 {
-                    readFromFile(isEnd);  // Read and discard releases to skip to the selected release
+                    ProductRelease release = readFromFile(isEnd); // Read a release from the file
+                    if (release.getProductName() == productName)  // If the release matches the product name
+                    {
+                        skippedReleases++; // Increment the skipped release count
+                    }
                 }
 
-                return readFromFile(isEnd); // Return the selected release
+                if (!isEnd)
+                {
+                    return readFromFile(isEnd); // Return the selected release
+                }
             }
         }
     }
