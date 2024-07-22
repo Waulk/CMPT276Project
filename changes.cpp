@@ -56,10 +56,10 @@ Changes::Changes(int changeId, string changeStatus, string productName, string r
     this->changeId = changeId;
     this->priority = priority;
     this->isBug = isBug;
-    strncpy(this->changeStatus, changeStatus.c_str(), CHANGESTATUSSIZE - 1);
-    strncpy(this->productName, productName.c_str(), PRODUCTNAMESIZE - 1);
-    strncpy(this->release_Id, release_Id.c_str(), RELEASE_IdSIZE - 1);
-    strncpy(this->description, description.c_str(), DESCRIPTIONSIZE - 1);
+    strncpy(this->changeStatus, changeStatus.c_str(), CHANGESTATUSSIZE);
+    strncpy(this->productName, productName.c_str(), PRODUCTNAMESIZE);
+    strncpy(this->release_Id, release_Id.c_str(), RELEASE_IdSIZE);
+    strncpy(this->description, description.c_str(), DESCRIPTIONSIZE);
 
     for(int i=changeStatus.length(); i < CHANGESTATUSSIZE + 1; i++)
     {
@@ -681,6 +681,7 @@ Changes Changes::readFromFile(bool &isEnd)
         isEnd = true;
         return toReturn;
     }
+    isEnd = false;
     
     // Read all members from disk in the EXACT same order as they were written
     file.read((char*)&toReturn.changeId, sizeof(int));
@@ -711,11 +712,11 @@ bool Changes::writeToFile(Changes change)
         throw std::runtime_error("Changes file not open on writeToFile");
     }
     seekToBeginningOfFile();
-    bool read = true;
-    Changes nextToCheck = readFromFile(read);
+    bool invalid = true;
+    Changes nextToCheck = readFromFile(invalid);
 
     // Check to see if any change in the system matches our current change
-    while(read)
+    while(!invalid)
     {
         if(nextToCheck.getchangeId() == change.getchangeId())
         {
@@ -736,11 +737,11 @@ bool Changes::writeToFile(Changes change)
             file.seekg(-sizeof(bool), std::fstream::cur);
             break;
         }
-        nextToCheck = readFromFile(read);
+        nextToCheck = readFromFile(invalid);
     }
 
     // Seek to the end of the file if we're not overwriting an entry
-    if(read == false)
+    if(invalid == true)
         file.seekg(0, std::ios::end);
 
     // Write all elements of the Change to disk
@@ -827,13 +828,13 @@ bool Changes::ChangesExists(Changes input)
  */
 {
     seekToBeginningOfFile();
-    bool nextValid = true;
-    Changes nextRead = readFromFile(nextValid);
-    while(nextValid)
+    bool invalid = true;
+    Changes nextRead = readFromFile(invalid);
+    while(!invalid)
     {
         if(nextRead.getchangeId() == input.getchangeId())
             return true;
-        nextRead = readFromFile(nextValid);
+        nextRead = readFromFile(invalid);
     }
     return false;
 }
