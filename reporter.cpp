@@ -321,6 +321,7 @@ Reporter Reporter::readFromFile(bool &isEnd)
         isEnd = true;
         return Reporter();
     }
+    isEnd = false;
 
     // Read the next file if it's not EOF, this will move the seek
     Reporter toReturn;
