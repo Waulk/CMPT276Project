@@ -56,10 +56,10 @@ Reporter::Reporter(string email, string customerName, string phoneNumber, string
     strncpy(this->phoneNumber, phoneNumber.c_str(), PHONENUMBERSIZE);
     strncpy(this->deparmentId, deparmentId.c_str(), DEPTIDSIZE);
 
-    this->email[EMAILDATASIZE + 1] = '\0';
-    this->customerName[CUSTOMERNAMESIZE + 1] = '\0';
-    this->phoneNumber[PHONENUMBERSIZE + 1] = '\0';
-    this->deparmentId[DEPTIDSIZE + 1] = '\0';
+    this->email[EMAILDATASIZE] = '\0';
+    this->customerName[CUSTOMERNAMESIZE] = '\0';
+    this->phoneNumber[PHONENUMBERSIZE] = '\0';
+    this->deparmentId[DEPTIDSIZE] = '\0';
 }
 
 /***********************************************/
@@ -288,7 +288,7 @@ bool Reporter::writeToFile(Reporter reporter)
     Reporter nextToCheck = readFromFile(read);
     // Check if the reporter already exists in the file
     // If they do return false
-    while(read)
+    while(!read)
     {
         if(strcmp(nextToCheck.email, reporter.email) == 0)
         {
