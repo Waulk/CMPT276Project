@@ -104,6 +104,7 @@ Report Report::readFromFile(bool &isEnd)
         isEnd = true;
         return Report();
     }
+    isEnd = false;
 
     // Read the next file if it's not EOF, this will move the seek
     Report toReturn;
