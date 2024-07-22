@@ -243,7 +243,7 @@ string ProductRelease::getDate()
  * - Constructs a string from the fixed-size character array.
  */
 {
-    string date(date);
+    string date(this->date);
     return date;   
 }
 
@@ -397,6 +397,7 @@ ProductRelease ProductRelease::readFromFile(bool &isEnd)
         isEnd = true;
         return ProductRelease();
     }
+    isEnd = false;
 
     ProductRelease toReturn;
     file.read(toReturn.productName, sizeof(char) * Product::PRODUCTNAMESIZE);
@@ -512,12 +513,13 @@ bool ProductRelease::productReleaseExists(ProductRelease input)
         throw std::runtime_error("ProductRelease file not open on productReleaseExists");
     }
     seekToBeginningOfFile();
-    bool nextValid = true;
-    ProductRelease nextRead = readFromFile(nextValid);
-    while(nextValid)
+    bool nextInvalid = true;
+    ProductRelease nextRead = readFromFile(nextInvalid);
+    while(!nextInvalid)
     {
         if(nextRead.getProductName() == input.getProductName() && nextRead.getReleaseId() == input.getReleaseId())
             return true;
+        nextRead = readFromFile(nextInvalid);
     }
     return false;
 }
