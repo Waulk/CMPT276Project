@@ -299,6 +299,7 @@ Product Product::readFromFile(bool &isEnd)
         isEnd = true;
         return Product();
     }
+    isEnd = false;
 
     // Read the next file if it's not EOF, this will move the seek
     Product toReturn;
@@ -327,7 +328,7 @@ bool Product::writeToFile(Product product)
     seekToBeginningOfFile();
     bool read = true;
     Product nextToCheck = readFromFile(read);
-    while(read)
+    while(!read)
     {
         if(nextToCheck.getProductName() == product.getProductName())
         {
