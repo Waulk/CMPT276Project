@@ -151,7 +151,7 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName) {
 
         for (int i = startIndex; i < endIndex; ++i) {
             ProductRelease release = productReleases[i];
-            std::cout << std::left << std::setw(10) << (i + 1) << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
+            std::cout << std::left << std::setw(10) << (std::to_string(i + 1) + ")") << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
             displayedReleases++;
         }
 

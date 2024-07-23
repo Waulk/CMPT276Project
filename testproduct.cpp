@@ -301,7 +301,7 @@ void testGetProductFromUser()
     }
     
     Product product;
-    Product selectedProduct = product.getProductFromUser(true);
+    Product selectedProduct = product.getProductFromUser(false);
     cout << "You selected or created: " << selectedProduct.getProductName() << endl;
 
     // Close the product file
