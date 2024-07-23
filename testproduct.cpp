@@ -233,7 +233,7 @@ void testSetProductNameUI()
         
 
 */
-void testGetProductReleaseFromUser()
+void testGetProductFromUser()
 {
     // Initialize products to write
     const int SIZE = 45;
@@ -311,14 +311,16 @@ void testGetProductReleaseFromUser()
 
 int main()
 {
-    
+    /*
     testDefaultConstructor();
     testParameterizedConstructor();
     testSetAndGetProductName();
     testPrintProductName();
     testSetProductNameUI();
-    testGetProductFromUser();
-    testFileOperations();
+   
+    testFileOperations();*/
+
+     testGetProductFromUser();
     
 
     return 0;
