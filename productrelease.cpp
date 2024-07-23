@@ -17,6 +17,7 @@
 #include <regex>
 #include <cstring>
 #include <filesystem>
+#include <iomanip>  
 #include "productrelease.h"
 using std::string;
 using std::cout;
@@ -97,7 +98,7 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
 }
 
 /***********************************************/
-ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
+ProductRelease ProductRelease::getProductReleaseFromUser(std::string productName)
 /*
  * Function to interactively retrieve a ProductRelease object from the user
  * by displaying paginated releases and allowing the user to select one.
@@ -114,100 +115,153 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
  */
 {
     const int RELEASES_PER_PAGE = 20;    // Number of releases displayed per page
-    bool isEnd = false;                  // Flag to indicate end of file
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPage = 0;                 // Current page number
 
     while (!exit)                        // Loop until user chooses to exit
     {
-        // seek to the beginning of the file
-        seekToBeginningOfFile();         // Reset file pointer to the beginning
-
+        bool isEnd = false;              // Flag to indicate end of file
         int skippedReleases = 0;         // Count of skipped releases
         int displayedReleases = 0;       // Count of displayed releases
 
-        // skip releases of previous pages
-        while (skippedReleases < currentPage * RELEASES_PER_PAGE && !isEnd)
+        seekToBeginningOfFile();         // Reset file pointer to the beginning
+
+        // Skip releases of previous pages
+        for (int i = 0; i < currentPage * RELEASES_PER_PAGE; ++i)
         {
             ProductRelease release = readFromFile(isEnd); // Read a release from the file
-            if (release.getProductName() == productName)  // If the release matches the product name
+            if (isEnd) // If end of file is reached, stop skipping
             {
-                skippedReleases++;       // Increment the skipped release count
+                currentPage--; // Adjust current page as there are fewer products than expected
+                break;  // Exit the loop as we have reached the end of file
             }
         }
 
-        if (isEnd)                        // If end of file was reached during skipping
-        {
-            std::cout << "No more releases to display." << std::endl; // Inform the user
-            currentPage--;               // Adjust current page number
-            continue;                    // Continue to next iteration
-        }
+        // Display the product releases
+        std::cout << "======= Product Releases for " << productName << " =======\n";
+        std::cout << std::left << std::setw(10) << "SELECTION" << std::setw(15) << "RELEASE" << std::setw(15) << "DATE" << "\n";
+        std::cout << "-------------------------------------------\n";
 
-        // display the product releases
-        std::cout << "=======Product Releases for " << productName << "=======\n";
-        std::cout << "SELECTION  RELEASE ID  DATE\n";
-        std::cout << "-----------------------------\n";
+        displayedReleases = 0;
 
-        while (displayedReleases < RELEASES_PER_PAGE && !isEnd)
+        for (int i = 0; i < RELEASES_PER_PAGE && !isEnd; ++i)
         {
             ProductRelease release = readFromFile(isEnd); // Read a release from the file
-            if (release.getProductName() == productName)  // If the release matches the product name
+            if (!isEnd && release.getProductName() == productName) // Check if end of file was not reached and product matches
             {
-                std::cout << displayedReleases + 1 << ") " << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
+                std::cout << std::left << std::setw(10) << (i + 1) << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
                 displayedReleases++;      // Increment the displayed release count
             }
         }
 
-        std::cout << "            <-P   N->\n";
-        std::cout << "Make a Selection: ";
+        // Display navigation options
+        std::cout << "            ";
+        if (currentPage > 0)             // Show previous page option if not on the first page
+        {
+            std::cout << "<-P   ";
+        }
+        else
+        {
+            std::cout << "    ";
+        }
 
-        // get user input
+        if (!isEnd && displayedReleases == RELEASES_PER_PAGE)   // Show next page option if not at the end of file
+        {
+            std::cout << "N->";
+        }
+        else
+        {
+            std::cout << "   ";
+        }
+        std::cout << "\nMake a Selection: ";
+
+        // Get user input
         std::string input;
-        std::cin >> input;                // Read user input
+        std::cin.clear(); // Clear any error flags
+        std::cin.sync();  // Synchronize the input buffer
+        std::getline(std::cin, input); // Read user input
 
-        if (input == "P" || input == "p") // If user wants to go to previous page
+        if (input.empty())
         {
-            if (currentPage > 0)          // If not already on the first page
+            std::cout << "Invalid input. Please enter a valid selection.\n";
+            continue; // Redisplay the current page
+        }
+
+        if (input == "P" || input == "p") // If user wants to go to the previous page
+        {
+            if (currentPage > 0) // Ensure it's not the first page
             {
-                currentPage--;            // Go to previous page
+                currentPage--; // Move to the previous page
+            }
+            else
+            {
+                std::cout << "There is no previous page.\n";
             }
         }
-        else if (input == "N" || input == "n") // If user wants to go to next page
+        else if (input == "N" || input == "n") // If user wants to go to the next page
         {
-            if (!isEnd)                   // If not already at the end of the file
+            if (displayedReleases == RELEASES_PER_PAGE && !isEnd) // Ensure it's not the end of the file
             {
-                currentPage++;            // Go to next page
+                currentPage++; // Move to the next page
+            }
+            else
+            {
+                std::cout << "There is no next page.\n";
             }
         }
-        else                            // If user entered a selection number
+        else if (isNumber(input)) // Check if the input is a number
         {
-            int selection = std::stoi(input); // Convert input to an integer
-            if (selection > 0 && selection <= displayedReleases) // If selection is valid
-            {
-                // seek again to the beginning of the file
-                seekToBeginningOfFile();  // Reset file pointer to the beginning
-
-                // skip releases of previous pages and selected releases on the current page
-                skippedReleases = 0;      // Reset the skipped releases count
-                while (skippedReleases < currentPage * RELEASES_PER_PAGE + selection - 1 && !isEnd)
+            try {
+                int selection = std::stoi(input); // Convert input to an integer
+                if (selection > 0 && selection <= displayedReleases) // Ensure the selection is within the displayed range
                 {
-                    ProductRelease release = readFromFile(isEnd); // Read a release from the file
-                    if (release.getProductName() == productName)  // If the release matches the product name
+                    // Seek again to the beginning of the file
+                    seekToBeginningOfFile();
+
+                    // Skip releases of previous pages and selected releases on the current page
+                    for (int i = 0; i < currentPage * RELEASES_PER_PAGE + selection - 1; ++i)
                     {
-                        skippedReleases++; // Increment the skipped release count
+                        readFromFile(isEnd); // Read and discard releases to skip to the selected release
                     }
-                }
 
-                if (!isEnd)
-                {
                     return readFromFile(isEnd); // Return the selected release
                 }
+                else
+                {
+                    std::cout << "Invalid selection number. Please try again.\n";
+                }
             }
+            catch (const std::invalid_argument& e)
+            {
+                std::cout << "Invalid selection number. Please try again.\n";
+            }
+            catch (const std::out_of_range& e)
+            {
+                std::cout << "Invalid input. The number is out of range. Please try again.\n";
+            }
+        }
+        else
+        {
+            std::cout << "Invalid input. Please enter a valid number.\n";
         }
     }
 
-    return ProductRelease();   // Return a default ProductRelease object if no valid selection was made
+    return ProductRelease(); // Return a default ProductRelease object if no valid selection was made
 }
+
+bool isNumber(const std::string& str)
+{
+    for (char const &c : str) {
+        if (std::isdigit(c) == 0) return false;
+    }
+    return true;
+}
+
+
+
+
+
+
 
 /***********************************************/
 string ProductRelease::getProductName()
@@ -462,16 +516,16 @@ bool ProductRelease::openProductReleaseFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
+    if(!std::filesystem::exists("/home/mha213/Desktop/CMPT276Project/technovo/")) // /etc/technovo/
+        std::filesystem::create_directory("/home/mha213/Desktop/CMPT276Project/technovo/"); // /etc/technovo/
     // Attempt to open the file
-    file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("/home/mha213/Desktop/CMPT276Project/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("/home/mha213/Desktop/CMPT276Project/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
@@ -526,4 +580,41 @@ bool ProductRelease::productReleaseExists(ProductRelease input)
         nextRead = readFromFile(nextInvalid);
     }
     return false;
+}
+
+/*
+Original file path:
+bool ProductRelease::openProductReleaseFile()
+
+{
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("/etc/technovo/"))
+        std::filesystem::create_directory("/etc/technovo/");
+    // Attempt to open the file
+    file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    bool valid = file.is_open();
+
+    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+    if(!valid)
+    {
+        file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        valid = file.is_open();
+    }
+
+    // Make sure the file opened and we're at the start
+    return valid && seekToBeginningOfFile();
+}
+
+
+*/
+
+
+// Helper function to check if a string is a number
+bool ProductRelease::isNumber(const std::string& s) {
+    for (char const &ch : s) {
+        if (std::isdigit(ch) == 0) {
+            return false;
+        }
+    }
+    return true;
 }
