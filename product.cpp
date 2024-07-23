@@ -472,8 +472,10 @@ bool Product::isNumber(const string& s)
  */
 {   
     // Iterate over each character in the string
-    for (char const &ch : s) {
-        if (std::isdigit(ch) == 0) {
+    for (char const &ch : s) 
+    {
+        if (std::isdigit(ch) == 0)
+        {
             // If any character is not a digit, return false
             return false;
         }
