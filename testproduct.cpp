@@ -233,7 +233,7 @@ void testSetProductNameUI()
         
 
 */
-void testGetProductFromUser()
+void testGetProductReleaseFromUser()
 {
     // Initialize products to write
     const int SIZE = 45;

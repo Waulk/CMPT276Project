@@ -233,6 +233,8 @@ class ProductRelease
          * Precondition: The file is open and valid
         */
 
+       static bool isNumber(const std::string& s);
+
     private:
         // char[] - name of the product. Fixed length (Fixed Length: 10 chars)
         char productName[Product::PRODUCTNAMESIZE + 1];
