@@ -38,10 +38,10 @@ Changes::Changes() : changeId(lastChangeId), priority(0), isBug(false)
  * Implementation Details:
  * - Uses memset to fill the productName array with null characters.
  */
-    std::memset(changeStatus, '\0', CHANGESTATUSSIZE);
-    std::memset(productName, '\0', PRODUCTNAMESIZE);
-    std::memset(release_Id, '\0', RELEASE_IdSIZE);
-    std::memset(description, '\0', DESCRIPTIONSIZE);
+    std::memset(changeStatus, '\0', CHANGESTATUSSIZE + 1);
+    std::memset(productName, '\0', PRODUCTNAMESIZE + 1);
+    std::memset(release_Id, '\0', RELEASE_IdSIZE + 1);
+    std::memset(description, '\0', DESCRIPTIONSIZE + 1);
     lastChangeId++;
 }
 
