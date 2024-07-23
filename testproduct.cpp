@@ -174,7 +174,6 @@ void testFileOperations()
     {
         cout << "File opened successfully!" << endl;
 
-        Product::seekToBeginningOfFile();
         Product::writeToFile(product);
 
         bool isEnd = false;
@@ -237,14 +236,55 @@ void testSetProductNameUI()
 void testGetProductFromUser()
 {
     // Initialize products to write
-    const int SIZE = 5;
+    const int SIZE = 45;
     Product products[SIZE] = {
         Product("Sea Water"),
         Product("Canvas"),
         Product("ProdMan"),
         Product("Notebook"),
-        Product("Pen")
+        Product("Pen"),
+        Product("Laptop"),
+        Product("Mug"),
+        Product("Bottle"),
+        Product("Charger"),
+        Product("Phone"),
+        Product("Mouse"),
+        Product("Keyboard"),
+        Product("Monitor"),
+        Product("Desk"),
+        Product("Chair"),
+        Product("Lamp"),
+        Product("Book"),
+        Product("Bag"),
+        Product("Shoes"),
+        Product("Hat"),
+        Product("Speaker"),
+        Product("Camera"),
+        Product("Tripod"),
+        Product("Lens"),
+        Product("SD Card"),
+        Product("Router"),
+        Product("Modem"),
+        Product("Cable"),
+        Product("Remote"),
+        Product("Controller"),
+        Product("Printer"),
+        Product("Scanner"),
+        Product("Paper"),
+        Product("Ink"),
+        Product("Tablet"),
+        Product("E-reader"),
+        Product("Glasses"),
+        Product("Clock"),
+        Product("Watch"),
+        Product("Bracelet"),
+        Product("Ring"),
+        Product("Necklace"),
+        Product("Pillow"),
+        Product("Blanket"),
+        Product("Mat")
     };
+
 
     // Open the product file
     if (!Product::openProductFile())
@@ -271,15 +311,13 @@ void testGetProductFromUser()
 
 int main()
 {
-    /*
+    
     testDefaultConstructor();
     testParameterizedConstructor();
     testSetAndGetProductName();
     testPrintProductName();
     testSetProductNameUI();
-*/
-    //testGetProductFromUser();
-
+    testGetProductFromUser();
     testFileOperations();
     
 
