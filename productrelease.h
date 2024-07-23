@@ -226,14 +226,26 @@ class ProductRelease
         */
 
        /***********************************************/
-       static bool productReleaseExists(ProductRelease input);
+       static bool productReleaseExists(
+            ProductRelease input // ProductRelase to check if this exists (in)
+        );
        // Returns: bool - return true if there exists a product with the name and releaseID
         /* This will search through the file to check if a product exists for entity integrity
          * ---------------------------------------------
          * Precondition: The file is open and valid
         */
 
-       static bool isNumber(const std::string& s);
+        /***********************************************/
+       static bool isNumber(
+            const string& s // string to check if this is a number (in)
+        );
+        // Returns: bool - returns true if the string consists entirely of numeric digits, false otherwise
+        /* This function checks if the input string is a number
+        * ---------------------------------------------
+        * Precondition: The input string is provided
+        * This function iterates over each character in the string and uses std::isdigit to check if it is a digit. 
+        * If any character is not a digit, it returns false; otherwise, it returns true.
+        */
 
     private:
         // char[] - name of the product. Fixed length (Fixed Length: 10 chars)

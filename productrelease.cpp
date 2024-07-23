@@ -2,6 +2,8 @@
  * Module: productrelease.cpp
  * 
  * Code Version History: 
+ * Ver. 2 - 2024-07-23  Modified by Maki Hosokawa
+ *          Fixed getProductReleaseFromUser
  * Ver. 1: - 2024-07-08 Original by Maki Hosokawa
  *         - Initial version 
  ***********************************************/
@@ -98,7 +100,7 @@ ProductRelease ProductRelease::createNewProductRelease(string productName)
 }
 
 /***********************************************/
-ProductRelease ProductRelease::getProductReleaseFromUser(string productName) {
+ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
 /*
  * Function to interactively retrieve a ProductRelease object from the user
  * by displaying paginated releases and allowing the user to select one.
@@ -113,6 +115,7 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName) {
  * - If the user selects a valid release number, the function seeks to the 
  *   corresponding position in the file and reads the release.
  */
+{
     const int RELEASES_PER_PAGE = 20;    // Number of releases displayed per page
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPage = 0;                 // Current page number
@@ -239,21 +242,6 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName) {
 
     return ProductRelease(); // Return a default ProductRelease object if no valid selection was made
 }
-
-
-bool isNumber(const std::string& str)
-{
-    for (char const &c : str) {
-        if (std::isdigit(c) == 0) return false;
-    }
-    return true;
-}
-
-
-
-
-
-
 
 /***********************************************/
 string ProductRelease::getProductName()
@@ -574,184 +562,23 @@ bool ProductRelease::productReleaseExists(ProductRelease input)
     return false;
 }
 
+/***********************************************/
+bool ProductRelease::isNumber(const string& str)
 /*
-Original file path:
-bool ProductRelease::openProductReleaseFile()
-
+ * Checks if the input string consists entirely of numeric digits.
+ *
+ * Implementation Details:
+ * - Iterates over each character in the string.
+ * - Uses std::isdigit to check if each character is a digit.
+ * - Returns true if all characters are digits, otherwise returns false.
+ */
 {
-    // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
-    // Attempt to open the file
-    file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
-    bool valid = file.is_open();
-
-    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
-    if(!valid)
+    // Iterate over each character in the string
+    for (char const &c : str) 
     {
-        file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
-        valid = file.is_open();
-    }
-
-    // Make sure the file opened and we're at the start
-    return valid && seekToBeginningOfFile();
-}
-
-
-*/
-
-
-// Helper function to check if a string is a number
-bool ProductRelease::isNumber(const std::string& s) {
-    for (char const &ch : s) {
-        if (std::isdigit(ch) == 0) {
-            return false;
-        }
+        // If any character is not a digit, return false
+        if (std::isdigit(c) == 0) return false;
     }
     return true;
 }
 
-
-
-/*
-
-ProductRelease ProductRelease::getProductReleaseFromUser(std::string productName)
-
-{
-        const int RELEASES_PER_PAGE = 20;    // Number of releases displayed per page
-    bool exit = false;                   // Flag to indicate user wants to exit
-    int currentPage = 0;                 // Current page number
-
-    while (!exit)                        // Loop until user chooses to exit
-    {
-        bool isEnd = false;              // Flag to indicate end of file
-        int skippedReleases = 0;         // Count of skipped releases
-        int displayedReleases = 0;       // Count of displayed releases
-
-        seekToBeginningOfFile();         // Reset file pointer to the beginning
-
-        // Skip releases of previous pages
-        for (int i = 0; i < currentPage * RELEASES_PER_PAGE; ++i)
-        {
-            ProductRelease release = readFromFile(isEnd); // Read a release from the file
-            if (isEnd) // If end of file is reached, stop skipping
-            {
-                currentPage--; // Adjust current page as there are fewer products than expected
-                break;  // Exit the loop as we have reached the end of file
-            }
-        }
-
-        // Display the product releases
-        std::cout << "======= Product Releases for " << productName << " =======\n";
-        std::cout << std::left << std::setw(10) << "SELECTION" << std::setw(15) << "RELEASE" << std::setw(15) << "DATE" << "\n";
-        std::cout << "-------------------------------------------\n";
-
-        displayedReleases = 0;
-
-        for (int i = 0; i < RELEASES_PER_PAGE && !isEnd; ++i)
-        {
-            ProductRelease release = readFromFile(isEnd); // Read a release from the file
-            if (!isEnd && release.getProductName() == productName) // Check if end of file was not reached and product matches
-            {
-                std::cout << std::left << std::setw(10) << (currentPage * RELEASES_PER_PAGE + i + 1) << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
-                displayedReleases++;      // Increment the displayed release count
-            }
-        }
-
-        // Display navigation options
-        std::cout << "            ";
-        if (currentPage > 0)             // Show previous page option if not on the first page
-        {
-            std::cout << "<-P   ";
-        }
-        else
-        {
-            std::cout << "    ";
-        }
-
-        if (!isEnd && displayedReleases == RELEASES_PER_PAGE)   // Show next page option if not at the end of file
-        {
-            std::cout << "N->";
-        }
-        else
-        {
-            std::cout << "   ";
-        }
-        std::cout << "\nMake a Selection: ";
-
-        // Get user input
-        std::string input;
-        std::cin.clear(); // Clear any error flags
-        std::cin.sync();  // Synchronize the input buffer
-        std::getline(std::cin, input); // Read user input
-
-        if (input.empty())
-        {
-            std::cout << "Invalid input. Please enter a valid selection.\n";
-            continue; // Redisplay the current page
-        }
-
-        if (input == "P" || input == "p") // If user wants to go to the previous page
-        {
-            if (currentPage > 0) // Ensure it's not the first page
-            {
-                currentPage--; // Move to the previous page
-            }
-            else
-            {
-                std::cout << "There is no previous page.\n";
-            }
-        }
-        else if (input == "N" || input == "n") // If user wants to go to the next page
-        {
-            if (displayedReleases == RELEASES_PER_PAGE && !isEnd) // Ensure it's not the end of the file
-            {
-                currentPage++; // Move to the next page
-            }
-            else
-            {
-                std::cout << "There is no next page.\n";
-            }
-        }
-        else if (isNumber(input)) // Check if the input is a number
-        {
-            try {
-                int selection = std::stoi(input); // Convert input to an integer
-                if (selection > 0 && selection <= (currentPage * RELEASES_PER_PAGE + displayedReleases)) // Ensure the selection is within the displayed range
-                {
-                    // Seek again to the beginning of the file
-                    seekToBeginningOfFile();
-
-                    // Skip releases of previous pages and selected releases on the current page
-                    for (int i = 0; i < selection - 1; ++i)
-                    {
-                        readFromFile(isEnd); // Read and discard releases to skip to the selected release
-                    }
-
-                    return readFromFile(isEnd); // Return the selected release
-                }
-                else
-                {
-                    std::cout << "Invalid selection number. Please try again.\n";
-                }
-            }
-            catch (const std::invalid_argument& e)
-            {
-                std::cout << "Invalid selection number. Please try again.\n";
-            }
-            catch (const std::out_of_range& e)
-            {
-                std::cout << "Invalid input. The number is out of range. Please try again.\n";
-            }
-        }
-        else
-        {
-            std::cout << "Invalid input. Please enter a valid number.\n";
-        }
-    }
-
-    return ProductRelease(); // Return a default ProductRelease object if no valid selection was made
-}
-
-
-*/
