@@ -145,10 +145,18 @@ class Product
          * ---------------------------------------------
          * Precondition: The file is already open
          * If this precondition is not met, it will display an error message and throw an exception
+
+       /***********************************************/
+       static bool isNumber(
+            const string& s // string to check if this is a number (in)
+        );
+       // Returns: bool - returns true if the string consists entirely of numeric digits, false otherwise
+        /* This function checks if the input string is a number
+        * ---------------------------------------------
+        * Precondition: The input string is provided
+        * This function iterates over each character in the string and uses std::isdigit to check if it is a digit. 
+        * If any character is not a digit, it returns false; otherwise, it returns true.
         */
-
-       static bool isNumber(const std::string& s);
-
        
     private:
         // char[] - name of the product. Fixed length (10 char)
@@ -156,9 +164,6 @@ class Product
 
         // fstream - File to save Product objects
         inline static std::fstream file;
-
-        
-        
 
 };
 

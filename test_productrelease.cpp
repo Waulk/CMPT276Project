@@ -301,13 +301,13 @@ int main() {
 
    // testReadWriteFromFile();
    
-   // testProductReleaseExists(); 
+   testProductReleaseExists(); 
    testGetProductReleaseFromUser();
 
-    //testSetDateUI();
-    //testSetReleaseIdUI();
+    testSetDateUI();
+    testSetReleaseIdUI();
 
-//    testCreateNewProductRelease();
+    testCreateNewProductRelease();
 
     cout << "All tests passed!" << endl;
 

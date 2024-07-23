@@ -2,6 +2,8 @@
  * Module: product.cpp
  * 
  * Code Version History: 
+ *  Ver. 2 - 2024-07-23  Modified by Maki Hosokawa
+ *           Fixed getProductFromUser
  * Ver. 1: - 2024-07-08 Original by Maki Hosokawa
  *         - Initial version 
  ***********************************************/
@@ -279,7 +281,6 @@ Product Product::getProductFromUser(bool createNew)
     return Product(); // Return a new product if the loop exits without a valid selection
 }
 
-
 /***********************************************/
 Product Product::setProductNameUI()
 /*
@@ -459,11 +460,21 @@ bool Product::closeProductFile()
     return !(file.fail() || file.bad());
 }
 
-
-// Helper function to check if a string is a number
-bool Product::isNumber(const std::string& s) {
+/***********************************************/
+bool Product::isNumber(const string& s)
+/*
+ * Checks if the input string consists entirely of numeric digits.
+ *
+ * Implementation Details:
+ * - Iterates over each character in the string.
+ * - Uses std::isdigit to check if each character is a digit.
+ * - Returns true if all characters are digits, otherwise returns false.
+ */
+{   
+    // Iterate over each character in the string
     for (char const &ch : s) {
         if (std::isdigit(ch) == 0) {
+            // If any character is not a digit, return false
             return false;
         }
     }

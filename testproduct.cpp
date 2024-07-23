@@ -311,14 +311,14 @@ void testGetProductFromUser()
 
 int main()
 {
-    /*
+    
     testDefaultConstructor();
     testParameterizedConstructor();
     testSetAndGetProductName();
     testPrintProductName();
     testSetProductNameUI();
    
-    testFileOperations();*/
+    // testFileOperations();
 
      testGetProductFromUser();
     
