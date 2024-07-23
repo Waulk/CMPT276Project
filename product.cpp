@@ -155,13 +155,16 @@ Product Product::getProductFromUser(bool createNew)
         std::cout << "SELECTION  PRODUCT\n";
         std::cout << "---------------------\n";
 
+        int displayIndex = currentPage * PRODUCTS_PER_PAGE + 1; // Initialize the display index for the current page
         int displayedProducts = 0; // Counter to track the number of displayed products
+
         for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i)
         {
             Product product = readFromFile(isEnd); // Read a product from the file
             if (!isEnd) // Check if end of file was not reached
             {
-                std::cout << i + 1 << " " << product.getProductName() << "\n"; // Display product with its selection number
+                std::cout << displayIndex << " " << product.getProductName() << "\n"; // Display product with its selection number
+                displayIndex++; // Increment the display index
                 displayedProducts++; // Increment the counter for displayed products
             }
         }
@@ -238,13 +241,16 @@ Product Product::getProductFromUser(bool createNew)
             else if (isNumber(input)) // Check if the input is a number
             {
                 int selection = std::stoi(input); // Convert input to an integer
-                if (selection > 0 && selection <= displayedProducts) // Ensure the selection is within the displayed range
+                int absoluteSelectionIndex = selection - 1; // Calculate the absolute selection index
+
+                // Ensure the selection is within the displayed range
+                if (selection > 0 && absoluteSelectionIndex < (currentPage + 1) * PRODUCTS_PER_PAGE)
                 {
                     // Seek again to the beginning of the file
                     seekToBeginningOfFile();
 
-                    // Skip products of previous pages and selected products on the current page
-                    for (int i = 0; i < currentPage * PRODUCTS_PER_PAGE + selection - 1; ++i)
+                    // Skip to the selected product
+                    for (int i = 0; i < absoluteSelectionIndex; ++i)
                     {
                         readFromFile(isEnd); // Read and discard products to skip to the selected product
                     }
