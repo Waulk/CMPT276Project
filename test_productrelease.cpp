@@ -302,7 +302,7 @@ int main() {
    // testReadWriteFromFile();
    
    // testProductReleaseExists(); 
-   //testGetProductReleaseFromUser();
+   testGetProductReleaseFromUser();
 
     //testSetDateUI();
     //testSetReleaseIdUI();

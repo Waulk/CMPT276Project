@@ -17,6 +17,7 @@
 #include <fstream>
 #include <cstring>
 #include <filesystem>
+#include <iomanip>  
 #include "product.h"
 using std::string;
 using std::cout;
@@ -158,16 +159,14 @@ Product Product::getProductFromUser(bool createNew)
         int displayIndex = currentPage * PRODUCTS_PER_PAGE + 1; // Initialize the display index for the current page
         int displayedProducts = 0; // Counter to track the number of displayed products
 
-        for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i)
-        {
-            Product product = readFromFile(isEnd); // Read a product from the file
-            if (!isEnd) // Check if end of file was not reached
-            {
-                std::cout << displayIndex << " " << product.getProductName() << "\n"; // Display product with its selection number
-                displayIndex++; // Increment the display index
-                displayedProducts++; // Increment the counter for displayed products
-            }
+        for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i) {
+        Product product = readFromFile(isEnd); // Read a product from the file
+        if (!isEnd) { // Check if end of file was not reached
+            cout << std::left << std::setw(10) << (std::to_string(displayIndex) + ")") << product.getProductName() << "\n"; // Display product with its selection number
+            displayIndex++; // Increment the display index
+            displayedProducts++; // Increment the counter for displayed products
         }
+    }
 
         // Determine navigation options
         std::cout << "            ";
