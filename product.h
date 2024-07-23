@@ -146,6 +146,9 @@ class Product
          * Precondition: The file is already open
          * If this precondition is not met, it will display an error message and throw an exception
         */
+
+       static bool isNumber(const std::string& s);
+
        
     private:
         // char[] - name of the product. Fixed length (10 char)
@@ -154,6 +157,7 @@ class Product
         // fstream - File to save Product objects
         inline static std::fstream file;
 
+        
         
 
 };

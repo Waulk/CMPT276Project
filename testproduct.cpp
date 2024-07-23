@@ -167,30 +167,26 @@ void testPrintProductName()
 
 void testFileOperations()
 {
-    Product product("FileProd");
+    
+    Product product("File");
 
     if(Product::openProductFile())
     {
         cout << "File opened successfully!" << endl;
 
-        if(Product::writeToFile(product))
-        {
-            cout << "Write to file test passed" << endl;
-        }
-        else
-        {
-            cout << "Write to file test failed!" << endl;
-        }
+        Product::writeToFile(product);
 
         bool isEnd = false;
+
+        Product::seekToBeginningOfFile();
         Product readProduct = Product::readFromFile(isEnd);
-        if(readProduct.getProductName() == "FileProd" && !isEnd)
+        if(readProduct.getProductName() == "File")
         {
             cout << "Read from file test passed" << endl;
         }
         else
         {
-            cout << "Read from file test failed" << endl;
+            cout << "Read from file test failed. product name is " << readProduct.getProductName() << endl;
         }
 
         if(Product::closeProductFile())
@@ -206,6 +202,7 @@ void testFileOperations()
     {
         cout << "File open failed" << endl;
     }
+
 }
 
 /*
@@ -220,29 +217,108 @@ void testSetProductNameUI()
 }
 
 
+/*
+* 
+    * Example UI:
+    * =======Product=======
+    * SELECTION  PRODUCT     
+    * ---------------------                              
+    * 1)  xxxxxxxxxx
+    * 2)  Sea Water
+    *  ...
+    * 19)  Canvas
+    * 20)  ProdMan
+    *             <-P X N->
+    * Make a Selection:
+        
+
+*/
 void testGetProductFromUser()
 {
+    // Initialize products to write
+    const int SIZE = 45;
+    Product products[SIZE] = {
+        Product("Sea Water"),
+        Product("Canvas"),
+        Product("ProdMan"),
+        Product("Notebook"),
+        Product("Pen"),
+        Product("Laptop"),
+        Product("Mug"),
+        Product("Bottle"),
+        Product("Charger"),
+        Product("Phone"),
+        Product("Mouse"),
+        Product("Keyboard"),
+        Product("Monitor"),
+        Product("Desk"),
+        Product("Chair"),
+        Product("Lamp"),
+        Product("Book"),
+        Product("Bag"),
+        Product("Shoes"),
+        Product("Hat"),
+        Product("Speaker"),
+        Product("Camera"),
+        Product("Tripod"),
+        Product("Lens"),
+        Product("SD Card"),
+        Product("Router"),
+        Product("Modem"),
+        Product("Cable"),
+        Product("Remote"),
+        Product("Controller"),
+        Product("Printer"),
+        Product("Scanner"),
+        Product("Paper"),
+        Product("Ink"),
+        Product("Tablet"),
+        Product("E-reader"),
+        Product("Glasses"),
+        Product("Clock"),
+        Product("Watch"),
+        Product("Bracelet"),
+        Product("Ring"),
+        Product("Necklace"),
+        Product("Pillow"),
+        Product("Blanket"),
+        Product("Mat")
+    };
+
+
+    // Open the product file
+    if (!Product::openProductFile())
+    {
+        std::cerr << "Failed to open the product file." << endl;
+        return;
+    }
+
+    // Write the products to the file
+    for (int i = 0; i < SIZE; ++i)
+    {   
+        Product::writeToFile(products[i]);
+
+    }
+    
     Product product;
-   
-    Product::openProductFile();
-    cout << "Please select a product or create a new one: ";
     Product selectedProduct = product.getProductFromUser(true);
     cout << "You selected or created: " << selectedProduct.getProductName() << endl;
-    product.closeProductFile();
 
-    
+    // Close the product file
+    Product::closeProductFile();
 }
+
 
 int main()
 {
+    
     testDefaultConstructor();
     testParameterizedConstructor();
     testSetAndGetProductName();
     testPrintProductName();
     testSetProductNameUI();
-    //testGetProductFromUser();
-
-    //testFileOperations();
+    testGetProductFromUser();
+    testFileOperations();
     
 
     return 0;

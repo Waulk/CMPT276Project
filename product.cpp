@@ -128,107 +128,152 @@ Product Product::getProductFromUser(bool createNew)
     bool exit = false;
     int currentPage = 0;
 
-    while(!exit)
+    while (!exit)
     {
         // seek to the beginning of the file
         seekToBeginningOfFile();
+
+        // Reset isEnd flag at the start of each iteration
+        isEnd = false;
 
         // Skip products of previous pages
         // This loop ensures that products on earlier pages are not displayed again.
         // It stops either when the required number of products have been skipped or 
         // when the end of the file is reached.
-        for(int i = 0; i < currentPage * PRODUCTS_PER_PAGE; ++i)
+        for (int i = 0; i < currentPage * PRODUCTS_PER_PAGE; ++i)
         {
             readFromFile(isEnd); // Read and discard a product to skip it
-            if(isEnd) // If end of file is reached, stop skipping
+            if (isEnd) // If end of file is reached, stop skipping
             {
                 currentPage--; // Adjust current page as there are fewer products than expected
                 break;  // Exit the loop as we have reached the end of file
             }
         }
 
-        if(isEnd) // Check if end of file was reached during skipping
-        {
-            std::cout << "No more products to display." << std::endl; // Inform the user
-            currentPage--; // Adjust current page as there are no more products
-            //continue;
-        }
-
         // Display the products
         std::cout << "=======Product=======\n";
         std::cout << "SELECTION  PRODUCT\n";
         std::cout << "---------------------\n";
-        
-        // This loop reads and displays products for the current page.
-        // It stops either when PRODUCTS_PER_PAGE products are displayed 
-        // or when the end of the file is reached.
-        for(int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i){
+
+        int displayedProducts = 0; // Counter to track the number of displayed products
+        for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i)
+        {
             Product product = readFromFile(isEnd); // Read a product from the file
-            if (!isEnd){ // Check if end of file was not reached
+            if (!isEnd) // Check if end of file was not reached
+            {
                 std::cout << i + 1 << " " << product.getProductName() << "\n"; // Display product with its selection number
+                displayedProducts++; // Increment the counter for displayed products
             }
         }
 
-        // Display navigation options based on whether creating new products is allowed
-        if (createNew)
+        // Determine navigation options
+        std::cout << "            ";
+        if (currentPage > 0) // Show previous page option if not on the first page
         {
-            std::cout << "            <-P X N->\n"; // Allow navigating previous/next page or creating new product
+            std::cout << "<-P ";
         }
         else
         {
-            std::cout << "            <-P   N->\n"; // Allow navigating previous/next page only
+            std::cout << "    ";
         }
-        
-        std::cout << "Make a Selection: ";
+
+        if (createNew)
+        {
+            std::cout << "X ";
+        }
+        else
+        {
+            std::cout << "  ";
+        }
+
+        if (!isEnd) // Show next page option if not on the last page
+        {
+            std::cout << "N->";
+        }
+        else
+        {
+            std::cout << "   ";
+        }
+        std::cout << "\nMake a Selection: ";
 
         // Get user input
         std::string input;
-        std::cin >> input; // Read user input
+        std::cin.clear(); // Clear any error flags
+        std::cin.sync();  // Synchronize the input buffer
+        std::getline(std::cin, input); // Read user input
 
-        if (input == "P" || input == "p") // If user wants to go to the previous page
-        {
-            if(currentPage > 0) // Ensure it's not the first page
+        try {
+            if (input.empty())
             {
-                currentPage--; // Move to the previous page
+                throw std::invalid_argument("Invalid input. Please enter a valid selection.");
             }
-        }
-        else if (input == "N" || input == "n") // If user wants to go to the next page
-        {
-            if(!isEnd) // Ensure it's not the end of the file
-            {
-                currentPage++; // Move to the next page
-            }
-        }
-        else if(createNew && (input == "X" || input == "x")) // If user wants to create a new product
-        {
-            exit = true; // Set exit flag to true
-            return Product(); // Return a new product
-        }
-        else // When the user selects a number
-        {
-            int selection = std::stoi(input); // Convert input to an integer
-            if(selection > 0 && selection <= PRODUCTS_PER_PAGE) // Ensure the selection is within the displayed range
-            {
-                // Seek again to the beginning of the file
-                seekToBeginningOfFile();
 
-                // Skip products of previous pages and selected products on the current page
-                for(int i = 0; i < currentPage * PRODUCTS_PER_PAGE + selection - 1; ++i)
+            if (input == "P" || input == "p") // If user wants to go to the previous page
+            {
+                if (currentPage > 0) // Ensure it's not the first page
                 {
-                    readFromFile(isEnd); // Read and discard products to skip to the selected product
+                    currentPage--; // Move to the previous page
                 }
+                else
+                {
+                    std::cout << "There is no previous page\n";
+                }
+            }
+            else if (input == "N" || input == "n") // If user wants to go to the next page
+            {
+                if (!isEnd) // Ensure it's not the end of the file
+                {
+                    currentPage++; // Move to the next page
+                }
+                else
+                {
+                    std::cout << "There is no next page\n";
+                }
+            }
+            else if (createNew && (input == "X" || input == "x")) // If user wants to create a new product
+            {
+                exit = true; // Set exit flag to true
+                return Product(); // Return a new product
+            }
+            else if (isNumber(input)) // Check if the input is a number
+            {
+                int selection = std::stoi(input); // Convert input to an integer
+                if (selection > 0 && selection <= displayedProducts) // Ensure the selection is within the displayed range
+                {
+                    // Seek again to the beginning of the file
+                    seekToBeginningOfFile();
 
-                return readFromFile(isEnd); // Return the selected product
+                    // Skip products of previous pages and selected products on the current page
+                    for (int i = 0; i < currentPage * PRODUCTS_PER_PAGE + selection - 1; ++i)
+                    {
+                        readFromFile(isEnd); // Read and discard products to skip to the selected product
+                    }
+
+                    return readFromFile(isEnd); // Return the selected product
+                }
+                else
+                {
+                    std::cout << "Invalid selection number. Please try again.\n";
+                }
             }
             else
             {
-                throw std::out_of_range("Invalid selection number."); // Throw exception if the selection is out of range
+                std::cout << "Invalid input. Please enter a valid number.\n";
             }
+        }
+        catch (const std::invalid_argument& e)
+        {
+            std::cout << e.what() << "\n";
+        }
+        catch (const std::out_of_range& e)
+        {
+            std::cout << "Invalid input. The number is out of range. Please try again.\n";
         }
     }
 
     return Product(); // Return a new product if the loop exits without a valid selection
 }
+
 
 /***********************************************/
 Product Product::setProductNameUI()
@@ -372,16 +417,16 @@ bool Product::openProductFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
+    if(!std::filesystem::exists("/home/mha213/Desktop/CMPT276Project/technovo/"))
+        std::filesystem::create_directory("/home/mha213/Desktop/CMPT276Project/technovo/");
     // Attempt to open the file
-    file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("/home/mha213/Desktop/CMPT276Project/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("/home/mha213/Desktop/CMPT276Project/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
@@ -409,3 +454,13 @@ bool Product::closeProductFile()
     return !(file.fail() || file.bad());
 }
 
+
+// Helper function to check if a string is a number
+bool Product::isNumber(const std::string& s) {
+    for (char const &ch : s) {
+        if (std::isdigit(ch) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
