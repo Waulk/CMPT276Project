@@ -19,6 +19,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 using std::cout;
 using std::endl;
@@ -783,6 +784,9 @@ bool Changes::openChangesFile()
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
 {
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("/etc/technovo/"))
+        std::filesystem::create_directory("/etc/technovo/");
     // Attempt to open the file
     file.open("/etc/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();

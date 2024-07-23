@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <cstring>
+#include <filesystem>
 #include "product.h"
 using std::string;
 using std::cout;
@@ -370,6 +371,9 @@ bool Product::openProductFile()
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
 {
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("/etc/technovo/"))
+        std::filesystem::create_directory("/etc/technovo/");
     // Attempt to open the file
     file.open("/etc/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();

@@ -16,6 +16,7 @@
 #include <fstream>
 #include <regex>
 #include <cstring>
+#include <filesystem>
 #include "productrelease.h"
 using std::string;
 using std::cout;
@@ -460,6 +461,9 @@ bool ProductRelease::openProductReleaseFile()
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
 {
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("/etc/technovo/"))
+        std::filesystem::create_directory("/etc/technovo/");
     // Attempt to open the file
     file.open("/etc/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();

@@ -16,6 +16,7 @@
 #include <fstream>
 #include <cstring>
 #include <sstream>
+#include <filesystem>
 using namespace std;
 
 /***********************************************/
@@ -230,6 +231,9 @@ bool Reporter::openReporterFile()
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
 {
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("/etc/technovo/"))
+        std::filesystem::create_directory("/etc/technovo/");
     // Attempt to open the file
     file.open("/etc/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
