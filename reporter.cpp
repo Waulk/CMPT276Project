@@ -9,7 +9,7 @@
  * reporter.cpp
  * This file implements the member functions defined in the reporter.h header file
  * All data members are stored linearly unsorted in the file for ease of access.
- * ***********************************************/
+ ************************************************/
 
 #include "reporter.h"
 #include <iostream>
@@ -17,6 +17,7 @@
 #include <cstring>
 #include <sstream>
 #include <filesystem>
+#include <vector>
 using namespace std;
 
 /***********************************************/
@@ -63,6 +64,7 @@ Reporter::Reporter(string email, string customerName, string phoneNumber, string
     this->deparmentId[DEPTIDSIZE] = '\0';
 }
 
+
 /***********************************************/
 bool Reporter::checkEmail(const string &email) 
 /*
@@ -72,27 +74,25 @@ bool Reporter::checkEmail(const string &email)
  * Checks email is valid size (not empty and not longer than fixed size)
 */
 {
-    if (email.empty() || email.size() > EMAILDATASIZE + 1) 
+   if (email.empty() || email.size() > EMAILDATASIZE + 1) 
     {
         std::cerr << "Invalid email" << std::endl;
         return false;
     }
 
+    seekToBeginningOfFile();
+    bool isEnd = false;
 
-
-    string line;
-    while (getline(file, line)) 
+    while (!isEnd) 
     {
-        istringstream iss(line);
-        string fileEmail;
-        iss >> fileEmail;
-
-        if (fileEmail == email) 
+        Reporter reporter = readFromFile(isEnd);
+        if (!isEnd && strcmp(reporter.email, email.c_str()) == 0) 
         {
-            return false;
+            return true;
         }
     }
-    return true;
+
+    return false;
 }
 
 /***********************************************/
@@ -104,73 +104,60 @@ std::string Reporter::getEmail()
 
 /***********************************************/
 void Reporter::reporterUI(bool createNew)
-    /*
- * This function interacts with the user to display a list of products and 
- * allows the user to select one. It handles pagination to display products 
- * in chunks of 20 per page. If createNew is true, the user has the option 
- * to create a new product.
+/*
+ * This function interacts with the user to display a list of reporters and 
+ * allows the user to navigate through pages. If createNew is true, the user 
+ * has the option to create a new reporter.
  * 
  * Implementation Details:
  * - Initializes control variables for pagination and user input handling.
  * - Uses a while loop to continuously interact with the user until they exit.
- * - Seeks to the beginning of the file and skips products from previous pages 
- *   to display the current page's products.
- * - Displays the products for the current page and handles user input for 
- *   pagination or selection.
- * - If the user selects a valid product number, the function seeks to the 
- *   corresponding position in the file and reads the product.
+ * - Seeks to the beginning of the file and skips reporters from previous pages 
+ *   to display the current page's reporters.
+ * - Displays the reporters for the current page and handles user input for 
+ *   pagination or creation.
  */
 {
     const int REPORTERS_PER_PAGE = 20;
-    bool isEnd = false;
     bool exit = false;
     int currentPage = 0;
 
-    while(!exit)
-    {
-        // Skip products of previous pages
-        // This loop ensures that reporters on earlier pages are not displayed again.
-        // It stops either when the required number of reporters have been skipped or 
-        // when the end of the file is reached.
-        for(int i = 0; i < currentPage * REPORTERS_PER_PAGE; ++i)
-        {
-            readFromFile(isEnd); // Read and discard a product to skip it
-            if(isEnd) // If end of file is reached, stop skipping
-            {
-                currentPage--; // Adjust current page as there are fewer reporters than expected
-                break;  // Exit the loop as we have reached the end of file
+    while (!exit) {
+        seekToBeginningOfFile();
+        bool isEnd = false;
+
+        // Skip reporters of previous pages
+        for (int i = 0; i < currentPage * REPORTERS_PER_PAGE && !isEnd; ++i) {
+            readFromFile(isEnd); // Read and discard a reporter to skip it
+        }
+
+        if (isEnd) {
+            std::cout << "No more reporters to display." << std::endl;
+            if (currentPage > 0) {
+                --currentPage;
             }
+            continue;
         }
 
-        if(isEnd) // Check if end of file was reached during skipping
-        {
-            std::cout << "No more reporters to display." << std::endl; // Inform the user
-            currentPage--; // Adjust current page as there are no more products
-            //continue;
-        }
-
-        // Display the products
-        std::cout << "=======Reporter=======\n";
+        // Display the reporters
+        std::cout << "======= Reporter =======\n";
         std::cout << "SELECTION  REPORTERS\n";
         std::cout << "---------------------\n";
-        
-        // This loop reads and displays reporters for the current page.
-        // It stops either when REPORTERS_PER_PAGE products are displayed 
-        // or when the end of the file is reached.
-        for(int i = 0; i < REPORTERS_PER_PAGE && !isEnd; ++i){
+
+        for (int i = 0; i < REPORTERS_PER_PAGE && !isEnd; ++i) {
             Reporter reporter = readFromFile(isEnd); // Read a reporter from the file
-            if (!isEnd){ // Check if end of file was not reached
-                std::cout << i + 1 << " " << reporter.email <<" " <<reporter.customerName<<" " <<reporter.phoneNumber<<" " <<reporter.deparmentId<<"\n"; // Display reporter with its selection number
+            if (!isEnd) { // Check if end of file was not reached
+                std::cout << (i + 1) << " " << reporter.email << " " 
+                          << reporter.customerName << " " 
+                          << reporter.phoneNumber << " " 
+                          << reporter.deparmentId << "\n"; // Display reporter with its selection number
             }
         }
 
         // Display navigation options based on whether creating new reporter is allowed
-        if (createNew)
-        {
-            std::cout << "            <-P X N->\n"; // Allow navigating previous/next page or creating new product
-        }
-        else
-        {
+        if (createNew) {
+            std::cout << "            <-P X N->\n"; // Allow navigating previous/next page or creating new reporter
+        } else {
             std::cout << "            <-P   N->\n"; // Allow navigating previous/next page only
         }
         
@@ -180,46 +167,20 @@ void Reporter::reporterUI(bool createNew)
         std::string input;
         std::cin >> input; // Read user input
 
-        if (input == "P" || input == "p") // If user wants to go to the previous page
-        {
-            if(currentPage > 0) // Ensure it's not the first page
-            {
-                currentPage--; // Move to the previous page
+        if (input == "P" || input == "p") { // If user wants to go to the previous page
+            if (currentPage > 0) { // Ensure it's not the first page
+                --currentPage; // Move to the previous page
             }
-        }
-        else if (input == "N" || input == "n") // If user wants to go to the next page
-        {
-            if(!isEnd) // Ensure it's not the end of the file
-            {
-                currentPage++; // Move to the next page
+        } else if (input == "N" || input == "n") { // If user wants to go to the next page
+            if (!isEnd) { // Ensure it's not the end of the file
+                ++currentPage; // Move to the next page
             }
-        }
-        else if(createNew && (input == "X" || input == "x")) // If user wants to create a new reporter
-        {
+        } else if (createNew && (input == "X" || input == "x")) { // If user wants to create a new reporter
             exit = true; // Set exit flag to true
-            return; // Return a new reporter
-        }
-        else // When the user selects a number
-        {
-            int selection = std::stoi(input); // Convert input to an integer
-            if(selection > 0 && selection <= REPORTERS_PER_PAGE) // Ensure the selection is within the displayed range
-            {
-                // Skip reporters of previous pages and selected reporter on the current page
-                for(int i = 0; i < currentPage * REPORTERS_PER_PAGE + selection - 1; ++i)
-                {
-                    readFromFile(isEnd); // Read and discard reporters to skip to the selected reporter
-                }
-
-                return;
-            }
-            else
-            {
-                throw std::out_of_range("Invalid selection number."); // Throw exception if the selection is out of range
-            }
+        } else {
+            std::cerr << "Invalid selection. Please try again." << std::endl;
         }
     }
-
-    return; 
 }
 
 /***********************************************/
@@ -231,17 +192,18 @@ bool Reporter::openReporterFile()
  * - The file will be opened with reading & writing capabilities, as well in binary mode
  */
 {
-    // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
+      // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
+    {
+        std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
+    }
     // Attempt to open the file
-    file.open("/etc/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
-
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/etc/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
@@ -355,5 +317,52 @@ bool Reporter::closeReporterFile()
     }
     file.close();
     return !(file.fail() || file.bad());
+}
+
+
+void Reporter::addNewReporter(const std::string& email, const std::string& customerName, 
+                        const std::string& phoneNumber, const std::string& deparmentId) {
+   Reporter newReporter;
+        strncpy(newReporter.email, email.c_str(), sizeof(newReporter.email) - 1);
+        newReporter.email[sizeof(newReporter.email) - 1] = '\0';
+        
+        strncpy(newReporter.customerName, customerName.c_str(), sizeof(newReporter.customerName) - 1);
+        newReporter.customerName[sizeof(newReporter.customerName) - 1] = '\0';
+        
+        strncpy(newReporter.phoneNumber, phoneNumber.c_str(), sizeof(newReporter.phoneNumber) - 1);
+        newReporter.phoneNumber[sizeof(newReporter.phoneNumber) - 1] = '\0';
+        
+        strncpy(newReporter.deparmentId, deparmentId.c_str(), sizeof(newReporter.deparmentId) - 1);
+        newReporter.deparmentId[sizeof(newReporter.deparmentId) - 1] = '\0';
+
+        writeToFile(newReporter);
+    }
+std::string generateRandomString(size_t length) {
+    const std::string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    std::string randomString;
+    for (size_t i = 0; i < length; ++i) {
+        randomString += characters[rand() % characters.length()];
+    }
+    return randomString;
+}
+int main(){
+    srand(static_cast<unsigned>(time(0))); // Seed for random number generator
+
+    Reporter rr;
+    rr.openReporterFile();
+
+    // Generate 55 random reporters
+    for (int i = 0; i < 55; ++i) {
+        std::string email = "user" + std::to_string(i) + "@" + generateRandomString(5) + ".com";
+        std::string customerName = "Name" + std::to_string(i);
+        std::string phoneNumber = "555-" + std::to_string(rand() % 9000 + 1000) + "-" + std::to_string(rand() % 9000 + 1000);
+        std::string deparmentId = (rand() % 2 == 0) ? "Dept" + std::to_string(rand() % 10 + 1) : ""; // Randomly assign department or leave it empty
+
+        rr.addNewReporter(email, customerName, phoneNumber, deparmentId);
+    }
+
+    rr.reporterUI(true); // Pass true to allow creating new reporters
+    rr.closeReporterFile();
+    return 0;
 }
 

@@ -19,6 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
+#include <vector>
 using std::string;
 
 class Reporter
@@ -60,7 +61,7 @@ class Reporter
         * If these preconditions are not met, it will throw an exception with an error message
         */
 
-
+       
 
         /***********************************************/
         bool checkEmail(
@@ -76,15 +77,14 @@ class Reporter
        /***********************************************/
         std::string getEmail();
         // Returns: std::string
-        /* This function returns the email address of the current reporter
-         */
+        /* This function returns the email address of the current reporter*/
         
         /***********************************************/
         static void reporterUI(
             bool createNew // True or False
         );
         // Returns: void
-        /* This function displays an UI and shows a list of all the customers
+        /* This function displays an UI and shows a list of all the customers*/
 
 
         /***********************************************/
@@ -135,7 +135,7 @@ class Reporter
          * Precondition: The file to get closed exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
-              
+        void addNewReporter(const std::string& email, const std::string& customerName, const std::string& phoneNumber, const std::string& deparmentId);      
 
     private:
         // char[] - email address. Fixed length (Fixed Length: 24 chars)

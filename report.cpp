@@ -19,6 +19,7 @@
 #include <fstream>
 #include <sstream> 
 #include <filesystem>
+using namespace std;
 
 /***********************************************/
 Report::Report() 
@@ -69,26 +70,96 @@ Report Report::getReport(const string &email, const int &changeId)
  * reutrn the information or if not found returns an error message 
 */
 {
-    if (email.empty() || email.length() > EMAILDATASIZE + 1) 
-    {
-        throw std::invalid_argument("Invalid argument length");
+    if (!checkReport(email, changeId)) {
+        throw std::runtime_error("Report not found");
     }
 
     seekToBeginningOfFile();
-    string line;
     bool read = true;
     Report nextToCheck = readFromFile(read);
 
-    // Check to see if any change in the system matches our current change
-    while(read)
-    {
-        if(nextToCheck.email == email && nextToCheck.changeId == changeId)
+    while (read) {
+        if (nextToCheck.email == email && nextToCheck.changeId == changeId) {
             return nextToCheck;
+        }
         nextToCheck = readFromFile(read);
     }
-   
+
     return Report(); 
 }
+
+/***********************************************/
+void Report::getReportUI() {
+        const int REPORTS_PER_PAGE = 20;
+        bool isEnd = false;
+        bool exit = false;
+        int currentPage = 0;
+
+        while (!exit) {
+            seekToBeginningOfFile();
+
+            // Skip reports of previous pages
+            for (int i = 0; i < currentPage * REPORTS_PER_PAGE; ++i) {
+                bool read = true;
+                readFromFile(read);
+                if (!read) {
+                    currentPage--;
+                    break;
+                }
+            }
+
+            // Display the reports
+            std::cout << "=======Reports=======\n";
+            std::cout << "SELECTION  REPORTS\n";
+            std::cout << "---------------------\n";
+
+            for (int i = 0; i < REPORTS_PER_PAGE; ++i) {
+                bool read = true;
+                Report report = readFromFile(read);
+                if (!read) {
+                    isEnd = true;
+                    break;
+                }
+                std::cout << i + 1 << " " << report.email << " " << report.changeId << "\n";
+                // Display other report fields as needed
+            }
+
+            std::cout << "            <-P   N->\n";
+            std::cout << "Make a Selection: ";
+
+            std::string input;
+            std::cin >> input;
+
+            if (input == "P" || input == "p") {
+                if (currentPage > 0) {
+                    currentPage--;
+                }
+            } else if (input == "N" || input == "n") {
+                if (!isEnd) {
+                    currentPage++;
+                }
+            } else {
+                int selection = std::stoi(input);
+                if (selection > 0 && selection <= REPORTS_PER_PAGE) {
+                    seekToBeginningOfFile();
+                    for (int i = 0; i < currentPage * REPORTS_PER_PAGE + selection - 1; ++i) {
+                        bool read = true;
+                        readFromFile(read);
+                    }
+
+                    bool read = true;
+                    Report selectedReport = readFromFile(read);
+                    // Handle the selected report as needed
+                    std::cout << "Selected Report: " << selectedReport.email << " " << selectedReport.changeId << "\n";
+                    // Display other report fields as needed
+                    return;
+                } else {
+                    throw std::out_of_range("Invalid selection number.");
+                }
+            }
+        }
+    }
+
 
 /***********************************************/
 Report Report::readFromFile(bool &isEnd)
@@ -145,22 +216,25 @@ bool Report::openReportFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
+    if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
+    {
+        std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
+    }
     // Attempt to open the file
-    file.open("/etc/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
-
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/etc/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
     // Make sure the file opened and we're at the start
     return valid && seekToBeginningOfFile();
 }
+
+
 
 /***********************************************/
 bool Report::writeToFile(Report report)
@@ -210,13 +284,38 @@ bool Report::closeReportFile()
 }
 
 /***********************************************/
-bool Report::checkreport(const string &email, const int &changeId) 
+bool Report::checkReport(const string &email, const int &changeId) 
 {
-    if (email.empty() || email.length() > EMAILDATASIZE - 1) {
+    if (email.empty() || email.length() > EMAILDATASIZE + 1) {
         throw std::invalid_argument("Invalid argument length");
-        return false;
     }
+   seekToBeginningOfFile();
+    bool read = true;
+    Report nextToCheck = readFromFile(read);
 
-    return (this->email == email && this->changeId == changeId);
+    while (read) {
+        if (nextToCheck.email == email && nextToCheck.changeId == changeId) {
+            return true;
+        }
+        nextToCheck = readFromFile(read);
+    }
+    return false;
 }
 
+int main() {
+    // Seed for random number generation
+    srand(static_cast<unsigned>(time(0)));
+
+    std::cout<<"HEloo" <<endl;
+    Report reportSystem = Report();
+    reportSystem.openReportFile();
+    
+    
+     //Close the report file
+    if (!reportSystem.closeReportFile()) {
+        cerr << "Failed to close report file!" << endl;
+        return 1;
+    }
+
+    return 0;
+}

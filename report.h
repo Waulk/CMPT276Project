@@ -66,6 +66,11 @@ class Report
          * changeId != "" (empty string). The max length of releaseId is 7.
          * If these preconditions are not met, it will throw an exception with an error message
         */
+        
+        /***********************************************/
+        void getReportUI();
+        //Returns: void
+        /* This function displays an UI and shows a list of all the reports*/
 
         /***********************************************/
         static bool openReportFile();
@@ -108,7 +113,7 @@ class Report
         */
 
         /***********************************************/
-        bool checkreport(
+        bool checkReport(
             const string &email,          // string email - a email assign the customer (in)
             const int &changeId           // int changeId - the changeId of the report (in)
         );
