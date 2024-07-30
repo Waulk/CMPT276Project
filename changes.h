@@ -2,6 +2,8 @@
  * Module: changes.h
  * 
  * Code Version History: 
+ * Ver. 3: - 2024-07-30 Edited by Matthew Liu
+ *         - added additional commenting for readability
  * Ver. 2: - 2024-07-17 Edited by Matthew Liu
  *         - added additional comments
  *         - added parameters to UI methods
@@ -21,6 +23,11 @@
 #include <vector>
 #include <fstream>
 using std::string;
+
+/***********************************************
+ * The Changes class provides description of a change.
+ * The Changes class holds all the records of requested bug and feature changes in the system.
+***********************************************/
 
 class Changes
 {
