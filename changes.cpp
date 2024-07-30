@@ -788,22 +788,23 @@ bool Changes::openChangesFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/etc/technovo/"))
-        std::filesystem::create_directory("/etc/technovo/");
+    if(!std::filesystem::exists("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/"))
+        std::filesystem::create_directory("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/");
     // Attempt to open the file
-    file.open("/etc/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/etc/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
     // Make sure the file opened and we're at the start
     return valid && seekToBeginningOfFile();
 }
+
 
 bool Changes::closeChangesFile()
 /*
