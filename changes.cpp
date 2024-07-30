@@ -2,12 +2,14 @@
  * Module: changes.cpp
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-30 Modified by Matthew Liu
+             Added additional comments to improve readability
  * Ver. 1: - 2024-07-17 Original by Matthew Liu
  *         - Initial version 
  ***********************************************/
 
 /***********************************************
- * Example: The Changes class provides description of a change.
+ * Example: The Changes class provides description of a change. The Changes class holds all the records of requested bug and feature changes in the system.
  * You must call the constructor Changes() or Changes(int changeId, string changeStatus, ... bool isBug) before using this class.
  * All data members are stored linearly unsorted in the file for ease of access.
 ***********************************************/
@@ -28,6 +30,7 @@ using std::string;
 
 static std::fstream changesFile;
 
+// The static member lastChangeId keeps track of the last assigned change ID across all instances of the Changes class.
 int Changes::lastChangeId = 0;
 
 Changes::Changes() : changeId(lastChangeId), priority(0), isBug(false) 
