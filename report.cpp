@@ -153,7 +153,7 @@ bool Report::openReportFile(string path)
     {
         std::filesystem::create_directory(path+"technovo/");
     }
-    
+
     // Attempt to open the file
     file.open(path+"technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
@@ -166,7 +166,38 @@ bool Report::openReportFile(string path)
     return valid && seekToBeginningOfFile();
 }
 
+/***********************************************/
+string Report::getEmail()
+/*
+ * Function to get the email as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->email);
+}
 
+/***********************************************/
+string Report::getReleaseId()
+/*
+ * Function to get the releaseId as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->releaseId);
+}
+
+/***********************************************/
+int Report::getChangeId()
+/*
+ * Function to get the changeId;
+*/
+{
+    return this->changeId;
+}
 
 /***********************************************/
 bool Report::writeToFile(Report report)

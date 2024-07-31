@@ -69,28 +69,20 @@ class Reporter
        /***********************************************/
         string getCustomerName();
         // Returns: string - name of the Reporter
-        /* This is a getter of email
+        /* This is a getter of customerName
         */
 
        /***********************************************/
         string getPhoneNumber();
         // Returns: string - phone number of the Reporter
-        /* This is a getter of email
+        /* This is a getter of phoneNumber
         */
 
        /***********************************************/
         string getDepartmentId();
         // Returns: string - department of the Reporter
-        /* This is a getter of email
+        /* This is a getter of departmentId
         */
-       
-
-        
-
-       /***********************************************/
-        std::string getEmail();
-        // Returns: std::string
-        /* This function returns the email address of the current reporter*/
         
         /***********************************************/
         Reporter reporterUI();

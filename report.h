@@ -121,6 +121,24 @@ class Report
          * email != "" (empty string). The max length of productName is 10.
          * If these preconditions are not met, it will throw an exception with an error message and return False
         */
+
+        /***********************************************/
+        string getEmail();
+        // Returns: string - email of the Reporter for the report
+        /* This is a getter of email
+        */
+
+        /***********************************************/
+        string getReleaseId();
+        // Returns: string - ReleaseId for the report
+        /* This is a getter of releaseId
+        */
+
+        /***********************************************/
+        int getChangeId();
+        // Returns: int - ChangeId for the report
+        /* This is a getter of changeId
+        */
       
         /***********************************************/
         static bool closeReportFile();

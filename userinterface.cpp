@@ -203,8 +203,8 @@ void viewCustomersRequestedChange()
                 }
             }
             std::cout << std::left << std::setw(Reporter::EMAILDATASIZE) << foundReporter.getEmail() << "  ";
-            std::cout << foundReporter.getName() << '\n';
-            std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getNumber() < "  ";
+            std::cout << foundReporter.getCustomerName() << '\n';
+            std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getPhoneNumber() < "  ";
             std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n\n";
         }
         std::cout << "                       ";
@@ -228,11 +228,11 @@ void viewCustomersRequestedChange()
         {
             // Get the entire line of user entered data, and if it's empty throw an error
             getline(std::cin, input);
-            if(response.empty())
+            if(input.empty())
                 throw std::invalid_argument("Invalid Response by User");
             // If the selection makes sense (only one digit) convert it to an integer
-            if(response.size() == 1)
-                selection = response.at(0);
+            if(input.size() == 1)
+                selection = input.at(0);
             else
             {
                 selection = false;
