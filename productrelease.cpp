@@ -359,7 +359,9 @@ void ProductRelease::setDateUI()
     {
         cout << "=====New Release=====\n";  // Display a header for the input prompt
         cout << "Enter Release Date (YYYY-MM-DD): ";  // Prompt the user to enter the release date
-        cin >> inputDate;  // Read the user's input
+        getline(std::cin, inputDate);
+        if(inputDate.empty())
+            throw std::invalid_argument("User entered empty string");
 
         // Validate the date format using a regular expression
         const std::regex pattern("^(\\d{4})-(\\d{2})-(\\d{2})$");  // Define a regex pattern for YYYY-MM-DD format
@@ -392,7 +394,9 @@ void ProductRelease::setReleaseIdUI()
     {
         cout << "=====New Release=====\n";  // Display a header for the input prompt
         cout << "Enter Release Version (max 8 char.): ";  // Prompt the user to enter the release ID
-        cin >> inputReleaseId;  // Read the user's input
+        getline(std::cin, inputReleaseId);
+        if(inputReleaseId.empty())
+            throw std::invalid_argument("User entered empty string");
 
         // Validate the release ID length
         if(inputReleaseId.length() > IDSIZE)  // Check if the length of the input exceeds the maximum allowed length

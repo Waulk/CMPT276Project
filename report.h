@@ -2,6 +2,8 @@
  * Module: Report.h
  * 
  * Code Version History: 
+ * Ver. 3: - 2024-07-30 Updated by Anmol Sangha
+ *         - Added the date of the report
  * Ver. 2: - 2024-07-16 Updated by Anmol Sangha
  *         - Updated function prototypes
  *         - Increased array sizes by 1 for null terminator
@@ -29,6 +31,8 @@ class Report
         static const int EMAILDATASIZE = 24;
         // size of releaseId
         static const int IDSIZE = 8;
+        // size of date
+        static const int DATESIZE = 10;
 
         /***********************************************/
         Report();
@@ -41,7 +45,8 @@ class Report
         Report(
             string email,          // string email - a email assign the customer (in)
             int changeId,          // int changeId - the changeId of the report (in)
-            string ReleaseId        // string ReleasId - the releaseId of the report (in)
+            string ReleaseId,      // string ReleasId - the releaseId of the report (in)
+            string date            // string date - the date the report was made (in)
         );
         // Returns: None since this is a constructor
         /* This is a constructor of Report
@@ -160,6 +165,9 @@ class Report
 
         // int - the change Id. Fixed length (Max Value: 999,999)
         int changeId; 
+
+        // char[] - the date the report was made. Fixed length of 10 chars
+        char date[DATESIZE + 1];
 
         // fstream - File to save Report objects
         inline static std::fstream file;

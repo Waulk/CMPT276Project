@@ -144,7 +144,7 @@ Reporter Reporter::checkEmail(const string &email)
 }
 
 /***********************************************/
-Reporter Reporter::reporterUI()
+Reporter Reporter::reporterUI(bool warnUser)
 /*
  * This function interacts with the user to create a new reporter.
  * 
@@ -169,6 +169,11 @@ Reporter Reporter::reporterUI()
         Reporter foundReporter = checkEmail(email);
         if(foundReporter.getCustomerName() != "")
         {
+            if(warnUser)
+            {
+                std::cout << "Customer with that email already found!\n";
+                return foundReporter;
+            }
             std::cout << "Is the Customer's name " << foundReporter.getCustomerName() << "(Y/N)?\n";
             std::string response;
             getline(std::cin, response);
@@ -298,7 +303,6 @@ bool Reporter::writeToFile(Reporter reporter)
     file.write(reporter.customerName, sizeof(char) * CUSTOMERNAMESIZE);
     file.write(reporter.phoneNumber, sizeof(char) * PHONENUMBERSIZE);
     file.write(reporter.deparmentId, sizeof(char) * DEPTIDSIZE);
-    file.close();
     return !(file.fail() || file.bad());
 }
 /***********************************************/

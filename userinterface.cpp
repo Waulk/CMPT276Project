@@ -2,6 +2,10 @@
  * Module: userinterface.cpp
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-30 Edited by Jayden Brown
+ *         - Changed function calls
+ *         - Implemented viewCustomersRequestedChange
+ *         - Removed the ability to see all customers
  * Ver. 1: - 2024-07-14 Original by Jayden Brown
  *         - Initial version
  ***********************************************/
@@ -15,6 +19,8 @@
 ***********************************************/
 #include <iostream>
 #include <iomanip>
+#include <chrono>
+#include <ctime>
 #include "userinterface.h"
 #include "changes.h"
 #include "product.h"
@@ -121,7 +127,8 @@ void viewCustomersRequestedChange()
  * Opens a list of customers who requested a change
  *
  * Implementation Details:
- *  - Simply calls each object to obtain its data, then will call the Report class to view the reporters
+ *  - Directly accesses both the Report and Reporter files and uses a "two-pointer" technique to traverse both
+ *  - On a page change each file is read from the beginning again so it's is quite slow
 */
 {
     // Get the change to be viewed
@@ -134,6 +141,7 @@ void viewCustomersRequestedChange()
     while(!exit)
     {
         Report::seekToBeginningOfFile();
+        Reporter::seekToBeginningOfFile();
         bool isEnd = false;
         
         // Skip reports of previous pages
@@ -160,7 +168,7 @@ void viewCustomersRequestedChange()
         std::cout << "======Customers======\n";
         std::cout << "EMAIL                     NAME\n";
         std::cout << "PHONE NUMBER  DEPT\n";
-        std::cout << "–-------------------------------------------------------\n";
+        std::cout << "--------------------------------------------------------\n";
         int read = 0;
         bool readNext = true;
         bool endOfReporter = false;
@@ -205,25 +213,17 @@ void viewCustomersRequestedChange()
             std::cout << std::left << std::setw(Reporter::EMAILDATASIZE) << foundReporter.getEmail() << "  ";
             std::cout << foundReporter.getCustomerName() << '\n';
             std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getPhoneNumber() << "  ";
-            std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n\n";
+            // endl needs to specifically be used here to flush the buffer (due to weird formatting issues)
+            std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n" << std::endl;
         }
         std::cout << "                       ";
-        if(currentPage == 0)
-        {
-            std::cout << "     ";
-        }
-        else
-        {
-            std::cout << "<-P  ";
-        }
-        if(read != REPORTERS_PER_PAGE)
-            std::cout << "\n";
-        else
-            std::cout << "N->\n";
+        std::cout << "<-P  N->\n";
         std::cout << "Next or Previous?\n";
         std::string input;
         bool isResponseValid = false;
         char selection;
+
+        // Loop to select either moving back a page or moving forward a page
         while(!isResponseValid)
         {
             // Get the entire line of user entered data, and if it's empty throw an error
@@ -238,15 +238,29 @@ void viewCustomersRequestedChange()
                 selection = false;
             }
             selection = tolower(selection);
-            if(selection == 'n' && read == REPORTERS_PER_PAGE)
+            if(selection == 'n')
             {
-                isResponseValid = true;
-                currentPage++;
+                if(read == REPORTERS_PER_PAGE)
+                {
+                    isResponseValid = true;
+                    currentPage++;
+                }
+                else
+                    std::cout << "No next page!\n";
+                
             }
-            else if(selection == 'p' && currentPage > 0)
+            else if(selection == 'p')
             {
-                isResponseValid = true;
-                currentPage--;
+                if(currentPage > 0)
+                {
+                    isResponseValid = true;
+                    currentPage--;
+                }
+                else
+                {
+                    std::cout << "No previous page!\n";
+                }
+                
             }
             if(!isResponseValid)
             {
@@ -270,10 +284,9 @@ void customerMenu()
 {
     std::cout << "======Customers======\n";
     std::cout << "\t1) View Customers Who Requested Change\n";
-    std::cout << "\t2) View All Customers\n";
-    std::cout << "\t3) Add Customer\n";
+    std::cout << "\t2) Add Customer\n";
     std::cout << "Which item are you interested in?\n";
-    int selection = getUserSelectionForMenu(1, 3);
+    int selection = getUserSelectionForMenu(1, 2);
 
     switch(selection)
     {
@@ -281,13 +294,8 @@ void customerMenu()
             viewCustomersRequestedChange();
             break;
         case 2:
-            // View all customers without creating a new one
-            //Reporter::reporterUI(false);
-            // TODO: delete or implement
-            break;
-        case 3:
             // Create a new customer
-            Reporter::reporterUI();
+            Reporter::reporterUI(true);
             break;
     }
 }
@@ -310,8 +318,12 @@ void createNewIssue()
     ProductRelease selectedRelease = ProductRelease::getProductReleaseFromUser(selectedProduct.getProductName());
     // Get the change where the issue exists
     Changes selectedChange = Changes::viewChangesFromProduct(selectedProduct.getProductName(), true);
+    // Calculate the current date
+    std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::string date(30, '\0');
+    std::strftime(&date[0], date.size(), "%Y-%m-%d", std::localtime(&now));
     // Generate the report and save it to disk
-    Report newReport(newReporter.getEmail(), selectedChange.getchangeId(), selectedRelease.getReleaseId());
+    Report newReport(newReporter.getEmail(), selectedChange.getchangeId(), selectedRelease.getReleaseId(), date);
     Report::writeToFile(newReport);
 }
 
@@ -630,6 +642,11 @@ void UserInterface::runMainMenu()
                     this->m_bRunMenu = false;
                     break;
             }
+        }
+        catch(const std::runtime_error& e)
+        {
+            std::cout << "Error: " << e.what() << '\n';
+            break;
         }
         catch(...)
         {

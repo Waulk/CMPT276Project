@@ -85,7 +85,9 @@ class Reporter
         */
         
         /***********************************************/
-        static Reporter reporterUI();
+        static Reporter reporterUI(
+            bool warnUser = false     // bool warnUser - Warns the user instead of asking them if the found email was correct (in)
+        );
         // Returns: void
         /* This function displays an UI and shows a list of all the customers*/
 

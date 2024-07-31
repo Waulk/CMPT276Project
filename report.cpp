@@ -5,6 +5,7 @@
  * Ver. 2: - 2024-07-30 Updated by Anmol Sangha
  *         - Updated function prototypes
  *         - Converted changeId to use an int instead of an array
+ *         - Added writing and reading for the date
  * Ver. 1: - 2024-06-30 Original by Anmol Sangha
  *         - Initial version 
  ***********************************************/
@@ -36,10 +37,11 @@ Report::Report()
     memset(email, '\0', EMAILDATASIZE + 1);
     changeId = 0;
     memset(releaseId, '\0', IDSIZE + 1);
+    memset(date, '\0', DATESIZE + 1);
 }
 
 /***********************************************/
-Report::Report(string email, int changeId, string releaseId) 
+Report::Report(string email, int changeId, string releaseId, string date) 
 /*
  * Constructor that initializes member variables with values
  *
@@ -53,13 +55,17 @@ Report::Report(string email, int changeId, string releaseId)
         {
         throw std::invalid_argument("Invalid argument length");
         }
+    // Null everything
+    memset(this->email, '\0', EMAILDATASIZE + 1);
+    memset(this->releaseId, '\0', IDSIZE + 1);
+    memset(this->date, '\0', DATESIZE + 1);
 
-    strncpy(this->email, email.c_str(), EMAILDATASIZE);
-    this->email[EMAILDATASIZE] = '\0'; 
+    strncpy(this->email, email.c_str(), email.size());
     this->changeId = changeId;
 
-    strncpy(this->releaseId, releaseId.c_str(), IDSIZE);
-    this->releaseId[IDSIZE] = '\0'; 
+    strncpy(this->releaseId, releaseId.c_str(), releaseId.size());
+
+    strncpy(this->date, date.c_str(), date.size());
 }
 
 /***********************************************/
@@ -113,6 +119,7 @@ Report Report::readFromFile(bool &isEnd)
     file.read(toReturn.email, sizeof(char) * EMAILDATASIZE);
     file.read((char*)&toReturn.changeId, sizeof(int));
     file.read(toReturn.releaseId, sizeof(char) * IDSIZE);
+    file.read(toReturn.date, sizeof(char) * DATESIZE);
     return toReturn;
 }
 
@@ -230,7 +237,8 @@ bool Report::writeToFile(Report report)
     file.write(report.email, sizeof(char) * EMAILDATASIZE);
     file.write((char*)&report.changeId, sizeof(int));
     file.write(report.releaseId, sizeof(char) * IDSIZE);
-    
+    file.write(report.date, sizeof(char) * DATESIZE);
+
     return !(file.fail() || file.bad());
 }
 
