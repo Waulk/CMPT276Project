@@ -306,7 +306,7 @@ Product Product::setProductNameUI()
     // The loop ensures that the product name is not empty and does not exceed the maximum allowed length 
     while(!isValid)
     {
-        cout << "Enter the Product Name (max 10 char.): ";
+        cout << "Enter the Product Name (max 10 char.):\n ";
         std::getline(std::cin, inputName);
 
         // Check if the input name is empty
