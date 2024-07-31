@@ -2,10 +2,10 @@
  * Module: product.cpp
  * 
  * Code Version History: 
- *  Ver. 2 - 2024-07-23  Modified by Maki Hosokawa
- *           Fixed getProductFromUser
- * Ver. 1: - 2024-07-08 Original by Maki Hosokawa
- *         - Initial version 
+ *  Ver. 2: - 2024-07-23  Modified by Maki Hosokawa
+ *          - Fixed getProductFromUser
+ *  Ver. 1: - 2024-07-08 Original by Maki Hosokawa
+ *          - Initial version 
  ***********************************************/
 
 /***********************************************
