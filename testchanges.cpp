@@ -185,10 +185,9 @@ void testFileOperations()
     }
 }
 
-
 void testWriteChanges()
 {
-    bool testPassed;
+    bool testPassed = false;
     // Initialize changes to write
     const int SIZE = 20;
     Changes changes[SIZE] = {
@@ -228,14 +227,31 @@ void testWriteChanges()
     }
         testPassed = false;
 
-    Changes change;
-    change.setProductName("test");
-    Changes selectedChange = change.viewNewChangesUI();
-    selectedChange.viewNewChangesUI();
-    std::cout << "You selected or created change: " << selectedChange.getDescription() << std::endl;
+    // Changes change;
+    // change.setProductName("test");
+    // Changes selectedChange = change.viewNewChangesUI();
+    // selectedChange.viewNewChangesUI();
+    // std::cout << "You selected or created change: " << selectedChange.getDescription() << std::endl;
 
-    //Close the product file.
+    // Create a Changes object to use viewNewChangesUI
+    Changes change;
+    
+    std::cout << "Testing viewNewChangesUI and editing priority:" << std::endl;
+    
+    // Use viewNewChangesUI to select a change
+    Changes selectedChange = change.viewNewChangesUI();
+    
+    // Display the selected change
+    std::cout << "Selected change: " << selectedChange.getDescription() << std::endl;
+
+    // Close the changes file
     Changes::closeChangesFile();
+
+    if (testPassed) {
+        std::cout << "testWriteChanges passed!" << std::endl;
+    } else {
+        std::cout << "testWriteChanges failed." << std::endl;
+    }
 }
 
 // Main function to run all tests
