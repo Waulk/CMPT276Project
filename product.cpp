@@ -414,7 +414,7 @@ bool Product::seekToBeginningOfFile()
 }
 
 /***********************************************/
-bool Product::openProductFile()
+bool Product::openProductFile(string path)
 /*
  * This function will open the products.bin file and will return false on failure
  * 
@@ -423,16 +423,16 @@ bool Product::openProductFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/home/mha213/Desktop/CMPT276Project/technovo/"))
-        std::filesystem::create_directory("/home/mha213/Desktop/CMPT276Project/technovo/");
+    if(!std::filesystem::exists(path+"technovo/"))
+        std::filesystem::create_directory(path+"technovo/");
     // Attempt to open the file
-    file.open("/home/mha213/Desktop/CMPT276Project/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open(path+"technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/home/mha213/Desktop/CMPT276Project/technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open(path+"technovo/products.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 

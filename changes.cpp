@@ -883,7 +883,7 @@ bool Changes::seekToBeginningOfFile()
     return !(file.fail() || file.bad());
 }
 
-bool Changes::openChangesFile() 
+bool Changes::openChangesFile(std::string path) 
 /*
  * This function will open the changes.bin file and will return false on failure
  * 
@@ -892,17 +892,17 @@ bool Changes::openChangesFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/home/mla436/Desktop/CMPT276_Project/technovo/"))
-        std::filesystem::create_directory("/home/mla436/Desktop/CMPT276_Project/technovo/");
+    if(!std::filesystem::exists(path+"technovo/"))
+        std::filesystem::create_directory(path+"technovo/");
     // Attempt to open the file
-    file.open("/home/mla436/Desktop/CMPT276_Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open(path+"technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/home/mla436/Desktop/CMPT276_Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open(path+"technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 

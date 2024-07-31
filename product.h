@@ -133,7 +133,9 @@ class Product
         */
 
        /***********************************************/
-       static bool openProductFile();
+       static bool openProductFile(
+            string path     // path for the new technovo/products.bin file
+       );
        // Returns: bool - return true if the file got opened successfully, false otherwise
         /* This function opens the file and creates a new one if it does not already exist
         */

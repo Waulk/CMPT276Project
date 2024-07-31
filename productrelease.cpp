@@ -487,7 +487,7 @@ bool ProductRelease::seekToBeginningOfFile()
 }
 
 /***********************************************/
-bool ProductRelease::openProductReleaseFile()
+bool ProductRelease::openProductReleaseFile(std::string path)
 /*
  * This function will open the productreleases.bin file and will return false on failure
  * 
@@ -496,16 +496,16 @@ bool ProductRelease::openProductReleaseFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("/home/mha213/Desktop/CMPT276Project/technovo/")) // /etc/technovo/
-        std::filesystem::create_directory("/home/mha213/Desktop/CMPT276Project/technovo/"); // /etc/technovo/
+    if(!std::filesystem::exists(path+"technovo/")) // /etc/technovo/
+        std::filesystem::create_directory(path+"technovo/"); // /etc/technovo/
     // Attempt to open the file
-    file.open("/home/mha213/Desktop/CMPT276Project/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open(path+"technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("/home/mha213/Desktop/CMPT276Project/technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open(path+"technovo/productreleases.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 

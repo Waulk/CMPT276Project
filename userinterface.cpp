@@ -22,6 +22,11 @@
 #include "report.h"
 #include "reporter.h"
 
+// Intended to easily change the path of the technovo directory
+// Linux example: "/etc/"
+// Windows example: "C:/Users/Jayden/Documents/Source/repos/CMPT276Project/"
+const std::string TECHNOVO_PATH = "C:/Users/Jayden/Documents/Source/repos/CMPT276Project/";
+
 /***********************************************/
 UserInterface::UserInterface()
 /*
@@ -33,11 +38,11 @@ UserInterface::UserInterface()
 {
     // Initializes files for every object
     // If an object doesn't have a file a new one will be created
-    Changes::openChangesFile();
-    Product::openProductFile();
-    ProductRelease::openProductReleaseFile();
-    Report::openReportFile();
-    Reporter::openReporterFile();
+    Changes::openChangesFile(TECHNOVO_PATH);
+    Product::openProductFile(TECHNOVO_PATH);
+    ProductRelease::openProductReleaseFile(TECHNOVO_PATH);
+    Report::openReportFile(TECHNOVO_PATH);
+    Reporter::openReporterFile(TECHNOVO_PATH);
 }
 
 /***********************************************/
@@ -212,9 +217,7 @@ void viewCustomersRequestedChange()
             std::cout << "<-P  ";
         }
         if(read != REPORTERS_PER_PAGE)
-        {
             std::cout << "\n";
-        }
         else
             std::cout << "N->\n";
         std::cout << "Next or Previous?\n";
@@ -249,7 +252,7 @@ void viewCustomersRequestedChange()
             {
                 std::cout << "Invalid selection!\n";
             }
-    }
+        }
         
     }
 
@@ -301,7 +304,7 @@ void createNewIssue()
 */
 {
     // Get a reporter
-    Reporter newReporter = Reporter::reporterUI();
+    Reporter newReporter = Reporter::reporterUI(true);
     // Get the product
     Product selectedProduct = Product::getProductFromUser();
     // Get the release for the product

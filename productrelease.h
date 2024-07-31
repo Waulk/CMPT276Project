@@ -211,7 +211,9 @@ class ProductRelease
         */
 
        /***********************************************/
-       static bool openProductReleaseFile();
+       static bool openProductReleaseFile(
+            string path     // path for the new technovo/productreleases.bin file
+       );
        // Returns: bool - return true if the file got opened successfully, false otherwise
         /* This function opens the file and creates a new one if it does not already exist
         */

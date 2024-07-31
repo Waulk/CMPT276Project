@@ -263,7 +263,9 @@ class Changes
         */
 
        /***********************************************/
-       static bool openChangesFile();
+       static bool openChangesFile(
+            string path     // path for the new technovo/changes.bin file
+       );
        // Returns: bool - return true if the file got opened successfully, false otherwise
         /* This function opens the file
          * ---------------------------------------------
