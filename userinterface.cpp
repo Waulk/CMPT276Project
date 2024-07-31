@@ -6,6 +6,7 @@
  *         - Changed function calls
  *         - Implemented viewCustomersRequestedChange
  *         - Removed the ability to see all customers
+ *         - Opens files with a path instead of hardcoded directories
  * Ver. 1: - 2024-07-14 Original by Jayden Brown
  *         - Initial version
  ***********************************************/
@@ -40,15 +41,23 @@ UserInterface::UserInterface()
  *
  * Implementation Details:
  *  - Opens all required files that will be used. This is the "startup" procedure
+ *  - If a file fails to open the program's execution is cancelled and it crashes
 */
 {
     // Initializes files for every object
     // If an object doesn't have a file a new one will be created
-    Changes::openChangesFile(TECHNOVO_PATH);
-    Product::openProductFile(TECHNOVO_PATH);
-    ProductRelease::openProductReleaseFile(TECHNOVO_PATH);
-    Report::openReportFile(TECHNOVO_PATH);
-    Reporter::openReporterFile(TECHNOVO_PATH);
+
+    // openChangesFile handles updating the latest changeid
+    if(!Changes::openChangesFile(TECHNOVO_PATH))
+        throw std::runtime_error("Changes file failed to open!");
+    if(!Product::openProductFile(TECHNOVO_PATH))
+        throw std::runtime_error("Products file failed to open!");
+    if(!ProductRelease::openProductReleaseFile(TECHNOVO_PATH))
+        throw std::runtime_error("Product Releases file failed to open!");
+    if(!Report::openReportFile(TECHNOVO_PATH))
+        throw std::runtime_error("Reports file failed to open!");
+    if(!Reporter::openReporterFile(TECHNOVO_PATH))
+        throw std::runtime_error("Reporters file failed to open!");
 }
 
 /***********************************************/
