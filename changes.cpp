@@ -374,7 +374,7 @@ Changes Changes::viewNewChangesUI()
         {
             std::cout << "   ";
         }
-        std::cout << "\nMake a Selection: ";
+        std::cout << "\nMake a Selection: \n";
         // get user input
         std::string input;
         getline(std::cin, input);
@@ -398,8 +398,8 @@ Changes Changes::viewNewChangesUI()
         }
         else                            // If user entered a selection number
         {
-            int selection = std::stoi(input); // Convert input to an integer               
-            Changes changeObj;      
+            int selection = std::stoi(input); // Convert input to an integer                 
+            seekToBeginningOfFile();
             for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; )
             {
                 Changes in = readFromFile(isEnd);
@@ -408,59 +408,20 @@ Changes Changes::viewNewChangesUI()
                     changeObj = readFromFile(isEnd);
                     break;
                 }
+                
                 if(in.getchangeStatus() == "New")
                     i++;
             }
-            std::cout << "=====New Changes=====\n";
-            std::cout << "Product         " << changeObj.getProductName() << "\n" ;        
-            std::cout << "Priority        " << changeObj.getPriority() << "\n";
-            std::cout << "Description     " << changeObj.getDescription() << "\n";
-            std::cout << "Would you like to Cancel the Change? (Y/N)?\n";   
-
-            string response;
-            cin >> response;    
-            
-            if(response == "Y" || response == "y")
+            while(true)
             {
-                //Return to viewNewChangesUI
-                viewNewChangesUI();
-                return changeObj;
+                bool isEnd;
+                Changes in = readFromFile(isEnd);
+                if(in.getchangeStatus() == "New")
+                    return in;
+                if(isEnd)
+                    throw std::invalid_argument("Invalid input\n");
             }
-            else{
-                cout << "Would you like to edit the Priority (Y/N)?\n";
-                cin >> response;
-                if(response == "Y" || response == "y")
-                {
-                    cout << "Enter the Priority of the change (A number from 1-5) :\n";
-                    int newPriority;
-                    cin >> newPriority;
-                    changeObj.setPriority(newPriority);
-                }
-                cout << "Would you like to edit the Description? (Y/N)?\n";
-                cin >> response;
-                if(response == "Y" || response == "y")
-                {
-                    cout << "Enter the new description for the change (max 30 char.):";
-                    string newDescription;
-                    cin >> newDescription;
-                    changeObj.setDescription(newDescription);
-                }
-
-                if(selection > 0 && selection <= RELEASES_PER_PAGE ) // If selection is valid
-                {
-                    // seek again to the beginning of the file
-                    seekToBeginningOfFile();  // Reset file pointer to the beginning
-
-                    // skip releases of previous pages and selected releases on the current page
-                    for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; ++i)
-                    {
-                        readFromFile(isEnd);  // Read and discard releases to skip to the selected release
-                    }
-
-                    return readFromFile(isEnd); // Return the selected release
-                }
-
-            }
+            return changeObj;
         }
 
     }    
@@ -525,9 +486,13 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
                 continue;
             if(!isEnd)                // If end of file is not reached
             {
+
+                std::cout << std::right << std::setw(9) << (std::to_string(i + 1) + ")") << "  ";
+                std::cout << std::left << std::setw(10) << change.getchangeStatus() << "  ";
+                std::cout << std::left << std::setw(8) << change.getPriority() << "  ";
+                std::cout << std::left << std::setw(30) << change.getDescription() << "  ";
+                std::cout << (change.getIsBug() ? "T" : "F") << '\n';
                 i++;
-                std::cout << i + 1 << ") " << change.getchangeStatus() << "  " << change.getPriority() << "  " <<
-                change.getDescription() << "  " << change.getIsBug() << "\n"; // Display change details
             }
         }
         // Determine navigation options
@@ -607,28 +572,29 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
         else                            // If user entered a selection number
         {
             int selection = std::stoi(input); // Convert input to an integer               
-                  
-            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1;)
+            seekToBeginningOfFile();
+            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; )
             {
                 Changes in = readFromFile(isEnd);
                 if(isEnd)
                 {
-                    return in;
+                    changeObj = readFromFile(isEnd);
                     break;
                 }
+                
                 if(in.getProductName() == product)
                     i++;
-                    
             }
             while(true)
             {
-                bool isEnd = false;
+                bool isEnd;
                 Changes in = readFromFile(isEnd);
                 if(in.getProductName() == product)
                     return in;
                 if(isEnd)
-                    return Changes();
+                    throw std::invalid_argument("Invalid input\n");
             }
+            return changeObj;
             
         }
 

@@ -156,7 +156,7 @@ Product Product::getProductFromUser(bool createNew)
         // Display the products
         std::cout << "=======Product=======\n";
         std::cout << "SELECTION  PRODUCT\n";
-        std::cout << "---------------------\n";
+        std::cout << "---------  -------\n";
 
         int displayIndex = currentPage * PRODUCTS_PER_PAGE + 1; // Initialize the display index for the current page
         int displayedProducts = 0; // Counter to track the number of displayed products
@@ -198,7 +198,7 @@ Product Product::getProductFromUser(bool createNew)
         {
             std::cout << "   ";
         }
-        std::cout << "\nMake a Selection: ";
+        std::cout << "\nMake a Selection: \n";
 
         // Get user input
         std::string input;

@@ -407,6 +407,8 @@ void checkNewChanges()
     std::cout << "Is this a bug (Y/N)?\n";
     selectedChange.setIsBug(getTrueorFalseFromUser());
 
+    selectedChange.setchangeStatus("Assessed\n");
+
     // Save to disk
     Changes::writeToFile(selectedChange);
 }
@@ -423,11 +425,72 @@ void viewChangesForProduct()
     // Get the product and then view all changes for the product
     Product productToView = Product::getProductFromUser();
     Changes changeToEdit = Changes::viewChangesFromProduct(productToView.getProductName()); 
+    if(changeToEdit.getchangeStatus() == "Done" || changeToEdit.getchangeStatus() == "Cancelled")
+    {
+        std::cout << "Error: Attempting to edit completed change!\n";
+        return;
+    }
+    std::cout << "=====Edit Change=====\n";
+    std::cout << "ChangeID:    " << changeToEdit.getchangeId() << '\n';
+    std::cout << "Priority:    " << changeToEdit.getPriority() << '\n';
+    std::cout << "Description: " << changeToEdit.getDescription() << '\n';
+    std::cout << "Is Bug:      " << (changeToEdit.getIsBug() ? "True" : "False") << '\n';
+    std::cout << "Release:     " << changeToEdit.getchangeStatus() << '\n';
 
-    std::cout << "Would you like to edit the Change's Product Release (Y/N)?\n";
-    bool editRelease = getTrueorFalseFromUser();
+    // Edit priority
+    std::cout << "Would you like to edit the Priority (Y/N)?\n";
+    bool response = getTrueorFalseFromUser();
+    std::string input;
+    if(response)
+    {
+        std::cout << "Enter the Priority of the change (A number from 1-5):\n";
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");
+        changeToEdit.setPriority(std::atoi(input.c_str()));
+    }
 
-    if(editRelease)
+    // Update the description if required
+    std::cout << "Would you like to edit the Description (Y/N)?\n";
+    response = getTrueorFalseFromUser();
+    if(response)
+    {
+        std::cout << "Enter the new Description for the change (max 30 char.):\n";
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");
+        changeToEdit.setDescription(input);
+    }
+
+    // Update status
+    std::cout << "Would you like to edit the Status (Y/N)?\n";
+    response = getTrueorFalseFromUser();
+    if(response)
+    {
+        std::cout << "====Select Status====\n";
+        std::cout << "\t1) InProgress\n";
+        std::cout << "\t2) Cancelled\n";
+        std::cout << "\t3) Done\n";
+        std::cout << "Please Select a Status:\n";
+        int option = getUserSelectionForMenu(1, 3);
+        switch(option)
+        {
+            case 1:
+                changeToEdit.setchangeStatus("InProgress");
+                break;
+            case 2:
+                changeToEdit.setchangeStatus("Cancelled");
+                break;
+            case 3:
+                changeToEdit.setchangeStatus("Done");
+        }
+
+    }
+
+    // Update the change's release
+    std::cout << "Would you like to edit the Change Product Release (Y/N)?\n";
+    response = getTrueorFalseFromUser();
+    if(response)
     {
         changeToEdit.setReleaseId(ProductRelease::getProductReleaseFromUser(productToView.getProductName()).getReleaseId());
     }

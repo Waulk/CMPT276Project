@@ -149,14 +149,14 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         }
 
         // Display the product releases for the current page
-        std::cout << "======= Product Releases for " << productName << " =======\n";
-        std::cout << std::left << std::setw(10) << "SELECTION" << std::setw(15) << "RELEASE" << std::setw(15) << "DATE" << "\n";
-        std::cout << "-------------------------------------------\n";
+        std::cout << "=======Release=======\n";
+        std::cout << "SELECTION  RELEASE   DATE \n";
+        std::cout << "---------  --------  --------\n";
 
         for (int i = startIndex; i < endIndex; ++i) 
         {
             ProductRelease release = productReleases[i];
-            std::cout << std::left << std::setw(10) << (std::to_string(i + 1) + ")") << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
+            std::cout << std::right << std::setw(9) << (std::to_string(i + 1) + ")") << "  " << std::left << std::setw(8) << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
             displayedReleases++;
         }
 
