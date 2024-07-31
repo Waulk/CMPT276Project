@@ -905,6 +905,38 @@ bool Changes::openChangesFile(std::string path)
         file.open(path+"technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
+    
+    // Update the lastChangeId
+    if(valid)
+    {
+        file.seekg(0, std::fstream::end);
+        
+        // Check if the file is empty
+        if(file.peek() == EOF)
+        {
+            lastChangeId = 0;
+        }
+        else
+        {
+            // Move back in the file to read the very last entry
+            // Change ID
+            file.seekg(-sizeof(int), std::fstream::cur);
+            // Change Status
+            file.seekg(-sizeof(char) * CHANGESTATUSSIZE, std::fstream::cur);
+            // Product Name
+            file.seekg(-sizeof(char) * PRODUCTNAMESIZE, std::fstream::cur);
+            // Release ID
+            file.seekg(-sizeof(char) * RELEASE_IdSIZE, std::fstream::cur);
+            // Priority
+            file.seekg(-sizeof(int), std::fstream::cur);
+            // Description
+            file.seekg(-sizeof(char) * DESCRIPTIONSIZE, std::fstream::cur);
+            // Bug
+            file.seekg(-sizeof(bool), std::fstream::cur);
+            bool ignore;
+            lastChangeId = readFromFile(ignore).getchangeId();
+        }
+    }
 
     // Make sure the file opened and we're at the start
     return valid && seekToBeginningOfFile();
