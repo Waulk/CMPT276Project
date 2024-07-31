@@ -513,7 +513,7 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
         {
             std::cout << "   ";
         }
-        std::cout << "\nMake a Selection: ";
+        std::cout << "\nMake a Selection: \n";
         // get user input
         std::string input;
         getline(std::cin, input);
@@ -745,7 +745,7 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
         {
             std::cout << "   ";
         }
-        std::cout << "\nMake a Selection: ";
+        std::cout << "\nMake a Selection: \n";
         // get user input
         std::string input;
         getline(std::cin, input);

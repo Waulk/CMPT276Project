@@ -179,7 +179,7 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         {
             std::cout << "   ";
         }
-        std::cout << "\nMake a Selection: ";
+        std::cout << "\nMake a Selection: \n";
 
         // Get user input
         std::string input;
