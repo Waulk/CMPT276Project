@@ -2,10 +2,10 @@
 all: technovo
 test: writing_test
 
-technovo: main.o userinterface.o 
-	g++ -o technovo main.o userinterface.o
+technovo: main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
+	g++ -o technovo main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
 	
-main.o: main.cpp userinterface.o
+main.o: main.cpp 
 	g++ -c -std=c++17 -Wall main.cpp 
 
 writing_test: writing_test.o product.o productrelease.o report.o reporter.o changes.o

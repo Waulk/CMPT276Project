@@ -14,6 +14,7 @@
  * to keep the implementation out of anybody's direct view.
 ***********************************************/
 #include <iostream>
+#include <iomanip>
 #include "userinterface.h"
 #include "changes.h"
 #include "product.h"
@@ -118,8 +119,140 @@ void viewCustomersRequestedChange()
  *  - Simply calls each object to obtain its data, then will call the Report class to view the reporters
 */
 {
-    Product prouctToView = Product::getProductFromUser();
-    Changes changeToView = Changes::viewChangesFromProduct(prouctToView.getProductName());
+    // Get the change to be viewed
+    Product productToView = Product::getProductFromUser();
+    Changes changeToView = Changes::viewChangesFromProduct(productToView.getProductName());
+
+    const int REPORTERS_PER_PAGE = 20;
+    bool exit = false;
+    int currentPage = 0;
+    while(!exit)
+    {
+        Report::seekToBeginningOfFile();
+        bool isEnd = false;
+        
+        // Skip reports of previous pages
+        for (int i = 0; i < currentPage * REPORTERS_PER_PAGE; ) {
+            Report readReport = Report::readFromFile(isEnd); // Read in a report and only increment if it is for the change
+            if(isEnd)
+            {
+                currentPage--;
+                break;
+            }
+                
+            if(readReport.getChangeId() == changeToView.getchangeId())
+            {
+                i++;
+            }
+        }
+        if (isEnd) {
+            std::cout << "No more reporters to display." << std::endl;
+            if (currentPage > 0) {
+                --currentPage;
+            }
+            continue;
+        }
+        std::cout << "======Customers======\n";
+        std::cout << "EMAIL                     NAME\n";
+        std::cout << "PHONE NUMBER  DEPT\n";
+        std::cout << "–-------------------------------------------------------\n";
+        int read = 0;
+        bool readNext = true;
+        bool endOfReporter = false;
+        // Will keep reading new reports and their corresponding reporter until either it's read REPORTERS_PER_PAGE amount OR it reads to the end of the file
+        while(readNext)
+        {
+            if(read == REPORTERS_PER_PAGE)
+            {
+                break;
+            }
+            Report nextReport;
+            bool isNextReportFound = false;
+            while(!isNextReportFound)
+            {
+                nextReport = Report::readFromFile(isEnd);
+                if(isEnd)
+                {
+                    readNext = false;
+                    break;
+                }
+                if(nextReport.getChangeId() == changeToView.getchangeId())
+                {
+                    isNextReportFound = true;
+                    read++;
+                }
+            }
+            if(!readNext)
+                break;
+            // Read to find reporter with the email of the report
+            Reporter::seekToBeginningOfFile();
+            bool isReporterFound = false;
+            Reporter foundReporter;
+            while(!isReporterFound)
+            {
+                // endOfReporter should never be false, if it is then there is something seriously wrong (will cause a crash)
+                foundReporter = Reporter::readFromFile(endOfReporter);
+                if(foundReporter.getEmail() == nextReport.getEmail())
+                {
+                    isReporterFound = true;
+                }
+            }
+            std::cout << std::left << std::setw(Reporter::EMAILDATASIZE) << foundReporter.getEmail() << "  ";
+            std::cout << foundReporter.getName() << '\n';
+            std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getNumber() < "  ";
+            std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n\n";
+        }
+        std::cout << "                       ";
+        if(currentPage == 0)
+        {
+            std::cout << "     ";
+        }
+        else
+        {
+            std::cout << "<-P  ";
+        }
+        if(read != REPORTERS_PER_PAGE)
+        {
+            std::cout << "\n";
+        }
+        else
+            std::cout << "N->\n";
+        std::cout << "Next or Previous?\n";
+        std::string input;
+        bool isResponseValid = false;
+        char selection;
+        while(!isResponseValid)
+        {
+            // Get the entire line of user entered data, and if it's empty throw an error
+            getline(std::cin, input);
+            if(response.empty())
+                throw std::invalid_argument("Invalid Response by User");
+            // If the selection makes sense (only one digit) convert it to an integer
+            if(response.size() == 1)
+                selection = response.at(0);
+            else
+            {
+                selection = false;
+            }
+            selection = tolower(selection);
+            if(selection == 'n' && read == REPORTERS_PER_PAGE)
+            {
+                isResponseValid = true;
+                currentPage++;
+            }
+            else if(selection == 'p' && currentPage > 0)
+            {
+                isResponseValid = true;
+                currentPage--;
+            }
+            if(!isResponseValid)
+            {
+                std::cout << "Invalid selection!\n";
+            }
+    }
+        
+    }
+
 }
 
 
@@ -152,7 +285,7 @@ void customerMenu()
             break;
         case 3:
             // Create a new customer and write them to disk
-            Reporter newReporter = Reporter(); 
+            Reporter newReporter = Reporter::reporterUI();
             Reporter::writeToFile(newReporter);
             break;
     }
@@ -168,7 +301,7 @@ void createNewIssue()
 */
 {
     // Get a reporter
-    Reporter newReporter = Reporter();
+    Reporter newReporter = Reporter::reporterUI();
     // Get the product
     Product selectedProduct = Product::getProductFromUser();
     // Get the release for the product
