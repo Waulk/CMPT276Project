@@ -195,7 +195,7 @@ Reporter Reporter::reporterUI()
 }
 
 /***********************************************/
-bool Reporter::openReporterFile() 
+bool Reporter::openReporterFile(string path) 
 /*
  * This function will open the products.bin file and will return false on failure
  * 
@@ -206,16 +206,18 @@ bool Reporter::openReporterFile()
  * - Ensures the file is opened and we're at the start
  */
 {
-    if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
+      // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists(path+"technovo/"))
     {
-        std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
+        std::filesystem::create_directory(path+"technovo/");
     }
+    // Attempt to open the file
+    file.open(path+"/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     
-    file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
     if(!valid)
     {
-        file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open(path+"/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
     return valid && seekToBeginningOfFile();

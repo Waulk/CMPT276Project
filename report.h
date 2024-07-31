@@ -68,7 +68,9 @@ class Report
         */
         
         /***********************************************/
-        static bool openReportFile();
+        static bool openReportFile(
+            string path     // path for the new technovo/reports.bin file
+       );
        // Returns: True or False
         /* This function opens the file
          * ---------------------------------------------

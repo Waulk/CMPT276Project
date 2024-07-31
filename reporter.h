@@ -108,7 +108,9 @@ class Reporter
         */
 
         /***********************************************/
-        static bool openReporterFile();
+        static bool openReporterFile(
+            string path     // path for the new technovo/reporters.bin file
+       );
         // Returns: true or flase
         /* This function opens the file 
          * ---------------------------------------------

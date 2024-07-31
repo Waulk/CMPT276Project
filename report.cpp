@@ -137,7 +137,7 @@ bool Report::seekToBeginningOfFile()
 }
 
 /***********************************************/
-bool Report::openReportFile() 
+bool Report::openReportFile(string path) 
 /*
  * This function will open the reports.bin file and will return false on failure
  * 
@@ -148,16 +148,18 @@ bool Report::openReportFile()
  * - Ensures the file is opened and we're at the start.
  */
 {
-    if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
+    // Create the technovo directory if it doesn't exist
+    if(!std::filesystem::exists(path+"technovo/"))
     {
-        std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
+        std::filesystem::create_directory(path+"technovo/");
     }
     
-    file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    // Attempt to open the file
+    file.open(path+"technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
     if(!valid)
     {
-        file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open(path+"technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
