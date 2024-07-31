@@ -225,7 +225,6 @@ void testWriteChanges()
     {   
         Changes::writeToFile(changes[i]);
     }
-        testPassed = false;
 
     // Changes change;
     // change.setProductName("test");
