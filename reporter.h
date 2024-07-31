@@ -144,10 +144,10 @@ class Reporter
     private:
 
         /***********************************************/
-        static bool checkEmail(
+        static Reporter checkEmail(
             const string &email     // string email - email of customer (in)
         );
-        // Returns: True or Flase  
+        // Returns: The found Reporter, or an empty reporter 
         /* This checks if email exists
         * ---------------------------------------------
         * Precondition: email != "" (empty string). The max length of email is 24.

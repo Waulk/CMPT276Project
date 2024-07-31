@@ -115,7 +115,7 @@ string Reporter::getDepartmentId()
 }
 
 /***********************************************/
-bool Reporter::checkEmail(const string &email) 
+Reporter Reporter::checkEmail(const string &email) 
 /*
  * Checks if provided email exists
  *
@@ -127,7 +127,7 @@ bool Reporter::checkEmail(const string &email)
    if (email.empty() || email.size() > EMAILDATASIZE + 1) 
     {
         std::cerr << "Invalid email" << std::endl;
-        return false;
+        return Reporter();
     }
 
     seekToBeginningOfFile();
@@ -137,10 +137,10 @@ bool Reporter::checkEmail(const string &email)
         Reporter reporter = readFromFile(isEnd);
         if (!isEnd && strcmp(reporter.email, email.c_str()) == 0) 
         {
-            return true;
+            return reporter;
         }
     }
-    return false;
+    return Reporter();
 }
 
 /***********************************************/
@@ -156,25 +156,50 @@ Reporter Reporter::reporterUI()
 {
 
     std::string email, customerName, phoneNumber, departmentId;
-    std::cout << "Enter email: ";
-    std::cin >> email;
-
-    while (checkEmail(email)) 
+    bool getEmail = true;
+    // Loops until either an email is found that doesn't belong to a customer or the correct customer is found
+    while(getEmail)
     {
-        std::cout << "Entered existing email\nEnter another email: ";
-        std::cin >> email;
+        std::cout << "Enter the Customer's Email (max 24 char.):\n";
+        getline(std::cin, email);
+        // Return to main menu
+        if(email.empty())
+                throw std::invalid_argument("Invalid Response by User");
+        
+        Reporter foundReporter = checkEmail(email);
+        if(foundReporter.getCustomerName() != "")
+        {
+            std::cout << "Is the Customer's name " << foundReporter.getCustomerName() << "(Y/N)?\n";
+            std::string response;
+            getline(std::cin, response);
+            if(response == "Y" || response == "y")
+            {
+                return foundReporter;
+            }
+        }
+        else
+            getEmail = false;
     }
+    std::cout << "Customer not found!\n";
 
-    std::cout << "Enter name: ";
-    std::cin >> customerName;
-    std::cout << "Enter phone number: ";
-    std::cin >> phoneNumber;
-    std::cout << "Do they work at the company? (yes/no): ";
+    std::cout << "Enter the Customer's Name (max 30 char.):\n";
+    getline(std::cin, customerName);
+    if(customerName.empty())
+            throw std::invalid_argument("Invalid Response by User");
+
+    std::cout << "Enter the Customer's Phone Number (10-11 digits):\n";
+    getline(std::cin, phoneNumber);
+    if(phoneNumber.empty())
+            throw std::invalid_argument("Invalid Response by User");
+    
+    std::cout << "Is the Customer an employee with a department (Y/N)?\n";
     std::string worksAtCompany;
-    std::cin >> worksAtCompany;
-    if (worksAtCompany == "yes" || worksAtCompany == "Yes") 
+    getline(std::cin, worksAtCompany);
+    if(worksAtCompany.empty())
+            throw std::invalid_argument("Invalid Response by User");
+    if (worksAtCompany == "y" || worksAtCompany == "Y") 
     {
-        std::cout << "Enter department: ";
+        std::cout << "What is the Employee's Department (max 12 char.):\n";
         std::cin >> departmentId;
     } else 
     {
@@ -182,16 +207,8 @@ Reporter Reporter::reporterUI()
     }
 
     Reporter newReporter(email, customerName, phoneNumber, departmentId);
-    if (writeToFile(newReporter)) 
-    {
-        std::cout << "Reporter added successfully." << std::endl;
-        return newReporter;
-    } else 
-    {
-        std::cout << "Error occurred while adding Reporter." << std::endl;
-        return Reporter(); 
-    }
-    
+    writeToFile(newReporter);
+    return newReporter;
 }
 
 /***********************************************/
@@ -279,6 +296,7 @@ bool Reporter::writeToFile(Reporter reporter)
     file.write(reporter.customerName, sizeof(char) * CUSTOMERNAMESIZE);
     file.write(reporter.phoneNumber, sizeof(char) * PHONENUMBERSIZE);
     file.write(reporter.deparmentId, sizeof(char) * DEPTIDSIZE);
+    file.close();
     return !(file.fail() || file.bad());
 }
 /***********************************************/

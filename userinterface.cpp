@@ -286,9 +286,8 @@ void customerMenu()
             // TODO: delete or implement
             break;
         case 3:
-            // Create a new customer and write them to disk
-            Reporter newReporter = Reporter::reporterUI();
-            Reporter::writeToFile(newReporter);
+            // Create a new customer
+            Reporter::reporterUI();
             break;
     }
 }
@@ -302,6 +301,7 @@ void createNewIssue()
  *  - Uses a pipeline of sorts to pass data between classes to get the end result of a new issue
 */
 {
+    std::cout << "======New Issue======\n";
     // Get a reporter
     Reporter newReporter = Reporter::reporterUI();
     // Get the product
