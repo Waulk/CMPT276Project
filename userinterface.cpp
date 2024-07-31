@@ -223,7 +223,7 @@ void viewCustomersRequestedChange()
             std::cout << foundReporter.getCustomerName() << '\n';
             std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getPhoneNumber() << "  ";
             // endl needs to specifically be used here to flush the buffer (due to weird formatting issues)
-            std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n" << std::endl;
+            std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << foundReporter.getDepartmentId() << "\n" << std::endl;
         }
         std::cout << "                       ";
         std::cout << "<-P  N->\n";
