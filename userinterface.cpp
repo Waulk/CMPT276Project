@@ -31,7 +31,7 @@
 // Intended to easily change the path of the technovo directory
 // Linux example: "/etc/"
 // Windows example: "C:/Users/Jayden/Documents/Source/repos/CMPT276Project/"
-const std::string TECHNOVO_PATH = "C:/Users/Jayden/Documents/Source/repos/CMPT276Project/";
+const std::string TECHNOVO_PATH = "/etc/";
 
 /***********************************************/
 UserInterface::UserInterface()
