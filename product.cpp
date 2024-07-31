@@ -164,7 +164,7 @@ Product Product::getProductFromUser(bool createNew)
         for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i) {
         Product product = readFromFile(isEnd); // Read a product from the file
         if (!isEnd) { // Check if end of file was not reached
-            cout << std::left << std::setw(10) << (std::to_string(displayIndex) + ")") << product.getProductName() << "\n"; // Display product with its selection number
+            cout << std::right << std::setw(9) << (std::to_string(displayIndex) + ")") << "  " << product.getProductName() << "\n"; // Display product with its selection number
             displayIndex++; // Increment the display index
             displayedProducts++; // Increment the counter for displayed products
         }

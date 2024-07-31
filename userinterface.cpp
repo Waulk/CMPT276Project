@@ -58,11 +58,11 @@ void createNewProductRelease()
     // Get a product from the user, and if it's an empty product make a new one
     Product prod = Product::getProductFromUser(true);
     if(prod.getProductName() == "")
-        prod.setProductName(prod.getProductName());
+        prod = Product::setProductNameUI();
     
     // Get the new release
     ProductRelease newRelease;
-    newRelease.setProductName(Product::getProductFromUser().getProductName());
+    newRelease.setProductName(prod.getProductName());
 
     // If the release already exists, keep asking until you get one that doesn't
     while(true)
@@ -502,11 +502,13 @@ void UserInterface::runMainMenu()
         std::cout << "\t5) Exit\n";
         std::cout << "Enter the selection (1-5):\n";
         
-        int selection = getUserSelectionForMenu(1, 5);
+        std::cin.clear(); // Clear any error flags
+        std::cin.sync();  // Synchronize the input buffer
 
         // Use a try and catch to handle exiting from any "interior" calls by throwing an exception
         try
         {
+            int selection = getUserSelectionForMenu(1, 5);
             switch(selection)
             {
                 case 1:

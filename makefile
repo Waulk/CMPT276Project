@@ -3,7 +3,7 @@ all: technovo
 test: writing_test
 
 technovo: main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
-	g++ -o technovo main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
+	g++ -g -o technovo main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
 	
 main.o: main.cpp 
 	g++ -c -std=c++17 -Wall main.cpp 
@@ -19,25 +19,25 @@ writing_test.o: writing_test.cpp product.h productrelease.h report.h reporter.h 
 	g++ -c -std=c++17 -Wall writing_test.cpp
 
 changes.o: changes.cpp changes.h
-	g++ -c -std=c++17 -Wall changes.cpp
+	g++ -g -c -std=c++17 -Wall changes.cpp
 
 userinterface.o: userinterface.cpp userinterface.h
-	g++ -c -std=c++17 -Wall userinterface.cpp
+	g++ -g -c -std=c++17 -Wall userinterface.cpp
 
 
 unitTestMain.o: unitTestMain.cpp product.h
-	g++ -c -std=c++17 -Wall unitTestMain.cpp
+	g++ -g -c -std=c++17 -Wall unitTestMain.cpp
 
 productrelease.o: productrelease.cpp product.h
-	g++ -c -std=c++17 -Wall productrelease.cpp
+	g++ -g -c -std=c++17 -Wall productrelease.cpp
 
 product.o: product.cpp product.h
-	g++ -c -std=c++17 -Wall product.cpp
+	g++ -g -c -std=c++17 -Wall product.cpp
 
 report.o: report.cpp report.h
-	g++ -c -std=c++17 -Wall report.cpp
+	g++ -g -c -std=c++17 -Wall report.cpp
 reporter.o: reporter.cpp reporter.h
-	g++ -c -std=c++17 -Wall reporter.cpp
+	g++ -g -c -std=c++17 -Wall reporter.cpp
 
 cleanWindows:	
 	del -f *.o
