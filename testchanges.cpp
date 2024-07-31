@@ -186,49 +186,57 @@ void testFileOperations()
 }
 
 
-// void testWriteChanges()
-// {
-//     bool testPassed;
-//     // Initialize changes to write
-//     const int SIZE = 15;
-//     Changes changes[SIZE] = {
-//         Changes(1, "New", "Canvas", "1.19.0", 3, "Add dark mode feature", false),
-//         Changes(2, "InProgress", "ProdMan", "1.20.1", 2, "Fix login bug", true),
-//         Changes(3, "Done", "Sea Water", "1.23.5", 1, "Optimize database queries", false),
-//         Changes(4, "New", "Notebook", "1.22.2", 4, "Implement user notifications", false),
-//         Changes(5, "Cancelled", "Pen", "1.01.0", 5, "Add voice recognition", false),
-//         Changes(6, "InProgress", "Laptop", "1.42.1", 3, "Update UI design", false),
-//         Changes(7, "New", "Mug", "1.41.0", 2, "Fix memory leak", true),
-//         Changes(8, "Done", "Bottle", "2.32.3", 1, "Add export to PDF feature", false),
-//         Changes(9, "InProgress", "Charger", "3.32.0", 4, "Implement two-factor auth", false),
-//         Changes(10, "New", "Phone", "1.25.2", 3, "Add support for new API", false),
-//         Changes(11, "Cancelled", "Mouse", "1.43.5", 5, "Redesign homepage", false),
-//         Changes(12, "InProgress", "Keyboard", "1.22.7", 2, "Fix cross-browser issues", true),
-//         Changes(13, "Done", "Monitor", "4.24.0", 1, "Implement caching system", false),
-//         Changes(14, "New", "Desk", "1.12.1", 4, "Add multi-language support", false),
-//         Changes(15, "InProgress", "Chair", "3.11.33", 3, "Optimize image loading", false)
-//     };
+void testWriteChanges()
+{
+    bool testPassed;
+    // Initialize changes to write
+    const int SIZE = 20;
+    Changes changes[SIZE] = {
+        Changes(1, "New", "Canvas", "1.19.0", 3, "Add dark mode feature", false),
+        Changes(2, "InProgress", "ProdMan", "1.20.1", 2, "Fix login bug", true),
+        Changes(3, "Done", "Sea Water", "1.23.5", 1, "Optimize database queries", false),
+        Changes(4, "New", "Notebook", "1.22.2", 4, "Implement user notifications", false),
+        Changes(5, "Cancelled", "Pen", "1.01.0", 5, "Add voice recognition", false),
+        Changes(6, "InProgress", "Laptop", "1.42.1", 3, "Update UI design", false),
+        Changes(7, "New", "Mug", "1.41.0", 2, "Fix memory leak", true),
+        Changes(8, "Done", "Bottle", "2.32.3", 1, "Add export to PDF feature", false),
+        Changes(9, "InProgress", "Charger", "3.32.0", 4, "Implement two-factor auth", false),
+        Changes(10, "New", "Phone", "1.25.2", 3, "Add support for new API", false),
+        Changes(11, "Cancelled", "Mouse", "1.43.5", 5, "Redesign homepage", false),
+        Changes(12, "InProgress", "Keyboard", "1.22.7", 2, "Fix cross-browser issues", true),
+        Changes(13, "Done", "Monitor", "4.24.0", 1, "Implement caching system", false),
+        Changes(14, "New", "Desk", "1.12.1", 4, "Add multi-language support", false),
+        Changes(15, "InProgress", "Chair", "3.11.33", 3, "Optimize image loading", false),
+        Changes(16, "Cancelled", "Lamp", "1.43.5", 5, "Redesign homepage", false),
+        Changes(17, "InProgress", "Book", "1.22.7", 2, "Fix cross-browser issues", true),
+        Changes(18, "Done", "Bag", "4.24.0", 1, "Implement caching system", false),
+        Changes(19, "New", "Shoes", "1.12.1", 4, "Add multi-language support", false),
+        Changes(20, "InProgress", "Hat", "3.11.33", 3, "Optimize image loading", false)
+    };
 
-//     // Open the changes file
-//     if (!Changes::openChangesFile())
-//     {
-//         std::cerr << "Failed to open the changes file." << std::endl;
-//         return;
-//     }
+    // Open the changes file
+    if (!Changes::openChangesFile())
+    {
+        std::cerr << "Failed to open the changes file." << std::endl;
+        return;
+    }
 
-//     // Write the changes to the file
-//     for (int i = 0; i < SIZE; ++i)
-//     {   
-//         Changes::writeToFile(changes[i]);
-//     }
-//         testPassed = false;
+    // Write the changes to the file
+    for (int i = 0; i < SIZE; ++i)
+    {   
+        Changes::writeToFile(changes[i]);
+    }
+        testPassed = false;
 
-//     // Now you can test reading these changes
-//     bool createNew = false; // Set to true if you want to test creating a new change
-//     Changes change;
-//     Changes selectedChange = change.viewNewChangesUI();
-//     std::cout << "You selected or created change: " << selectedChange.getDescription() << std::endl;
-// }
+    Changes change;
+    change.setProductName("test");
+    Changes selectedChange = change.viewNewChangesUI();
+    selectedChange.viewNewChangesUI();
+    std::cout << "You selected or created change: " << selectedChange.getDescription() << std::endl;
+
+    //Close the product file.
+    Changes::closeChangesFile();
+}
 
 // Main function to run all tests
 int main()
@@ -237,7 +245,7 @@ int main()
     testParameterizedConstructor();
     testSettersAndGetters();
     // testFileOperations();
-    // testWriteChanges();
+    testWriteChanges();
 
     return 0;
 }
