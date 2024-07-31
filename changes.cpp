@@ -716,13 +716,13 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
         for(int i = 0, counter = 0; counter < RELEASES_PER_PAGE && !isEnd; ++i)
         {
             Changes change = readFromFile(isEnd); // Read a change from the file
-            std::cout << change.getchangeId() << '\n';
             if(!isEnd && change.getReleaseId() == productRelease && change.getProductName() == product)                
             // Check if end of file is not reached and the current change has the desired product release and name
             {
-                std::cout << counter + 1 << "  " << change.getchangeStatus() << 
-                "  " << change.getPriority() << "  " << change.getDescription() << "  " <<
-                change.getIsBug() << "  " << "\n"; // Display change details for specific release id
+                std::cout << std::left << std::setw(10) << change.getchangeStatus() << "  ";
+                std::cout << std::left << std::setw(8) << change.getPriority() << "  ";
+                std::cout << std::left << std::setw(30) << change.getDescription() << "  ";
+                std::cout << (change.getIsBug() ? "T" : "F") << '\n';
                 counter++; //increment the counter each time related change instance is found
             }
         }
