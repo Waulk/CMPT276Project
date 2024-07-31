@@ -330,6 +330,8 @@ bool getTrueorFalseFromUser()
     while(!validResponse)
     {
         getline(std::cin, YesNo);
+        if(YesNo.empty())
+            throw std::invalid_argument("User exited");
         try
         {
             response = UserInterface::isYesOrNo(YesNo);
@@ -407,7 +409,7 @@ void checkNewChanges()
     std::cout << "Is this a bug (Y/N)?\n";
     selectedChange.setIsBug(getTrueorFalseFromUser());
 
-    selectedChange.setchangeStatus("Assessed\n");
+    selectedChange.setchangeStatus("Assessed");
 
     // Save to disk
     Changes::writeToFile(selectedChange);
@@ -435,7 +437,7 @@ void viewChangesForProduct()
     std::cout << "Priority:    " << changeToEdit.getPriority() << '\n';
     std::cout << "Description: " << changeToEdit.getDescription() << '\n';
     std::cout << "Is Bug:      " << (changeToEdit.getIsBug() ? "True" : "False") << '\n';
-    std::cout << "Release:     " << changeToEdit.getchangeStatus() << '\n';
+    std::cout << "Release:     " << changeToEdit.getReleaseId() << '\n';
 
     // Edit priority
     std::cout << "Would you like to edit the Priority (Y/N)?\n";

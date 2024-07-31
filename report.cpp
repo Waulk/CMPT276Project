@@ -207,7 +207,7 @@ bool Report::writeToFile(Report report)
  * Implementation Details:
  * - It's assumed the file is already opened and valid.
  * - If this is not true, then an error is thrown and displayed to the user.
- * - This function will NOT check for any entity integrity violations
+ * - This function will check for any entity integrity violations
  */ 
 {
     if(!file.is_open())
@@ -215,6 +215,15 @@ bool Report::writeToFile(Report report)
         std::cout << "An error has occured!\n";
         std::cout << "The Report file was not open when it was expected to be!\n";
         throw std::runtime_error("Report file not open on writeToFile");
+    }
+    seekToBeginningOfFile();
+    bool isEnd = false;
+    Report in = readFromFile(isEnd);
+    while(!isEnd)
+    {
+        if(report.getChangeId() == in.getChangeId() && report.getEmail() == in.getEmail())
+            return true;
+        in = readFromFile(isEnd);
     }
     
     file.seekg(0, std::ios::end);

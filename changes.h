@@ -294,6 +294,8 @@ class Changes
          * Precondition: The file to get closed exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
+
+       /***********************************************/
        static bool ChangesExists(Changes change);
        // Returns: bool - return true if the instance/object exists, false otherwise
         /* This function checks if an object exists in the file

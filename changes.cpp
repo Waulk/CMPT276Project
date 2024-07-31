@@ -110,27 +110,25 @@ Changes::Changes(int changeId, string changeStatus, string productName, string r
     strncpy(this->release_Id, release_Id.c_str(), release_Id.length());
     strncpy(this->description, description.c_str(), description.length());
 
-    for(size_t i=changeStatus.length(); i < changeStatus.length() + 1; i++)
+    for(size_t i=changeStatus.length(); i < CHANGESTATUSSIZE + 1; i++)
     {
          this->changeStatus[i] = '\0';
     }
 
-    for(size_t i=productName.length(); i < productName.length() + 1; i++)
+    for(size_t i=productName.length(); i < PRODUCTNAMESIZE + 1; i++)
     {
          this->productName[i] = '\0';
     }
 
-    for(size_t i=release_Id.length(); i < release_Id.length() + 1; i++)
+    for(size_t i=release_Id.length(); i < RELEASE_IdSIZE + 1; i++)
     {
          this->release_Id[i] = '\0';
     }
 
-    for(size_t i=description.length(); i < description.length() + 1; i++)
+    for(size_t i=description.length(); i < DESCRIPTIONSIZE + 1; i++)
     {
          this->description[i] = '\0';
     }
-
-    lastChangeId = changeId;
 
 }
 
@@ -228,7 +226,7 @@ void Changes::setchangeStatus(const string &changeStatus)
  * - Uses strncpy to copy the input string to the productName array.
  * - Ensures the last character is null-terminated.
  */
-    strncpy(this->changeStatus, changeStatus.c_str(), CHANGESTATUSSIZE - 1);
+    strncpy(this->changeStatus, changeStatus.c_str(), CHANGESTATUSSIZE);
 }
 
 void Changes::setProductName(const string &productName) 
@@ -241,7 +239,7 @@ void Changes::setProductName(const string &productName)
  * - Uses strncpy to copy the input string to the productName array.
  * - Ensures the last character is null-terminated.
  */
-    strncpy(this->productName, productName.c_str(), PRODUCTNAMESIZE - 1);
+    strncpy(this->productName, productName.c_str(), PRODUCTNAMESIZE);
 }
 
 void Changes::setReleaseId(const string &releaseId) 
@@ -254,7 +252,7 @@ void Changes::setReleaseId(const string &releaseId)
  * - Uses strncpy to copy the input string to the releaseId array.
  * - Ensures the last character is null-terminated.
  */
-    strncpy(this->release_Id, releaseId.c_str(), RELEASE_IdSIZE - 1);
+    strncpy(this->release_Id, releaseId.c_str(), RELEASE_IdSIZE);
 }
 
 void Changes::setPriority(const int &priority) 
@@ -275,7 +273,7 @@ void Changes::setDescription(const string &description)
  * - Uses strncpy to copy the input string to the description array.
  * - Ensures the last character is null-terminated.
  */
-    strncpy(this->description, description.c_str(), DESCRIPTIONSIZE - 1);
+    strncpy(this->description, description.c_str(), DESCRIPTIONSIZE);
 }
 
 void Changes::setIsBug(const bool &isBug) 
@@ -565,6 +563,7 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
             getline(std::cin, input);
             bug = (input == "Y" || input == "y");
             Changes newChange = Changes(lastChangeId, "New", product, "", priority, description, bug);
+            newChange.changeId = lastChangeId;
             lastChangeId++;
             writeToFile(newChange);
             return newChange;
@@ -694,7 +693,7 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
 
         for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; )
         {
-            
+            std::cout << "doesThis Happen\n";
             Changes in = readFromFile(isEnd);         // Read and discard releases to skip to the current page
             if(in.getProductName() == product && in.getReleaseId() == productRelease)
                 i++;
@@ -717,6 +716,7 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
         for(int i = 0, counter = 0; counter < RELEASES_PER_PAGE && !isEnd; ++i)
         {
             Changes change = readFromFile(isEnd); // Read a change from the file
+            std::cout << change.getchangeId() << '\n';
             if(!isEnd && change.getReleaseId() == productRelease && change.getProductName() == product)                
             // Check if end of file is not reached and the current change has the desired product release and name
             {
@@ -898,6 +898,7 @@ bool Changes::writeToFile(Changes change)
     file.write((char*)&change.priority, sizeof(int));
     file.write(change.description, sizeof(char) * DESCRIPTIONSIZE);
     file.write((char*)&change.isBug, sizeof(bool));
+    lastChangeId = change.getchangeId() + 1;
 
     return !(file.fail() || file.bad());
 }
@@ -947,7 +948,7 @@ bool Changes::openChangesFile(std::string path)
     // Update the lastChangeId
     if(valid)
     {
-        file.seekg(0, std::fstream::end);
+        
         
         // Check if the file is empty
         if(file.peek() == EOF)
@@ -956,6 +957,7 @@ bool Changes::openChangesFile(std::string path)
         }
         else
         {
+            file.seekg(0, std::fstream::end);
             // Move back in the file to read the very last entry
             // Change ID
             file.seekg(-sizeof(int), std::fstream::cur);
