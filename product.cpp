@@ -205,6 +205,8 @@ Product Product::getProductFromUser(bool createNew)
         std::cin.clear(); // Clear any error flags
         std::cin.sync();  // Synchronize the input buffer
         std::getline(std::cin, input); // Read user input
+        if(input.empty())
+            throw std::invalid_argument("Empty string inputted");
 
         try {
             if (input.empty())

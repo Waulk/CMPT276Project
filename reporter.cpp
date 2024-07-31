@@ -200,7 +200,9 @@ Reporter Reporter::reporterUI()
     if (worksAtCompany == "y" || worksAtCompany == "Y") 
     {
         std::cout << "What is the Employee's Department (max 12 char.):\n";
-        std::cin >> departmentId;
+        getline(std::cin, departmentId);
+        if(departmentId.empty())
+            throw std::invalid_argument("Invalid Response by User");
     } else 
     {
         departmentId = "";

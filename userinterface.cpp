@@ -309,7 +309,7 @@ void createNewIssue()
     // Get the release for the product
     ProductRelease selectedRelease = ProductRelease::getProductReleaseFromUser(selectedProduct.getProductName());
     // Get the change where the issue exists
-    Changes selectedChange = Changes::viewChangesFromProduct(selectedProduct.getProductName());
+    Changes selectedChange = Changes::viewChangesFromProduct(selectedProduct.getProductName(), true);
     // Generate the report and save it to disk
     Report newReport(newReporter.getEmail(), selectedChange.getchangeId(), selectedRelease.getReleaseId());
     Report::writeToFile(newReport);
@@ -359,7 +359,45 @@ void checkNewChanges()
 {
     // View new changes, will also handle editing and will return an edited one
     Changes selectedChange = Changes::viewNewChangesUI();
+    std::cout << "=====New Changes=====\n";
+    std::cout << "Product:     " << selectedChange.getProductName() << '\n';
+    std::cout << "Priority:    " << selectedChange.getPriority() << '\n';
+    std::cout << "Description: " << selectedChange.getDescription() << '\n';
+    std::cout << "Would you like to Cancel the Change (Y/N)?\n";
+    bool response = getTrueorFalseFromUser();
+    std::string input;
+    if(response)
+    {
+        selectedChange.setchangeStatus("Cancelled");
+        Changes::writeToFile(selectedChange);
+        checkNewChanges();
+        return;
+    }
 
+    // Update the priority if required
+    std::cout << "Would you like to edit the Priority (Y/N)?\n";
+    response = getTrueorFalseFromUser();
+    if(response)
+    {
+        std::cout << "Enter the Priority of the change (A number from 1-5):\n";
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");
+        selectedChange.setPriority(std::atoi(input.c_str()));
+    }
+
+    // Update the description if required
+    std::cout << "Would you like to edit the Description (Y/N)?\n";
+    response = getTrueorFalseFromUser();
+    if(response)
+    {
+        std::cout << "Enter the new Description for the change (max 30 char.):\n";
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");
+        selectedChange.setDescription(input);
+    }
+    
     // Get the new release version for the change
     ProductRelease selectedRelease = ProductRelease::getProductReleaseFromUser(selectedChange.getProductName());
     selectedChange.setReleaseId(selectedRelease.getReleaseId());

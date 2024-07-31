@@ -141,7 +141,8 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         int startIndex = currentPage * RELEASES_PER_PAGE;
         int endIndex = std::min(startIndex + RELEASES_PER_PAGE, static_cast<int>(productReleases.size()));
 
-        if (startIndex >= productReleases.size()) {
+        if (startIndex >= productReleases.size()) 
+        {
             std::cout << "No more releases to display.\n";
             exit = true;
             break;
@@ -152,7 +153,8 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         std::cout << std::left << std::setw(10) << "SELECTION" << std::setw(15) << "RELEASE" << std::setw(15) << "DATE" << "\n";
         std::cout << "-------------------------------------------\n";
 
-        for (int i = startIndex; i < endIndex; ++i) {
+        for (int i = startIndex; i < endIndex; ++i) 
+        {
             ProductRelease release = productReleases[i];
             std::cout << std::left << std::setw(10) << (std::to_string(i + 1) + ")") << std::setw(15) << release.getReleaseId() << std::setw(15) << release.getDate() << "\n"; // Display release details
             displayedReleases++;

@@ -45,7 +45,6 @@ Changes::Changes() : changeId(lastChangeId), priority(0), isBug(false)
     std::memset(productName, '\0', PRODUCTNAMESIZE + 1);
     std::memset(release_Id, '\0', RELEASE_IdSIZE + 1);
     std::memset(description, '\0', DESCRIPTIONSIZE + 1);
-    lastChangeId++;
 }
 
 Changes::Changes(int changeId, string changeStatus, string productName, string release_Id, 
@@ -111,22 +110,22 @@ Changes::Changes(int changeId, string changeStatus, string productName, string r
     strncpy(this->release_Id, release_Id.c_str(), release_Id.length());
     strncpy(this->description, description.c_str(), description.length());
 
-    for(int i=changeStatus.length(); i < changeStatus.length() + 1; i++)
+    for(size_t i=changeStatus.length(); i < changeStatus.length() + 1; i++)
     {
          this->changeStatus[i] = '\0';
     }
 
-    for(int i=productName.length(); i < productName.length() + 1; i++)
+    for(size_t i=productName.length(); i < productName.length() + 1; i++)
     {
          this->productName[i] = '\0';
     }
 
-    for(int i=release_Id.length(); i < release_Id.length() + 1; i++)
+    for(size_t i=release_Id.length(); i < release_Id.length() + 1; i++)
     {
          this->release_Id[i] = '\0';
     }
 
-    for(int i=description.length(); i < description.length() + 1; i++)
+    for(size_t i=description.length(); i < description.length() + 1; i++)
     {
          this->description[i] = '\0';
     }
@@ -313,7 +312,6 @@ Changes Changes::viewNewChangesUI()
     bool isEnd = false;                  // Flag to indicate end of file
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPageChanges = 0;          // Current page number
-    int productSelection = 0;            // product selection
     Changes changeObj;
 
     while(!exit)
@@ -347,11 +345,14 @@ Changes Changes::viewNewChangesUI()
             if(!isEnd && change.getchangeStatus() == "New")                
             // Check if end of file is not reached and the current change has the desired product release and name
             {
-                std::cout << counter + 1 << "  " << change.getProductName() << 
-                "  " << change.getPriority() << "  " << change.getDescription() << "  " << "\n"; // Display change details for new changes
+                std::cout << std::right << std::setw(9) << (std::to_string(counter + 1) + ")") << "  ";
+                std::cout << std::left << std::setw(10) << change.getProductName() << "  ";
+                std::cout << std::left << std::setw(8) << change.getPriority() << "  ";
+                std::cout << change.getDescription() << '\n';
                 counter++; //increment the counter each time related change instance is found
             }
         }
+        std::cout << "                       ";
         std::cout << "<-P";
         std::cout << "    N->" << endl;
         // Determine navigation options
@@ -376,7 +377,9 @@ Changes Changes::viewNewChangesUI()
         std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
-        std::cin >> input;              
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");             
         // Read user input
 
         if(input == "P" || input == "p") // If user wants to go to previous page
@@ -397,12 +400,16 @@ Changes Changes::viewNewChangesUI()
         {
             int selection = std::stoi(input); // Convert input to an integer               
             Changes changeObj;      
-            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; ++i)
+            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; )
             {
-                readFromFile(isEnd);
+                Changes in = readFromFile(isEnd);
                 if(isEnd)
+                {
                     changeObj = readFromFile(isEnd);
                     break;
+                }
+                if(in.getchangeStatus() == "New")
+                    i++;
             }
             std::cout << "=====New Changes=====\n";
             std::cout << "Product         " << changeObj.getProductName() << "\n" ;        
@@ -417,6 +424,7 @@ Changes Changes::viewNewChangesUI()
             {
                 //Return to viewNewChangesUI
                 viewNewChangesUI();
+                return changeObj;
             }
             else{
                 cout << "Would you like to edit the Priority (Y/N)?\n";
@@ -474,28 +482,31 @@ bool Changes::isValid()
     );
 }
 
-Changes Changes::viewChangesFromProduct(const string &product) 
-    {
+Changes Changes::viewChangesFromProduct(const string &product, bool createNew) 
+{
 
     const int RELEASES_PER_PAGE = 20;    // Number of releases displayed per page
     bool isEnd = false;                  // Flag to indicate end of file
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPageProducts = 0;         // Current page num for products
     int currentPageChanges = 0;          // Current page number
-    int productSelection = 0;            // product selection
     Changes changeObj;
     while(!exit)
     {
         seekToBeginningOfFile();
 
-        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + productSelection - 1; ++i)
+        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE - 1; )
         {
-            readFromFile(isEnd);         // Read and discard releases to skip to the current page
+            Changes in = readFromFile(isEnd);         // Read and discard releases to skip to the current page
             if(isEnd)                    // If end of file is reached
             {
                 currentPageChanges--;    // Adjust current page number
                 break;                   // Exit the loop
             }
+
+            // Make sure we're only counting the correct changes
+            if(in.getProductName() == product)
+                i++;
         }
         if(isEnd)
         {
@@ -507,11 +518,14 @@ Changes Changes::viewChangesFromProduct(const string &product)
         std::cout << "=======Changes=======\n";
         std::cout << "SELECTION  STATUS      PRIORITY  DESCRIPTION                     BUG\n";        
         std::cout << "---------  ------      --------  -----------                     ---  \n";
-        for(int i = 0; i < RELEASES_PER_PAGE && !isEnd; ++i)
+        for(int i = 0; i < RELEASES_PER_PAGE && !isEnd; )
         {
             Changes change = readFromFile(isEnd); // Read a change from the file
+            if(change.getProductName() != product)
+                continue;
             if(!isEnd)                // If end of file is not reached
             {
+                i++;
                 std::cout << i + 1 << ") " << change.getchangeStatus() << "  " << change.getPriority() << "  " <<
                 change.getDescription() << "  " << change.getIsBug() << "\n"; // Display change details
             }
@@ -519,13 +533,14 @@ Changes Changes::viewChangesFromProduct(const string &product)
         // Determine navigation options
         std::cout << "            ";
         if (currentPageChanges > 0) // Show previous page option if not on the first page
-        {
-            std::cout << "<-P ";
-        }
+            std::cout << "<-P";
         else
-        {
-            std::cout << "    ";
-        }
+            std::cout << "   ";
+
+        if(createNew)
+            std::cout << " X ";
+        else
+            std::cout << "   ";
 
         if (!isEnd) // Show next page option if not on the last page
         {
@@ -538,7 +553,9 @@ Changes Changes::viewChangesFromProduct(const string &product)
         std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
-        std::cin >> input;              
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");            
         // Read user input
 
         if(input == "P" || input == "p") // If user wants to go to previous page
@@ -555,98 +572,144 @@ Changes Changes::viewChangesFromProduct(const string &product)
                 currentPageProducts++;           // Go to next page
             }
         }
+        else if(input == "X" || input == "x") // User wants to create a new change
+        {
+            std::string description;
+            int priority;
+            bool bug;
+            std::cout << "======New Change=====\n";
+            std::cout << "Enter a description for the change (max 30 char.):\n";
+            getline(std::cin, description);
+            if(description.empty())
+                throw std::invalid_argument("Invalid Response by User");
+
+            std::cout << "Enter the Priority of the change (A number from 1-5):\n";
+            getline(std::cin, input);
+            priority = std::atoi(input.c_str());
+            while(priority == 0 || (priority < 1 && priority > 5))
+            {
+                if(input.empty())
+                    throw std::invalid_argument("Invalid Response by User");
+                
+                std::cout << "Invalid response, try again.\n";
+                getline(std::cin, input);
+                priority = std::atoi(input.c_str());
+            }
+
+            std::cout << "Is this a bug (Y/N)?\n";
+            getline(std::cin, input);
+            bug = (input == "Y" || input == "y");
+            Changes newChange = Changes(lastChangeId, "New", product, "", priority, description, bug);
+            lastChangeId++;
+            writeToFile(newChange);
+            return newChange;
+        }
         else                            // If user entered a selection number
         {
             int selection = std::stoi(input); // Convert input to an integer               
                   
-            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; ++i)
+            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1;)
             {
-                readFromFile(isEnd);
+                Changes in = readFromFile(isEnd);
                 if(isEnd)
-                    changeObj = readFromFile(isEnd);
-                    break;
-            }
-
-  
-            if (strcmp(changeObj.changeStatus, "Done") == 0 || strcmp(changeObj.changeStatus, "Completed") == 0) {
-                std::cout << "Error: Attempting to edit completed change!" << std::endl;
-                return changeObj;
-            }
-
-
-            std::cout << "=====Edit Change=====" << std::endl;
-            std::cout << "ChangeID:    " << changeObj.changeId << std::endl;
-            std::cout << "Priority:    " << changeObj.priority << std::endl;
-            std::cout << "Description: " << changeObj.description << std::endl;
-            std::cout << "Is :      " << (changeObj.isBug ? "a Bug" : "a Feature") << std::endl;
-            std::cout << "Release:     " << changeObj.release_Id << std::endl;
-            std::cout << "Status:      " << changeObj.changeStatus << std::endl;
-
-            char response;
-            std::cout << "Would you like to edit the Priority (Y/N)? ";
-            std::cin >> response;
-            if (response == 'Y' || response == 'y') 
-            {
-                int newPrio;
-                std::cout << "Enter the Priority of the change (A number from 1-5):";
-                std:: cin >> newPrio;
-                changeObj.setPriority(newPrio);
-            }
-            std::cout << "Would you like to edit the Description (Y/N)?";
-            std::cin >> response;
-            if (response == 'Y' || response == 'y') 
-            {
-                string description;
-                std::cout << "Enter the new Description for the change (max 30 char.)";
-                std:: cin >> description;
-                changeObj.setDescription(description);
-            }    
-            std::cout << "Would you like to edit the Status (Y/N)?";
-            std::cin >> response;
-            if (response == 'Y' || response == 'y') 
-            {
-                int statusOption;
-                string status;
-                std::cout << "====Select Status====" << std::endl;
-                std::cout << "1) InProgress" << std::endl;
-                std::cout << "2) Cancelled" << std::endl;
-                std::cout << "3) Done" << std::endl;
-                std::cout << "Please Select a Status:" << std::endl;
-                std:: cin >> statusOption;
-                switch (statusOption) {
-                    case 1:
-                        status = "InProgress";
-                        break;
-                    case 2:
-                        status = "Cancelled";
-                        break;
-                    case 3:
-                        status = "Done";
-                        break;
-                    default:
-                        std::cout << "Invalid selection" << std::endl;
-                }
-                changeObj.setchangeStatus(status);  
-            }
-            if(selection > 0 && selection <= RELEASES_PER_PAGE ) // If selection is valid
-            {
-                // seek again to the beginning of the file
-                seekToBeginningOfFile();  // Reset file pointer to the beginning
-
-                // skip releases of previous pages and selected releases on the current page
-                for(int i = 0; i < currentPageProducts * RELEASES_PER_PAGE + selection - 1; ++i)
                 {
-                    readFromFile(isEnd);  // Read and discard releases to skip to the selected release
+                    return in;
+                    break;
                 }
-
-                return readFromFile(isEnd); // Return the selected release
+                if(in.getProductName() == product)
+                    i++;
+                    
             }
+            while(true)
+            {
+                bool isEnd = false;
+                Changes in = readFromFile(isEnd);
+                if(in.getProductName() == product)
+                    return in;
+                if(isEnd)
+                    return Changes();
+            }
+            
         }
 
     }
     // Return the selected change or *this if selection is invalid
     return changeObj;
 
+}
+
+
+Changes Changes::editChangeUI(Changes toEdit)
+{
+
+
+    std::cout << "=====Edit Change=====" << std::endl;
+    std::cout << "ChangeID:    " << toEdit.changeId << std::endl;
+    std::cout << "Priority:    " << toEdit.priority << std::endl;
+    std::cout << "Description: " << toEdit.description << std::endl;
+    std::cout << "Is Bug:      " << (toEdit.isBug ? "True" : "False") << std::endl;
+    std::cout << "Release:     " << toEdit.release_Id << std::endl;
+    std::cout << "Status:      " << toEdit.changeStatus << std::endl;
+
+    std::string response;
+    std::cout << "Would you like to edit the Priority (Y/N)? ";
+    getline(std::cin, response);
+    if(response.empty())
+        throw std::invalid_argument("Invalid Response by User");
+    if (response == "Y" || response == "y") 
+    {
+        std::string newPrio;
+        std::cout << "Enter the Priority of the change (A number from 1-5):";
+        getline(std::cin, newPrio);
+        if(newPrio.empty())
+        throw std::invalid_argument("Invalid Response by User");
+        toEdit.setPriority(std::atoi(newPrio.c_str()));
+    }
+    std::cout << "Would you like to edit the Description (Y/N)?";
+    getline(std::cin, response);
+    if(response.empty())
+        throw std::invalid_argument("Invalid Response by User");
+    if (response == "Y" || response == "y") 
+    {
+        string description;
+        std::cout << "Enter the new Description for the change (max 30 char.)";
+        getline(std::cin, description);
+        if(description.empty())
+            throw std::invalid_argument("Invalid Response by User");
+        toEdit.setDescription(description);
+    }    
+    std::cout << "Would you like to edit the Status (Y/N)?";
+    getline(std::cin, response);
+    if(response.empty())
+        throw std::invalid_argument("Invalid Response by User");
+    if (response == "Y" || response == "y") 
+    {
+        int statusOption;
+        string status = "";
+        std::cout << "====Select Status====" << std::endl;
+        std::cout << "\t1) InProgress" << std::endl;
+        std::cout << "\t2) Cancelled" << std::endl;
+        std::cout << "\t3) Done" << std::endl;
+        std::cout << "Please Select a Status:" << std::endl;
+        std:: cin >> statusOption;
+        switch (statusOption) {
+            case 1:
+                status = "InProgress";
+                break;
+            case 2:
+                status = "Cancelled";
+                break;
+            case 3:
+                status = "Done";
+                break;
+            default:
+                std::cout << "Invalid selection" << std::endl;
+        }
+        if(status != "")
+            toEdit.setchangeStatus(status);  
+    }
+    return toEdit;
+    
 }
 
 Changes Changes::viewUnfinishedChanges(const string &productRelease, const string &product) 
@@ -657,16 +720,18 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
     bool isEnd = false;                  // Flag to indicate end of file
     bool exit = false;                   // Flag to indicate user wants to exit
     int currentPageChanges = 0;          // Current page number
-    int productSelection = 0;            // product selection
     Changes changeObj;
     
     while(!exit)
     {
         seekToBeginningOfFile();
 
-        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; ++i)
+        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; )
         {
-            readFromFile(isEnd);         // Read and discard releases to skip to the current page
+            
+            Changes in = readFromFile(isEnd);         // Read and discard releases to skip to the current page
+            if(in.getProductName() == product && in.getReleaseId() == productRelease)
+                i++;
             if(isEnd)                    // If end of file is reached
             {
                 currentPageChanges--;    // Adjust current page number
@@ -717,7 +782,9 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
         std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
-        std::cin >> input;              
+        getline(std::cin, input);
+        if(input.empty())
+            throw std::invalid_argument("Invalid Response by User");            
         // Read user input
 
         if(input == "P" || input == "p") // If user wants to go to previous page
@@ -738,12 +805,17 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
         {
             int selection = std::stoi(input); // Convert input to an integer               
             Changes changeObj;      
-            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; ++i)
+            for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE + selection - 1; )
             {
-                readFromFile(isEnd);
+                Changes in = readFromFile(isEnd);
                 if(isEnd)
+                {
                     changeObj = readFromFile(isEnd);
                     break;
+                }
+                if(in.getProductName() == product && in.getReleaseId() == productRelease)
+                    i++;
+                    
             }
             if(selection > 0 && selection <= RELEASES_PER_PAGE ) // If selection is valid
             {
@@ -934,7 +1006,7 @@ bool Changes::openChangesFile(std::string path)
             // Bug
             file.seekg(-sizeof(bool), std::fstream::cur);
             bool ignore;
-            lastChangeId = readFromFile(ignore).getchangeId();
+            lastChangeId = readFromFile(ignore).getchangeId() + 1;
         }
     }
 

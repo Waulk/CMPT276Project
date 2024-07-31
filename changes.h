@@ -197,7 +197,10 @@ class Changes
         */
 
         /***********************************************/
-        static Changes viewChangesFromProduct(const string &product);
+        static Changes viewChangesFromProduct(
+            const string &product,          // string &product - The product release to view changes for (in)
+            bool createNew = false          // bool createNew - Whether it should allow the user to create a new Change. defaults to false (in)
+        );
         // Returns: Changes
         /* This function returns a Changes object.
         =======Changes=======
@@ -208,14 +211,24 @@ class Changes
             ...
             19)  Assessed       5         Submission crashes site         T
             20)  Done           4         App should save                 F
-                                <-P  N->
+                                <-P X N->
         Make a Selection:
-
         */
+
+       /***********************************************/
+       static Changes editChangeUI(
+            Changes toEdit          // Changes toEdit - the change to edit and return a copy of (in)
+       );
+       // Returns: Cahnges
+       /* This function shows a User Interface to edit a change
+       */
 
         /***********************************************/
 
-        static Changes viewUnfinishedChanges(const string &productRelease, const string &product);
+        static Changes viewUnfinishedChanges(
+            const string &productRelease,   // string &productRelease - The product release to view changes for (in)
+            const string &product           // string &product - The product release to view changes for (in)
+            );
         // Returns: Changes
         /* This function returns a Changes object.
         =======Changes=======
