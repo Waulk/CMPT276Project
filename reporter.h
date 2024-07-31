@@ -34,7 +34,6 @@ class Reporter
         // size of department id
         static const int DEPTIDSIZE = 12;
 
-        // Reporter UI in a stactic funcation
         /***********************************************/
         Reporter();
         // Returns: None since this is a constructor
@@ -61,18 +60,32 @@ class Reporter
         * If these preconditions are not met, it will throw an exception with an error message
         */
 
+        /***********************************************/
+        string getEmail();
+        // Returns: string - email of the Reporter
+        /* This is a getter of email
+        */
+
+       /***********************************************/
+        string getCustomerName();
+        // Returns: string - name of the Reporter
+        /* This is a getter of email
+        */
+
+       /***********************************************/
+        string getPhoneNumber();
+        // Returns: string - phone number of the Reporter
+        /* This is a getter of email
+        */
+
+       /***********************************************/
+        string getDepartmentId();
+        // Returns: string - department of the Reporter
+        /* This is a getter of email
+        */
        
 
-        /***********************************************/
-        bool checkEmail(
-            const string &email     // string email - email of customer (in)
-        );
-        // Returns: True or Flase  
-        /* This checks if email exists
-        * ---------------------------------------------
-        * Precondition: email != "" (empty string). The max length of email is 24.
-        * If this precondition is not met, it will display an error message and the function will return False  
-        */
+        
 
        /***********************************************/
         std::string getEmail();
@@ -80,9 +93,7 @@ class Reporter
         /* This function returns the email address of the current reporter*/
         
         /***********************************************/
-        static void reporterUI(
-            bool createNew // True or False
-        );
+        Reporter reporterUI();
         // Returns: void
         /* This function displays an UI and shows a list of all the customers*/
 
@@ -135,9 +146,21 @@ class Reporter
          * Precondition: The file to get closed exists
          * If this precondition is not met, it will display an error message and throw an exception
         */
-        void addNewReporter(const std::string& email, const std::string& customerName, const std::string& phoneNumber, const std::string& deparmentId);      
 
     private:
+
+        /***********************************************/
+        bool checkEmail(
+            const string &email     // string email - email of customer (in)
+        );
+        // Returns: True or Flase  
+        /* This checks if email exists
+        * ---------------------------------------------
+        * Precondition: email != "" (empty string). The max length of email is 24.
+        * If this precondition is not met, it will display an error message and the function will return False  
+        */
+       /***********************************************/
+
         // char[] - email address. Fixed length (Fixed Length: 24 chars)
         char email[EMAILDATASIZE + 1];
 

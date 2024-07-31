@@ -68,11 +68,6 @@ class Report
         */
         
         /***********************************************/
-        void getReportUI();
-        //Returns: void
-        /* This function displays an UI and shows a list of all the reports*/
-
-        /***********************************************/
         static bool openReportFile();
        // Returns: True or False
         /* This function opens the file

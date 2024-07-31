@@ -2,6 +2,8 @@
  * Module: reporter.cpp
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-30 Edited by Anmol Sangha
+ *         - Added funcation and updated the code
  * Ver. 1: - 2024-07-14 Original by Anmol Sangha
  *         - Initial version 
  ***********************************************/
@@ -26,7 +28,7 @@ Reporter::Reporter()
  * Default constructor that initializes the member variables
  *
  * Implementation Details:
- * uses memset to set all characters in the members to null
+ * - uses memset to set all characters in the members to null
 */
 {
     memset(email, 0, EMAILDATASIZE + 1);
@@ -41,9 +43,9 @@ Reporter::Reporter(string email, string customerName, string phoneNumber, string
  * Constructor that initializes member variables with values
  *
  * Implementation Details:
- * Checks each string to insure valid input (not empty and not longer than fixed size)
- * Uses strncpy to copy string to arrays
- * Uses for loops to change rest of fixed size to null characters  
+ * - Checks each string to insure valid input (not empty and not longer than fixed size)
+ * - Uses strncpy to copy string to arrays
+ * - Uses for loops to change rest of fixed size to null characters  
 */
 {
     if (email.empty() || email.size() > EMAILDATASIZE + 1 ||
@@ -64,6 +66,53 @@ Reporter::Reporter(string email, string customerName, string phoneNumber, string
     this->deparmentId[DEPTIDSIZE] = '\0';
 }
 
+/***********************************************/
+string Reporter::getEmail()
+/*
+ * Function to get the email as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->email);
+}
+
+/***********************************************/
+string Reporter::getCustomerName()
+/*
+ * Function to get the name as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->customerName);
+}
+
+/***********************************************/
+string Reporter::getPhoneNumber()
+/*
+ * Function to get the phone number as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->phoneNumber);
+}
+
+/***********************************************/
+string Reporter::getDepartmentId()
+/*
+ * Function to get the department id as a string.
+ * 
+ * Implementation Details:
+ * - Constructs a string from the fixed-size character array.
+*/
+{
+    return string(this->deparmentId);
+}
 
 /***********************************************/
 bool Reporter::checkEmail(const string &email) 
@@ -71,7 +120,8 @@ bool Reporter::checkEmail(const string &email)
  * Checks if provided email exists
  *
  * Implementation Details:
- * Checks email is valid size (not empty and not longer than fixed size)
+ * - Checks email is valid size (not empty and not longer than fixed size)
+ * - Iterates through the file to see if the email already exists
 */
 {
    if (email.empty() || email.size() > EMAILDATASIZE + 1) 
@@ -82,7 +132,6 @@ bool Reporter::checkEmail(const string &email)
 
     seekToBeginningOfFile();
     bool isEnd = false;
-
     while (!isEnd) 
     {
         Reporter reporter = readFromFile(isEnd);
@@ -91,96 +140,58 @@ bool Reporter::checkEmail(const string &email)
             return true;
         }
     }
-
     return false;
 }
 
 /***********************************************/
-std::string Reporter::getEmail()
-// Simple getter that returns the email as a string
-{
-    return std::string(this->email);
-}
-
-/***********************************************/
-void Reporter::reporterUI(bool createNew)
+Reporter Reporter::reporterUI()
 /*
- * This function interacts with the user to display a list of reporters and 
- * allows the user to navigate through pages. If createNew is true, the user 
- * has the option to create a new reporter.
+ * This function interacts with the user to create a new reporter.
  * 
  * Implementation Details:
- * - Initializes control variables for pagination and user input handling.
- * - Uses a while loop to continuously interact with the user until they exit.
- * - Seeks to the beginning of the file and skips reporters from previous pages 
- *   to display the current page's reporters.
- * - Displays the reporters for the current page and handles user input for 
- *   pagination or creation.
+ * - Prompts the user for email, name, phone number, and department (if applicable).
+ * - Ensures the entered email is unique before creating a new Reporter object.
+ * - Writes the new reporter to the file and returns the created object.
  */
 {
-    const int REPORTERS_PER_PAGE = 20;
-    bool exit = false;
-    int currentPage = 0;
 
-    while (!exit) {
-        seekToBeginningOfFile();
-        bool isEnd = false;
+   std::string email, customerName, phoneNumber, departmentId;
+    std::cout << "Enter email: ";
+    std::cin >> email;
 
-        // Skip reporters of previous pages
-        for (int i = 0; i < currentPage * REPORTERS_PER_PAGE && !isEnd; ++i) {
-            readFromFile(isEnd); // Read and discard a reporter to skip it
-        }
-
-        if (isEnd) {
-            std::cout << "No more reporters to display." << std::endl;
-            if (currentPage > 0) {
-                --currentPage;
-            }
-            continue;
-        }
-
-        // Display the reporters
-        std::cout << "======= Reporter =======\n";
-        std::cout << "SELECTION  REPORTERS\n";
-        std::cout << "---------------------\n";
-
-        for (int i = 0; i < REPORTERS_PER_PAGE && !isEnd; ++i) {
-            Reporter reporter = readFromFile(isEnd); // Read a reporter from the file
-            if (!isEnd) { // Check if end of file was not reached
-                std::cout << (i + 1) << " " << reporter.email << " " 
-                          << reporter.customerName << " " 
-                          << reporter.phoneNumber << " " 
-                          << reporter.deparmentId << "\n"; // Display reporter with its selection number
-            }
-        }
-
-        // Display navigation options based on whether creating new reporter is allowed
-        if (createNew) {
-            std::cout << "            <-P X N->\n"; // Allow navigating previous/next page or creating new reporter
-        } else {
-            std::cout << "            <-P   N->\n"; // Allow navigating previous/next page only
-        }
-        
-        std::cout << "Make a Selection: ";
-
-        // Get user input
-        std::string input;
-        std::cin >> input; // Read user input
-
-        if (input == "P" || input == "p") { // If user wants to go to the previous page
-            if (currentPage > 0) { // Ensure it's not the first page
-                --currentPage; // Move to the previous page
-            }
-        } else if (input == "N" || input == "n") { // If user wants to go to the next page
-            if (!isEnd) { // Ensure it's not the end of the file
-                ++currentPage; // Move to the next page
-            }
-        } else if (createNew && (input == "X" || input == "x")) { // If user wants to create a new reporter
-            exit = true; // Set exit flag to true
-        } else {
-            std::cerr << "Invalid selection. Please try again." << std::endl;
-        }
+    while (this->checkEmail(email)) 
+    {
+        std::cout << "Entered existing email\nEnter another email: ";
+        std::cin >> email;
     }
+
+    std::cout << "Enter name: ";
+    std::cin >> customerName;
+    std::cout << "Enter phone number: ";
+    std::cin >> phoneNumber;
+    std::cout << "Do they work at the company? (yes/no): ";
+    std::string worksAtCompany;
+    std::cin >> worksAtCompany;
+    if (worksAtCompany == "yes" || worksAtCompany == "Yes") 
+    {
+        std::cout << "Enter department: ";
+        std::cin >> departmentId;
+    } else 
+    {
+        departmentId = "";
+    }
+
+    Reporter newReporter(email, customerName, phoneNumber, departmentId);
+    if (writeToFile(newReporter)) 
+    {
+        std::cout << "Reporter added successfully." << std::endl;
+        return newReporter;
+    } else 
+    {
+        std::cout << "Error occurred while adding Reporter." << std::endl;
+        return Reporter(); 
+    }
+    
 }
 
 /***********************************************/
@@ -190,24 +201,23 @@ bool Reporter::openReporterFile()
  * 
  * Implementation Details:
  * - The file will be opened with reading & writing capabilities, as well in binary mode
+ * - Create the technovo directory if it doesn't exist
+ * - If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
+ * - Ensures the file is opened and we're at the start
  */
 {
-      // Create the technovo directory if it doesn't exist
     if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
     {
         std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
     }
-    // Attempt to open the file
+    
     file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
-    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
         file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
-
-    // Make sure the file opened and we're at the start
     return valid && seekToBeginningOfFile();
 }
 
@@ -217,8 +227,8 @@ bool Reporter::seekToBeginningOfFile()
  * This function simply just seeks to the beggining of the file.
  *
  * Implementation Details:
- * - It's assumed the file is already opened and valid.
- * - If this is not true, then an error is thrown and displayed to the user.
+ * - Assumes the file is already opened and valid.
+ * - Throws an error if the file is not open.
  */
 {
     if(!file.is_open())
@@ -237,9 +247,10 @@ bool Reporter::writeToFile(Reporter reporter)
  * This function will append a Product to the file
  * 
  * Implementation Details:
- * - It's assumed the file is already opened and valid.
- * - If this is not true, then an error is thrown and displayed to the user.
- * - This function will check for any entity integrity violations, if there is one it will return false.
+ * - Assumes the file is already opened and valid.
+ * - Throws an error if the file is not open.
+ * - Checks for any entity integrity violations; if found, returns false.
+ * - Writes the entirety of the reporter to the file.
  */
 {
     if(!file.is_open())
@@ -252,8 +263,6 @@ bool Reporter::writeToFile(Reporter reporter)
     seekToBeginningOfFile();
     bool read = true;
     Reporter nextToCheck = readFromFile(read);
-    // Check if the reporter already exists in the file
-    // If they do return false
     while(!read)
     {
         if(strcmp(nextToCheck.email, reporter.email) == 0)
@@ -263,7 +272,6 @@ bool Reporter::writeToFile(Reporter reporter)
         nextToCheck = readFromFile(read);
     }
 
-    // Write the entirety of the reporter to the file
     file.seekg(0, std::ios::end);
     file.write(reporter.email, sizeof(char) * EMAILDATASIZE);
     file.write(reporter.customerName, sizeof(char) * CUSTOMERNAMESIZE);
@@ -289,7 +297,6 @@ Reporter Reporter::readFromFile(bool &isEnd)
     }
     isEnd = false;
 
-    // Read the next file if it's not EOF, this will move the seek
     Reporter toReturn;
     file.read(toReturn.email, sizeof(char) * EMAILDATASIZE);
     file.read(toReturn.customerName, sizeof(char) * CUSTOMERNAMESIZE);
@@ -319,50 +326,4 @@ bool Reporter::closeReporterFile()
     return !(file.fail() || file.bad());
 }
 
-
-void Reporter::addNewReporter(const std::string& email, const std::string& customerName, 
-                        const std::string& phoneNumber, const std::string& deparmentId) {
-   Reporter newReporter;
-        strncpy(newReporter.email, email.c_str(), sizeof(newReporter.email) - 1);
-        newReporter.email[sizeof(newReporter.email) - 1] = '\0';
-        
-        strncpy(newReporter.customerName, customerName.c_str(), sizeof(newReporter.customerName) - 1);
-        newReporter.customerName[sizeof(newReporter.customerName) - 1] = '\0';
-        
-        strncpy(newReporter.phoneNumber, phoneNumber.c_str(), sizeof(newReporter.phoneNumber) - 1);
-        newReporter.phoneNumber[sizeof(newReporter.phoneNumber) - 1] = '\0';
-        
-        strncpy(newReporter.deparmentId, deparmentId.c_str(), sizeof(newReporter.deparmentId) - 1);
-        newReporter.deparmentId[sizeof(newReporter.deparmentId) - 1] = '\0';
-
-        writeToFile(newReporter);
-    }
-std::string generateRandomString(size_t length) {
-    const std::string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    std::string randomString;
-    for (size_t i = 0; i < length; ++i) {
-        randomString += characters[rand() % characters.length()];
-    }
-    return randomString;
-}
-int main(){
-    srand(static_cast<unsigned>(time(0))); // Seed for random number generator
-
-    Reporter rr;
-    rr.openReporterFile();
-
-    // Generate 55 random reporters
-    for (int i = 0; i < 55; ++i) {
-        std::string email = "user" + std::to_string(i) + "@" + generateRandomString(5) + ".com";
-        std::string customerName = "Name" + std::to_string(i);
-        std::string phoneNumber = "555-" + std::to_string(rand() % 9000 + 1000) + "-" + std::to_string(rand() % 9000 + 1000);
-        std::string deparmentId = (rand() % 2 == 0) ? "Dept" + std::to_string(rand() % 10 + 1) : ""; // Randomly assign department or leave it empty
-
-        rr.addNewReporter(email, customerName, phoneNumber, deparmentId);
-    }
-
-    rr.reporterUI(true); // Pass true to allow creating new reporters
-    rr.closeReporterFile();
-    return 0;
-}
 

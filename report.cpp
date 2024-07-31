@@ -2,6 +2,9 @@
  * Module: Report.cpp
  * 
  * Code Version History: 
+ * Ver. 2: - 2024-07-30 Updated by Anmol Sangha
+ *         - Updated function prototypes
+ *         - Converted changeId to use an int instead of an array
  * Ver. 1: - 2024-06-30 Original by Anmol Sangha
  *         - Initial version 
  ***********************************************/
@@ -52,11 +55,11 @@ Report::Report(string email, int changeId, string releaseId)
         }
 
     strncpy(this->email, email.c_str(), EMAILDATASIZE);
-    this->email[EMAILDATASIZE] = '\0'; // Ensure null termination
+    this->email[EMAILDATASIZE] = '\0'; 
     this->changeId = changeId;
 
     strncpy(this->releaseId, releaseId.c_str(), IDSIZE);
-    this->releaseId[IDSIZE] = '\0'; // Ensure null termination
+    this->releaseId[IDSIZE] = '\0'; 
 }
 
 /***********************************************/
@@ -87,79 +90,6 @@ Report Report::getReport(const string &email, const int &changeId)
 
     return Report(); 
 }
-
-/***********************************************/
-void Report::getReportUI() {
-        const int REPORTS_PER_PAGE = 20;
-        bool isEnd = false;
-        bool exit = false;
-        int currentPage = 0;
-
-        while (!exit) {
-            seekToBeginningOfFile();
-
-            // Skip reports of previous pages
-            for (int i = 0; i < currentPage * REPORTS_PER_PAGE; ++i) {
-                bool read = true;
-                readFromFile(read);
-                if (!read) {
-                    currentPage--;
-                    break;
-                }
-            }
-
-            // Display the reports
-            std::cout << "=======Reports=======\n";
-            std::cout << "SELECTION  REPORTS\n";
-            std::cout << "---------------------\n";
-
-            for (int i = 0; i < REPORTS_PER_PAGE; ++i) {
-                bool read = true;
-                Report report = readFromFile(read);
-                if (!read) {
-                    isEnd = true;
-                    break;
-                }
-                std::cout << i + 1 << " " << report.email << " " << report.changeId << "\n";
-                // Display other report fields as needed
-            }
-
-            std::cout << "            <-P   N->\n";
-            std::cout << "Make a Selection: ";
-
-            std::string input;
-            std::cin >> input;
-
-            if (input == "P" || input == "p") {
-                if (currentPage > 0) {
-                    currentPage--;
-                }
-            } else if (input == "N" || input == "n") {
-                if (!isEnd) {
-                    currentPage++;
-                }
-            } else {
-                int selection = std::stoi(input);
-                if (selection > 0 && selection <= REPORTS_PER_PAGE) {
-                    seekToBeginningOfFile();
-                    for (int i = 0; i < currentPage * REPORTS_PER_PAGE + selection - 1; ++i) {
-                        bool read = true;
-                        readFromFile(read);
-                    }
-
-                    bool read = true;
-                    Report selectedReport = readFromFile(read);
-                    // Handle the selected report as needed
-                    std::cout << "Selected Report: " << selectedReport.email << " " << selectedReport.changeId << "\n";
-                    // Display other report fields as needed
-                    return;
-                } else {
-                    throw std::out_of_range("Invalid selection number.");
-                }
-            }
-        }
-    }
-
 
 /***********************************************/
 Report Report::readFromFile(bool &isEnd)
@@ -212,25 +142,25 @@ bool Report::openReportFile()
  * This function will open the reports.bin file and will return false on failure
  * 
  * Implementation Details:
- * - The file will be opened with reading & writing capabilities, as well in binary mode
+ * - The file is opened with read and write capabilities, in binary mode.
+ * - Creates the technovo directory if it doesn't exist.
+ * - If the file fails to open, tries again with the trunc flag (creates a new file if none exists).
+ * - Ensures the file is opened and we're at the start.
  */
 {
-    // Create the technovo directory if it doesn't exist
     if(!std::filesystem::exists("C:/Users/Anmol/Desktop/CMPT 276/technovo/"))
     {
         std::filesystem::create_directory("C:/Users/Anmol/Desktop/CMPT 276/technovo/");
     }
-    // Attempt to open the file
+    
     file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
-    // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
         file.open("C:/Users/Anmol/Desktop/CMPT 276/technovo/reports.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
-    // Make sure the file opened and we're at the start
     return valid && seekToBeginningOfFile();
 }
 
@@ -254,7 +184,6 @@ bool Report::writeToFile(Report report)
         throw std::runtime_error("Report file not open on writeToFile");
     }
     
-    // Seek to the end of the file
     file.seekg(0, std::ios::end);
     file.write(report.email, sizeof(char) * EMAILDATASIZE);
     file.write((char*)&report.changeId, sizeof(int));
@@ -302,20 +231,3 @@ bool Report::checkReport(const string &email, const int &changeId)
     return false;
 }
 
-int main() {
-    // Seed for random number generation
-    srand(static_cast<unsigned>(time(0)));
-
-    std::cout<<"HEloo" <<endl;
-    Report reportSystem = Report();
-    reportSystem.openReportFile();
-    
-    
-     //Close the report file
-    if (!reportSystem.closeReportFile()) {
-        cerr << "Failed to close report file!" << endl;
-        return 1;
-    }
-
-    return 0;
-}
