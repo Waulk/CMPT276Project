@@ -269,10 +269,12 @@ Changes Changes::viewNewChangesUI()
     int currentPageChanges = 0;          // Current page number
     int productSelection = 0;            // product selection
     Changes changeObj;
-    
+
     while(!exit)
     {
         seekToBeginningOfFile();
+
+        isEnd = false;
 
         for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; ++i)
         {
@@ -304,8 +306,26 @@ Changes Changes::viewNewChangesUI()
                 counter++; //increment the counter each time related change instance is found
             }
         }
-        std::cout << "            <-P   N->\n";
-        std::cout << "Make a Selection: ";
+        // Determine navigation options
+        std::cout << "            ";
+        if (currentPageChanges > 0) // Show previous page option if not on the first page
+        {
+            std::cout << "<-P ";
+        }
+        else
+        {
+            std::cout << "    ";
+        }
+
+        if (!isEnd) // Show next page option if not on the last page
+        {
+            std::cout << "N->";
+        }
+        else
+        {
+            std::cout << "   ";
+        }
+        std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
         std::cin >> input;              
@@ -448,8 +468,26 @@ Changes Changes::viewChangesFromProduct(const string &product)
                 change.getDescription() << "  " << change.getIsBug() << "\n"; // Display change details
             }
         }
-        std::cout << "            <-P   N->\n";
-        std::cout << "Make a Selection: ";
+        // Determine navigation options
+        std::cout << "            ";
+        if (currentPageChanges > 0) // Show previous page option if not on the first page
+        {
+            std::cout << "<-P ";
+        }
+        else
+        {
+            std::cout << "    ";
+        }
+
+        if (!isEnd) // Show next page option if not on the last page
+        {
+            std::cout << "N->";
+        }
+        else
+        {
+            std::cout << "   ";
+        }
+        std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
         std::cin >> input;              
@@ -609,8 +647,26 @@ Changes Changes::viewUnfinishedChanges(const string &productRelease, const strin
                 counter++; //increment the counter each time related change instance is found
             }
         }
-        std::cout << "            <-P   N->\n";
-        std::cout << "Make a Selection: ";
+        // Determine navigation options
+        std::cout << "            ";
+        if (currentPageChanges > 0) // Show previous page option if not on the first page
+        {
+            std::cout << "<-P ";
+        }
+        else
+        {
+            std::cout << "    ";
+        }
+
+        if (!isEnd) // Show next page option if not on the last page
+        {
+            std::cout << "N->";
+        }
+        else
+        {
+            std::cout << "   ";
+        }
+        std::cout << "\nMake a Selection: ";
         // get user input
         std::string input;
         std::cin >> input;              
