@@ -204,7 +204,7 @@ void viewCustomersRequestedChange()
             }
             std::cout << std::left << std::setw(Reporter::EMAILDATASIZE) << foundReporter.getEmail() << "  ";
             std::cout << foundReporter.getCustomerName() << '\n';
-            std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getPhoneNumber() < "  ";
+            std::cout << std::left << std::setw(Reporter::PHONENUMBERSIZE) << foundReporter.getPhoneNumber() << "  ";
             std::cout << std::left << std::setw(Reporter::DEPTIDSIZE) << "\n\n";
         }
         std::cout << "                       ";
@@ -258,8 +258,6 @@ void viewCustomersRequestedChange()
 
 }
 
-
-
 /***********************************************/
 void customerMenu()
 /*
@@ -284,7 +282,8 @@ void customerMenu()
             break;
         case 2:
             // View all customers without creating a new one
-            Reporter::reporterUI(false);
+            //Reporter::reporterUI(false);
+            // TODO: delete or implement
             break;
         case 3:
             // Create a new customer and write them to disk
@@ -304,7 +303,7 @@ void createNewIssue()
 */
 {
     // Get a reporter
-    Reporter newReporter = Reporter::reporterUI(true);
+    Reporter newReporter = Reporter::reporterUI();
     // Get the product
     Product selectedProduct = Product::getProductFromUser();
     // Get the release for the product

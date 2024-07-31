@@ -85,7 +85,7 @@ class Reporter
         */
         
         /***********************************************/
-        Reporter reporterUI();
+        static Reporter reporterUI();
         // Returns: void
         /* This function displays an UI and shows a list of all the customers*/
 
@@ -144,7 +144,7 @@ class Reporter
     private:
 
         /***********************************************/
-        bool checkEmail(
+        static bool checkEmail(
             const string &email     // string email - email of customer (in)
         );
         // Returns: True or Flase  

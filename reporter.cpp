@@ -155,11 +155,11 @@ Reporter Reporter::reporterUI()
  */
 {
 
-   std::string email, customerName, phoneNumber, departmentId;
+    std::string email, customerName, phoneNumber, departmentId;
     std::cout << "Enter email: ";
     std::cin >> email;
 
-    while (this->checkEmail(email)) 
+    while (checkEmail(email)) 
     {
         std::cout << "Entered existing email\nEnter another email: ";
         std::cin >> email;
@@ -213,7 +213,7 @@ bool Reporter::openReporterFile(string path)
     }
     // Attempt to open the file
     file.open(path+"/technovo/reporters.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
-    
+
     bool valid = file.is_open();
     if(!valid)
     {
