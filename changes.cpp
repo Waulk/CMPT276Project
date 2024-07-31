@@ -57,32 +57,78 @@ Changes::Changes(int changeId, string changeStatus, string productName, string r
  * Implementation Details:
  * - Uses memset to fill the productName array with null characters.
  */
+
+    bool invalid = false;
     this->changeId = changeId;
     this->priority = priority;
     this->isBug = isBug;
-    strncpy(this->changeStatus, changeStatus.c_str(), CHANGESTATUSSIZE);
-    strncpy(this->productName, productName.c_str(), PRODUCTNAMESIZE);
-    strncpy(this->release_Id, release_Id.c_str(), RELEASE_IdSIZE);
-    strncpy(this->description, description.c_str(), DESCRIPTIONSIZE);
 
-    for(int i=changeStatus.length(); i < CHANGESTATUSSIZE + 1; i++)
-    {
-         changeStatus[i] = '\0';
+    //Check for invalid input with ifs.
+    if(changeStatus.length() > CHANGESTATUSSIZE){
+        invalid = true;
+    }
+    if(productName.length() > PRODUCTNAMESIZE){
+        invalid = true;
+    }
+    if(release_Id.length() > RELEASE_IdSIZE){
+        invalid = true;
+    }
+    if(description.length() > DESCRIPTIONSIZE){
+        invalid = true;
     }
 
-    for(int i=productName.length(); i < PRODUCTNAMESIZE + 1; i++)
+    //run a loop until all inputs are valid.
+    while(invalid){
+        if(changeStatus.length() > CHANGESTATUSSIZE){
+            invalid = true;
+            std::cout << "Please enter valid change status." << std::endl;
+            cin >> changeStatus;
+        }
+        if(productName.length() > PRODUCTNAMESIZE){
+            invalid = true;
+            std::cout << "Please enter valid product name." << std::endl;
+            cin >> productName;
+        }
+
+        if(release_Id.length() > RELEASE_IdSIZE){
+            invalid = true;
+            std::cout << "Please enter valid release_id." << std::endl;
+            cin >> release_Id;
+        }
+
+        if(description.length() > DESCRIPTIONSIZE){
+            invalid = true;
+            std::cout << "Please enter valid description." << std::endl;
+            cin >> description;
+        }
+        else{
+            invalid = false;
+        }
+
+    }
+    strncpy(this->changeStatus, changeStatus.c_str(), changeStatus.length());
+    strncpy(this->productName, productName.c_str(), productName.length());
+    strncpy(this->release_Id, release_Id.c_str(), release_Id.length());
+    strncpy(this->description, description.c_str(), description.length());
+
+    for(int i=changeStatus.length(); i < changeStatus.length() + 1; i++)
     {
-         productName[i] = '\0';
+         this->changeStatus[i] = '\0';
     }
 
-    for(int i=release_Id.length(); i < RELEASE_IdSIZE + 1; i++)
+    for(int i=productName.length(); i < productName.length() + 1; i++)
     {
-         release_Id[i] = '\0';
+         this->productName[i] = '\0';
     }
 
-    for(int i=description.length(); i < DESCRIPTIONSIZE + 1; i++)
+    for(int i=release_Id.length(); i < release_Id.length() + 1; i++)
     {
-         description[i] = '\0';
+         this->release_Id[i] = '\0';
+    }
+
+    for(int i=description.length(); i < description.length() + 1; i++)
+    {
+         this->description[i] = '\0';
     }
 
     lastChangeId = changeId;
@@ -306,6 +352,8 @@ Changes Changes::viewNewChangesUI()
                 counter++; //increment the counter each time related change instance is found
             }
         }
+        std::cout << "<-P";
+        std::cout << "    N->" << endl;
         // Determine navigation options
         std::cout << "            ";
         if (currentPageChanges > 0) // Show previous page option if not on the first page
@@ -757,7 +805,7 @@ Changes Changes::readFromFile(bool &isEnd)
 
 bool Changes::writeToFile(Changes change)
 /*
- * This function will append a Product to the file
+ * This function will append a Change to the file
  * 
  * Implementation Details:
  * - It's assumed the file is already opened and valid.
@@ -844,16 +892,17 @@ bool Changes::openChangesFile()
  */
 {
     // Create the technovo directory if it doesn't exist
-    if(!std::filesystem::exists("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/"))
-        std::filesystem::create_directory("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/");
+    if(!std::filesystem::exists("/home/mla436/Desktop/CMPT276_Project/technovo/"))
+        std::filesystem::create_directory("/home/mla436/Desktop/CMPT276_Project/technovo/");
     // Attempt to open the file
-    file.open("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
+    file.open("/home/mla436/Desktop/CMPT276_Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary);
     bool valid = file.is_open();
+
 
     // If the file fails to open, try again with the trunc flag (will create a new file if there isn't one)
     if(!valid)
     {
-        file.open("C:/Users/mattl/Downloads/CMPT276_NearlyFinished/CMPT276Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
+        file.open("/home/mla436/Desktop/CMPT276_Project/technovo/changes.bin", std::fstream::in | std::fstream::out | std::fstream::binary | std::fstream::trunc);
         valid = file.is_open();
     }
 
