@@ -160,7 +160,6 @@ Reporter Reporter::reporterUI(bool warnUser)
     // Loops until either an email is found that doesn't belong to a customer or the correct customer is found
     while(getEmail)
     {
-        std::cout << "=====New Customer====\n";
         std::cout << "Enter the Customer's Email (max 24 char.):\n";
         getline(std::cin, email);
         // Return to main menu

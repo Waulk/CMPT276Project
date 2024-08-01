@@ -304,6 +304,7 @@ void customerMenu()
             break;
         case 2:
             // Create a new customer
+            std::cout << "=====New Customer====\n";
             Reporter::reporterUI(true);
             break;
     }
