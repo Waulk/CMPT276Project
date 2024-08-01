@@ -3,7 +3,7 @@ all: technovo
 test: writing_test
 
 technovo: main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
-	g++ -g -o technovo main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
+	g++ -g -o technovos main.o userinterface.o changes.o product.o productrelease.o report.o reporter.o
 	
 main.o: main.cpp 
 	g++ -c -std=c++17 -Wall main.cpp 
