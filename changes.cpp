@@ -887,7 +887,6 @@ bool Changes::writeToFile(Changes change)
     file.write((char*)&change.priority, sizeof(int));
     file.write(change.description, sizeof(char) * DESCRIPTIONSIZE);
     file.write((char*)&change.isBug, sizeof(bool));
-    lastChangeId = change.getchangeId() + 1;
 
     return !(file.fail() || file.bad());
 }
