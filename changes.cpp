@@ -318,14 +318,16 @@ Changes Changes::viewNewChangesUI()
 
         isEnd = false;
 
-        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; ++i)
+        for(int i = 0; i < currentPageChanges * RELEASES_PER_PAGE; )
         {
-            readFromFile(isEnd);         // Read and discard releases to skip to the current page
+            Changes in = readFromFile(isEnd);         // Read and discard releases to skip to the current page
             if(isEnd)                    // If end of file is reached
             {
                 currentPageChanges--;    // Adjust current page number
                 break;                   // Exit the loop
             }
+            if(in.getchangeStatus() == "New")
+                i++;
         }
         if(isEnd)
         {
@@ -351,10 +353,7 @@ Changes Changes::viewNewChangesUI()
             }
         }
         std::cout << "                       ";
-        std::cout << "<-P";
-        std::cout << "    N->" << endl;
         // Determine navigation options
-        std::cout << "            ";
         if (currentPageChanges > 0) // Show previous page option if not on the first page
         {
             std::cout << "<-P ";
@@ -367,10 +366,6 @@ Changes Changes::viewNewChangesUI()
         if (!isEnd) // Show next page option if not on the last page
         {
             std::cout << "N->";
-        }
-        else
-        {
-            std::cout << "   ";
         }
         std::cout << "\nMake a Selection: \n";
         // get user input
