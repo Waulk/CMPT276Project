@@ -161,17 +161,19 @@ Product Product::getProductFromUser(bool createNew)
         int displayIndex = currentPage * PRODUCTS_PER_PAGE + 1; // Initialize the display index for the current page
         int displayedProducts = 0; // Counter to track the number of displayed products
 
-        for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i) {
-        Product product = readFromFile(isEnd); // Read a product from the file
-        if (!isEnd) { // Check if end of file was not reached
-            cout << std::right << std::setw(9) << (std::to_string(displayIndex) + ")") << "  " << product.getProductName() << "\n"; // Display product with its selection number
-            displayIndex++; // Increment the display index
-            displayedProducts++; // Increment the counter for displayed products
+        for (int i = 0; i < PRODUCTS_PER_PAGE && !isEnd; ++i) 
+        {
+            Product product = readFromFile(isEnd); // Read a product from the file
+            if (!isEnd) // Check if end of file was not reached
+            { 
+                cout << std::right << std::setw(9) << (std::to_string(displayIndex - currentPage * PRODUCTS_PER_PAGE) + ")") << "  " << product.getProductName() << "\n"; // Display product with its selection number
+                displayIndex++; // Increment the display index
+                displayedProducts++; // Increment the counter for displayed products
+            }
         }
-    }
 
         // Determine navigation options
-        std::cout << "            ";
+        std::cout << "                       ";
         if (currentPage > 0) // Show previous page option if not on the first page
         {
             std::cout << "<-P ";
@@ -243,7 +245,7 @@ Product Product::getProductFromUser(bool createNew)
             }
             else if (isNumber(input)) // Check if the input is a number
             {
-                int selection = std::stoi(input); // Convert input to an integer
+                int selection = std::stoi(input) + currentPage * PRODUCTS_PER_PAGE; // Convert input to an integer
                 int absoluteSelectionIndex = selection - 1; // Calculate the absolute selection index
 
                 // Ensure the selection is within the displayed range

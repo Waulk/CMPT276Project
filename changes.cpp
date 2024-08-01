@@ -489,7 +489,7 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
             }
         }
         // Determine navigation options
-        std::cout << "            ";
+        std::cout << "                       ";
         if (currentPageChanges > 0) // Show previous page option if not on the first page
             std::cout << "<-P";
         else
@@ -501,13 +501,7 @@ Changes Changes::viewChangesFromProduct(const string &product, bool createNew)
             std::cout << "   ";
 
         if (!isEnd) // Show next page option if not on the last page
-        {
             std::cout << "N->";
-        }
-        else
-        {
-            std::cout << "   ";
-        }
         std::cout << "\nMake a Selection: \n";
         // get user input
         std::string input;

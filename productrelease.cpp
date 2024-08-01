@@ -156,12 +156,12 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         for (int i = startIndex; i < endIndex; ++i) 
         {
             ProductRelease release = productReleases[i];
-            std::cout << std::right << std::setw(9) << (std::to_string(i + 1) + ")") << "  " << std::left << std::setw(8) << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
+            std::cout << std::right << std::setw(9) << (std::to_string(i + 1 - startIndex) + ")") << "  " << std::left << std::setw(8) << release.getReleaseId() << "  " << release.getDate() << "\n"; // Display release details
             displayedReleases++;
         }
 
         // Display navigation options
-        std::cout << "            ";
+        std::cout << "                       ";
         if (currentPage > 0)             // Show previous page option if not on the first page
         {
             std::cout << "<-P   ";
@@ -217,7 +217,7 @@ ProductRelease ProductRelease::getProductReleaseFromUser(string productName)
         else if (isNumber(input)) // Check if the input is a number
         {
             try {
-                int selection = std::stoi(input); // Convert input to an integer
+                int selection = std::stoi(input) + startIndex; // Convert input to an integer
                 if (selection > 0 && selection <= productReleases.size()) // Ensure the selection is within the displayed range
                 {
                     return productReleases[selection - 1]; // Return the selected release
