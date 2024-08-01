@@ -459,6 +459,7 @@ void viewChangesForProduct()
     std::cout << "Description: " << changeToEdit.getDescription() << '\n';
     std::cout << "Is Bug:      " << (changeToEdit.getIsBug() ? "True" : "False") << '\n';
     std::cout << "Release:     " << changeToEdit.getReleaseId() << '\n';
+    std::cout << "Status:      " << changeToEdit.getchangeStatus() << '\n';
 
     // Edit priority
     std::cout << "Would you like to edit the Priority (Y/N)?\n";
